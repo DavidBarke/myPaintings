@@ -1,7 +1,7 @@
 add_user_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shinydashboard::box(
+  shinydashboardPlus::box(
     width = NULL,
     status = "primary",
     title = "Add user",

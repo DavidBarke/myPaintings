@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(shinydashboardPlus)
 library(shinyjs)
 library(dplyr)
 library(stringr)
@@ -8,6 +9,7 @@ library(purrr)
 library(DT)
 library(lubridate)
 library(bcrypt)
+library(shinycssloaders)
 
 ui_server <- function(source_to_globalenv = FALSE) {
   # If source_to_global_env all sourced functions get added to the global
@@ -57,6 +59,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
     # Extend shinyjs with custom JavaScript
     # extendShinyjs("www/js/extend_shinyjs.js")
   )
+  
+  ui <- container_ui(id = "container")
   
   # SERVER -------------------------------------------------------------------
   

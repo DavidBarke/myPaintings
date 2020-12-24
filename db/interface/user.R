@@ -13,10 +13,12 @@
 #' @export
 db_add_user <- function(db,
                         name,
-                        status = c("admin", "mod", "user"),
+                        status = c("admin", "user"),
                         password,
                         added_from = "Admin"
 ) {
+  status <- match.arg(status)
+  
   entry <- tibble::tibble(
     name = name,
     status = status,
@@ -25,10 +27,29 @@ db_add_user <- function(db,
     added_from = added_from,
     time_added = as.character(Sys.time()),
     time_logged = as.character(Sys.time()),
-    times_logged = 0
+    times_logged = 0,
+    capital = 1000
   )
   
   DBI::dbAppendTable(db, "user", entry)
+}
+
+
+
+#' Get User Name
+#' 
+#' @template db
+#' @param user_id User id.
+#' 
+#' @family user
+#' 
+#' @export
+db_get_user_name <- function(db, user_id) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT name FROM user WHERE rowid = ?",
+    params = list(user_id)
+  )$name
 }
 
 
@@ -66,6 +87,7 @@ db_set_user_status <- function(db, name, status) {
       params = list("admin")
     )$n_admins
     
+    # Ensure that it remains at least one admin at any given timepoint
     if (n_admins == 1) return(0)
   }
   

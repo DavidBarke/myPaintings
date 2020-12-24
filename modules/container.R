@@ -1,22 +1,33 @@
 container_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shinydashboard::dashboardPage(
-    shinydashboard::dashboardHeader(
-      title = "Paintings"
+  shinydashboardPlus::dashboardPage(
+    header = shinydashboardPlus::dashboardHeader(
+      title = "myPaintings",
+      shinydashboardPlus::userOutput(
+        id = ns("user")
+      )
     ),
-    shinydashboard::dashboardSidebar(
-      sidebar_menu_ui(
-        id = ns("sidebar_menu")
-      ),
+    sidebar = shinydashboardPlus::dashboardSidebar(
+      # sidebar_menu_ui(
+      #   id = ns("sidebar_menu")
+      # ),
+      shinydashboard::sidebarMenuOutput(ns("menu")),
+      #shinydashboard::sidebarMenu(shinydashboard::menuItem(text = "Menu Item")),
       collapsed = FALSE
     ),
-    shinydashboard::dashboardBody(
+    body = shinydashboard::dashboardBody(
       shinydashboard::tabItems(
         shinydashboard::tabItem(
           tabName = "login",
           login_ui(
             id = ns("login")
+          )
+        ),
+        shinydashboard::tabItem(
+          tabName = "images",
+          images_ui(
+            id = ns("images")
           )
         ),
         shinydashboard::tabItem(
@@ -42,6 +53,38 @@ container_server <- function(id, .values) {
     function(input, output, session) {
 
       ns <- session$ns
+      
+      output$menu <- shinydashboard::renderMenu({
+        shinydashboard::sidebarMenu(
+          shinydashboard::menuItem("Menu")
+        )
+      })
+      
+      output$user <- renderUser({
+        dashboardUser(
+          name = "Divad Nojnarg", 
+          image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
+          title = "shinydashboardPlus",
+          subtitle = "Author", 
+          footer = p("The footer", class = "text-center"),
+          fluidRow(
+            dashboardUserItem(
+              width = 6,
+              socialButton(
+                href = "https://dropbox.com",
+                icon = icon("dropbox")
+              )
+            ),
+            dashboardUserItem(
+              width = 6,
+              socialButton(
+                href = "https://github.com",
+                icon = icon("github")
+              )
+            )
+          )
+        )
+      })
 
       # Register function for updating sidebar from other modules
       .values$update_sidebar <- function(tabName) {
@@ -59,6 +102,11 @@ container_server <- function(id, .values) {
 
       login_server(
         id = "login",
+        .values = .values
+      )
+      
+      images_server(
+        id = "images",
         .values = .values
       )
 

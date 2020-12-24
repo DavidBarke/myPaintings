@@ -22,6 +22,7 @@ db_init <- function(path = "db/db.sqlite") {
   
   # create tables
   create_user_table(db)
+  create_image_table(db)
   
   populate_user_table(db)
   
@@ -39,10 +40,30 @@ create_user_table <- function(db) {
     added_from = character(),
     time_added = character(),
     time_logged = character(),
-    times_logged = integer()
+    times_logged = integer(),
+    capital = numeric()
   )
   
   DBI::dbCreateTable(db, "user", tbl)
+}
+
+#' @export
+create_image_table <- function(db) {
+  tbl <- tibble::tibble(
+    title = character(),
+    user_id = character()
+  )
+  
+  DBI::dbCreateTable(db, "image", tbl)
+}
+
+create_offered_images_table <- function(db) {
+  tbl <- tibble::tibble(
+    image_id = character(),
+    price = numeric()
+  )
+  
+  DBI::dbCreateTable(db, "offered_images", tbl)
 }
 
 

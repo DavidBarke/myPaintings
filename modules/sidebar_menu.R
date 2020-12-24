@@ -17,10 +17,10 @@ sidebar_menu_server <- function(id, .values) {
       access_list <- list(
         not_logged = "login",
         admin = c(
-          "login", "user_management", "settings"
+          "login", "images", "user_management", "settings"
         ),
         user = c(
-          "login", "settings"
+          "login", "images", "settings"
         )
       )
 
@@ -31,6 +31,11 @@ sidebar_menu_server <- function(id, .values) {
           text = "Login",
           tabName = "login",
           icon = shiny::icon("sign-in-alt")
+        ),
+        images = shinydashboard::menuItem(
+          text = "Images",
+          tabName = "images",
+          icon = shiny::icon("images")
         ),
         user_management = shinydashboard::menuItem(
           text = "User Management",
@@ -45,7 +50,10 @@ sidebar_menu_server <- function(id, .values) {
       )
 
       output$menu <- shinydashboard::renderMenu({
-        sidebar_menu_r()
+        #sidebar_menu_r()
+        shinydashboard::sidebarMenu(
+          shinydashboard::menuItem(text = "Menu")
+        )
       })
 
       sidebar_menu_r <- shiny::reactive({
