@@ -4,7 +4,7 @@ login_ui <- function(id) {
   shiny::fluidRow(
     shiny::column(
       width = 6,
-      shinydashboardPlus::box(
+      shinydashboard::box(
         width = NULL,
         status = "primary",
         title = "Login",

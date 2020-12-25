@@ -1,13 +1,13 @@
 container_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shinydashboard::dashboardPage(
-    header = shinydashboardPlus::dashboardHeader(
+  shinydashboardPlus::dashboardPagePlus(
+    header = shinydashboardPlus::dashboardHeaderPlus(
       shinydashboardPlus::userOutput(
         id = ns("user")
       )
     ),
-    sidebar = shinydashboardPlus::dashboardSidebar(
+    sidebar = shinydashboard::dashboardSidebar(
       sidebar_menu_ui(
         id = ns("sidebar")
       )
@@ -60,22 +60,22 @@ container_server <- function(id, .values) {
       output$user <- renderUser({
         dashboardUser(
           name = "Mona Lisa",
-          image = "img/mona_lisa.png",
+          src = "img/mona_lisa.png",
           title = NULL,
           subtitle = "User",
           fluidRow(
             dashboardUserItem(
               width = 6,
               socialButton(
-                href = "https://dropbox.com",
-                icon = icon("dropbox")
+                url = "https://dropbox.com",
+                type = "dropbox"
               )
             ),
             dashboardUserItem(
               width = 6,
               socialButton(
-                href = "https://github.com",
-                icon = icon("github")
+                url = "https://github.com",
+                type = "github"
               )
             )
           )

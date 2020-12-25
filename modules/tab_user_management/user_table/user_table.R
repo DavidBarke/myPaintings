@@ -1,7 +1,7 @@
 user_table_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shinydashboardPlus::box(
+  shinydashboard::box(
     width = NULL,
     status = "primary",
     title = "User table",

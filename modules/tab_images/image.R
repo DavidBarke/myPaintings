@@ -1,7 +1,7 @@
 image_ui <- function(id) {
   ns <- shiny::NS(id)
   
-  shinydashboardPlus::box(
+  shinydashboard::box(
     width = NULL,
     title = shiny::uiOutput(
       outputId = ns("title")
