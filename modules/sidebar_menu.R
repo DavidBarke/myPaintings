@@ -50,10 +50,7 @@ sidebar_menu_server <- function(id, .values) {
       )
 
       output$menu <- shinydashboard::renderMenu({
-        #sidebar_menu_r()
-        shinydashboard::sidebarMenu(
-          shinydashboard::menuItem(text = "Menu")
-        )
+        sidebar_menu_r()
       })
 
       sidebar_menu_r <- shiny::reactive({

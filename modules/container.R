@@ -1,20 +1,16 @@
 container_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shinydashboardPlus::dashboardPage(
+  shinydashboard::dashboardPage(
     header = shinydashboardPlus::dashboardHeader(
-      title = "myPaintings",
       shinydashboardPlus::userOutput(
         id = ns("user")
       )
     ),
     sidebar = shinydashboardPlus::dashboardSidebar(
-      # sidebar_menu_ui(
-      #   id = ns("sidebar_menu")
-      # ),
-      shinydashboard::sidebarMenuOutput(ns("menu")),
-      #shinydashboard::sidebarMenu(shinydashboard::menuItem(text = "Menu Item")),
-      collapsed = FALSE
+      sidebar_menu_ui(
+        id = ns("sidebar")
+      )
     ),
     body = shinydashboard::dashboardBody(
       shinydashboard::tabItems(
@@ -43,7 +39,8 @@ container_ui <- function(id) {
           )
         )
       )
-    )
+    ),
+    title = "DashboardPage"
   )
 }
 
@@ -53,20 +50,19 @@ container_server <- function(id, .values) {
     function(input, output, session) {
 
       ns <- session$ns
-      
+
       output$menu <- shinydashboard::renderMenu({
         shinydashboard::sidebarMenu(
           shinydashboard::menuItem("Menu")
         )
       })
-      
+
       output$user <- renderUser({
         dashboardUser(
-          name = "Divad Nojnarg", 
-          image = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg", 
-          title = "shinydashboardPlus",
-          subtitle = "Author", 
-          footer = p("The footer", class = "text-center"),
+          name = "Mona Lisa",
+          image = "img/mona_lisa.png",
+          title = NULL,
+          subtitle = "User",
           fluidRow(
             dashboardUserItem(
               width = 6,
@@ -96,7 +92,7 @@ container_server <- function(id, .values) {
       }
 
       sidebar_menu_server(
-        id = "sidebar_menu",
+        id = "sidebar",
         .values = .values
       )
 
@@ -104,7 +100,7 @@ container_server <- function(id, .values) {
         id = "login",
         .values = .values
       )
-      
+
       images_server(
         id = "images",
         .values = .values
