@@ -82,6 +82,7 @@ ui_server <- function(source_to_globalenv = FALSE) {
     .values$user$status <- shiny::reactiveVal("admin")
     .values$user$name <- shiny::reactiveVal("Admin")
     .values$user$last_logged <- shiny::reactiveVal("2011-11-11 11:11:11")
+    .values$user$account <- shiny::reactiveVal(1000)
     
     .values$settings$password$length <- list(min = 4, max = 16)
     .values$settings$user_name$length <- list(min = 4, max = 16)

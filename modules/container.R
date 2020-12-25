@@ -5,14 +5,18 @@ container_ui <- function(id) {
     header = bs4Dash::bs4DashNavbar(
       title = "myPaintings",
       rightUi = htmltools::tagList(
+        account_info_ui(
+          id = ns("account_info")
+        ),
         user_info_ui(
           id = ns("user_info")
         )
       )
     ),
     sidebar = bs4Dash::bs4DashSidebar(
+      id = ns("sidebar"),
       sidebar_menu_ui(
-        id = ns("sidebar")
+        id = ns("sidebar_menu")
       )
     ),
     body = bs4Dash::bs4DashBody(
@@ -27,6 +31,12 @@ container_ui <- function(id) {
           tabName = "images",
           images_ui(
             id = ns("images")
+          )
+        ),
+        bs4Dash::bs4TabItem(
+          tabName = "wallet",
+          wallet_ui(
+            id = ns("wallet")
           )
         ),
         bs4Dash::bs4TabItem(
@@ -56,15 +66,20 @@ container_server <- function(id, .values) {
 
       # Register function for updating sidebar from other modules
       .values$update_sidebar <- function(tabName) {
-        bs4Dash::updatebs4TabItems(
-          session = session,
-          inputId = "sidebar_select",
+        shinydashboard::updateTabItems(
+          session = .values$sidebar$session,
+          inputId = .values$sidebar$id,
           selected = tabName
         )
       }
       
       sidebar_menu_server(
-        id = "sidebar", 
+        id = "sidebar_menu", 
+        .values = .values
+      )
+      
+      account_info_server(
+        id = "account_info",
         .values = .values
       )
       
@@ -80,6 +95,11 @@ container_server <- function(id, .values) {
 
       images_server(
         id = "images",
+        .values = .values
+      )
+      
+      wallet_server(
+        id = "wallet",
         .values = .values
       )
 

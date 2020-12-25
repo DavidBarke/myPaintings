@@ -12,15 +12,20 @@ sidebar_menu_server <- function(id, .values) {
     function(input, output, session) {
 
       ns <- session$ns
+      
+      .values$sidebar <- list(
+        id = "sidebar",
+        session = session
+      )
 
       # Name of menu items that are visible according to access right
       access_list <- list(
         not_logged = "login",
         admin = c(
-          "login", "images", "user_management", "settings"
+          "login", "images", "wallet", "user_management", "settings"
         ),
         user = c(
-          "login", "images", "settings"
+          "login", "images", "wallet", "settings"
         )
       )
 
@@ -36,6 +41,11 @@ sidebar_menu_server <- function(id, .values) {
           text = "Images",
           tabName = "images",
           icon = shiny::icon("images")
+        ),
+        wallet = bs4Dash::menuItem(
+          text = "Wallet",
+          tabName = "wallet",
+          icon = shiny::icon("wallet")
         ),
         user_management = bs4Dash::menuItem(
           text = "User Management",
@@ -56,7 +66,11 @@ sidebar_menu_server <- function(id, .values) {
       sidebar_menu_r <- shiny::reactive({
         menu_items <- unname(menu_item_list[access_list[[.values$user$status()]]])
 
-        do.call(sidebarMenu, menu_items)
+        args <- list(
+          id = ns(.values$sidebar$id)
+        )
+        
+        do.call(sidebarMenu, c(menu_items, args))
       })
     }
   )
