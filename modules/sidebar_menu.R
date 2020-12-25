@@ -1,7 +1,7 @@
 sidebar_menu_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shinydashboard::sidebarMenuOutput(
+  bs4Dash::sidebarMenuOutput(
     outputId = ns("menu")
   )
 }
@@ -27,36 +27,36 @@ sidebar_menu_server <- function(id, .values) {
       # List of all possible menu items. Extraction is done according to access
       # right
       menu_item_list <- list(
-        login = shinydashboard::menuItem(
+        login = bs4Dash::menuItem(
           text = "Login",
           tabName = "login",
           icon = shiny::icon("sign-in-alt")
         ),
-        images = shinydashboard::menuItem(
+        images = bs4Dash::menuItem(
           text = "Images",
           tabName = "images",
           icon = shiny::icon("images")
         ),
-        user_management = shinydashboard::menuItem(
+        user_management = bs4Dash::menuItem(
           text = "User Management",
           tabName = "user_management",
           icon = shiny::icon("user-edit")
         ),
-        settings = shinydashboard::menuItem(
+        settings = bs4Dash::menuItem(
           text = "Settings",
           tabName = "settings",
           icon = shiny::icon("cog")
         )
       )
 
-      output$menu <- shinydashboard::renderMenu({
+      output$menu <- bs4Dash::renderMenu({
         sidebar_menu_r()
       })
 
       sidebar_menu_r <- shiny::reactive({
         menu_items <- unname(menu_item_list[access_list[[.values$user$status()]]])
 
-        shinydashboard::sidebarMenu(.list = menu_items)
+        do.call(sidebarMenu, menu_items)
       })
     }
   )

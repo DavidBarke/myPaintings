@@ -4,7 +4,7 @@ images_ui <- function(id) {
   shiny::fluidRow(
     shiny::column(
       width = 12,
-      shinydashboard::box(
+      bs4Dash::box(
         width = NULL,
         title = "Images",
         status = "primary",

@@ -125,6 +125,44 @@
       "Repository": "CRAN",
       "Hash": "9addc7e2c5954eca5719928131fed98c"
     },
+    "bs4Dash": {
+      "Package": "bs4Dash",
+      "Version": "2.0.0.9000",
+      "Source": "GitHub",
+      "Remotes": "rstudio/htmltools, rstudio/shiny, rstudio/thematic",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "bs4Dash",
+      "RemoteUsername": "RinteRface",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "6c348e4e39e95c6c17a4d7144f0b8b1e615da7bb",
+      "Hash": "50bd8cf6316a8aa2b97199aa6a728f11"
+    },
+    "bslib": {
+      "Package": "bslib",
+      "Version": "0.2.3.9000",
+      "Source": "GitHub",
+      "Remotes": "rstudio/thematic, rstudio/promises, rstudio/sass,\nrstudio/htmltools, rstudio/shiny",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "bslib",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "338b05fc5aa551c0cb62dae2ce73ad8c2ceb8403",
+      "Hash": "163972fdd8596cbbcdef5b2773d1eb35"
+    },
+    "cachem": {
+      "Package": "cachem",
+      "Version": "0.0.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "cachem",
+      "RemoteUsername": "r-lib",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "ebef4f85d84f9f878fc794e8788c81860029aac3",
+      "Hash": "f65e2d24b42e28118accc256a6e710da"
+    },
     "cli": {
       "Package": "cli",
       "Version": "2.2.0",
@@ -188,6 +226,20 @@
       "Repository": "CRAN",
       "Hash": "83ab58a0518afe3d17e41da01af13b60"
     },
+    "fresh": {
+      "Package": "fresh",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fa54367040deb4537da49b7ac0ee5770"
+    },
+    "fs": {
+      "Package": "fs",
+      "Version": "1.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "44594a07a42e5f91fac9f93fda6d0109"
+    },
     "generics": {
       "Package": "generics",
       "Version": "0.1.0",
@@ -204,10 +256,15 @@
     },
     "htmltools": {
       "Package": "htmltools",
-      "Version": "0.5.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "7d651b7131794fe007b1ad6f21aaa401"
+      "Version": "0.5.0.9003",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "htmltools",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "d18bd8e404fb3e7d25dd448b1f8300f16a44add8",
+      "Hash": "624938244a70d1610a4f72a7cd7f93df"
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
@@ -222,6 +279,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "4e6dabb220b006ccdc3b3b5ff993b205"
+    },
+    "jquerylib": {
+      "Package": "jquerylib",
+      "Version": "0.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5ff50b36f7f0832f8421745af333e73c"
     },
     "jsonlite": {
       "Package": "jsonlite",
@@ -309,10 +373,15 @@
     },
     "promises": {
       "Package": "promises",
-      "Version": "1.1.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "a8730dcbdd19f9047774909f0ec214a4"
+      "Version": "1.1.1.9001",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "promises",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "bbadb3d7dedfc052813bb66b4b1dcfebd5ff881a",
+      "Hash": "50eb266e7f81baec34a21e9999c78ec4"
     },
     "purrr": {
       "Package": "purrr",
@@ -328,6 +397,13 @@
       "Repository": "CRAN",
       "Hash": "6e66da66a692c829ab34b3586989bb44"
     },
+    "rappdirs": {
+      "Package": "rappdirs",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "8c8298583adbbe76f3c2220eef71bebc"
+    },
     "renv": {
       "Package": "renv",
       "Version": "0.12.3",
@@ -342,12 +418,37 @@
       "Repository": "CRAN",
       "Hash": "9d7aba7bed9a79e2403b4777428a2b12"
     },
-    "shiny": {
-      "Package": "shiny",
-      "Version": "1.5.0",
+    "rstudioapi": {
+      "Package": "rstudioapi",
+      "Version": "0.13",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ee4ed72d7a5047d9e73cf922ad66e9c9"
+      "Hash": "06c85365a03fdaf699966cc1d3cf53ea"
+    },
+    "sass": {
+      "Package": "sass",
+      "Version": "0.2.0.9005",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "sass",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "403002c2533cc049625ae03688c442e6c4d51fe0",
+      "Hash": "e59b46facef37fa676de4f9d940c680c"
+    },
+    "shiny": {
+      "Package": "shiny",
+      "Version": "1.5.0.9006",
+      "Source": "GitHub",
+      "Remotes": "rstudio/htmltools, rstudio/promises, rstudio/sass,\nrstudio/bslib, rstudio/webdriver, rstudio/shinytest,\nr-lib/cachem",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "shiny",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "a9f7068b2f30753ec42e5b5cee528c31b8db745c",
+      "Hash": "3447f85b12b7531c75fcc09bef82993d"
     },
     "shinycssloaders": {
       "Package": "shinycssloaders",
@@ -355,20 +456,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f39bb3c44a9b496723ec7e86f9a771d8"
-    },
-    "shinydashboard": {
-      "Package": "shinydashboard",
-      "Version": "0.7.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "133639dc106955eee4ffb8ec73edac37"
-    },
-    "shinydashboardPlus": {
-      "Package": "shinydashboardPlus",
-      "Version": "0.7.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c83d818e606a67feee9c3afe5b579a1d"
     },
     "shinyjs": {
       "Package": "shinyjs",
@@ -432,6 +519,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "5cf1957f93076c19fdc81d01409d240b"
+    },
+    "waiter": {
+      "Package": "waiter",
+      "Version": "0.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7bfebcea9f02aa9b2821fb4f529031e6"
     },
     "withr": {
       "Package": "withr",

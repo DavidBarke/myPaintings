@@ -1,38 +1,41 @@
 container_ui <- function(id) {
   ns <- shiny::NS(id)
 
-  shinydashboardPlus::dashboardPagePlus(
-    header = shinydashboardPlus::dashboardHeaderPlus(
-      shinydashboardPlus::userOutput(
-        id = ns("user")
+  bs4Dash::bs4DashPage(
+    header = bs4Dash::bs4DashNavbar(
+      title = "myPaintings",
+      rightUi = htmltools::tagList(
+        user_info_ui(
+          id = ns("user_info")
+        )
       )
     ),
-    sidebar = shinydashboard::dashboardSidebar(
+    sidebar = bs4Dash::bs4DashSidebar(
       sidebar_menu_ui(
         id = ns("sidebar")
       )
     ),
-    body = shinydashboard::dashboardBody(
-      shinydashboard::tabItems(
-        shinydashboard::tabItem(
+    body = bs4Dash::bs4DashBody(
+      bs4Dash::bs4TabItems(
+        bs4Dash::bs4TabItem(
           tabName = "login",
           login_ui(
             id = ns("login")
           )
         ),
-        shinydashboard::tabItem(
+        bs4Dash::bs4TabItem(
           tabName = "images",
           images_ui(
             id = ns("images")
           )
         ),
-        shinydashboard::tabItem(
+        bs4Dash::bs4TabItem(
           tabName = "user_management",
           user_management_ui(
             id = ns("user_management")
           )
         ),
-        shinydashboard::tabItem(
+        bs4Dash::bs4TabItem(
           tabName = "settings",
           settings_ui(
             id = ns("settings")
@@ -51,51 +54,25 @@ container_server <- function(id, .values) {
 
       ns <- session$ns
 
-      output$menu <- shinydashboard::renderMenu({
-        shinydashboard::sidebarMenu(
-          shinydashboard::menuItem("Menu")
-        )
-      })
-
-      output$user <- renderUser({
-        dashboardUser(
-          name = "Mona Lisa",
-          src = "img/mona_lisa.png",
-          title = NULL,
-          subtitle = "User",
-          fluidRow(
-            dashboardUserItem(
-              width = 6,
-              socialButton(
-                url = "https://dropbox.com",
-                type = "dropbox"
-              )
-            ),
-            dashboardUserItem(
-              width = 6,
-              socialButton(
-                url = "https://github.com",
-                type = "github"
-              )
-            )
-          )
-        )
-      })
-
       # Register function for updating sidebar from other modules
       .values$update_sidebar <- function(tabName) {
-        shinydashboard::updateTabItems(
+        bs4Dash::updatebs4TabItems(
           session = session,
-          inputId = "sidebar",
+          inputId = "sidebar_select",
           selected = tabName
         )
       }
-
+      
       sidebar_menu_server(
-        id = "sidebar",
+        id = "sidebar", 
         .values = .values
       )
-
+      
+      user_info_server(
+        id = "user_info",
+        .values = .values
+      )
+      
       login_server(
         id = "login",
         .values = .values

@@ -1,6 +1,5 @@
 library(shiny)
-library(shinydashboardPlus)
-library(shinydashboard)
+library(bs4Dash)
 library(shinyjs)
 library(dplyr)
 library(stringr)

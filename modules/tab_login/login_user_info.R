@@ -32,11 +32,11 @@ login_user_info_server <- function(id, .values) {
 
       output$user_name <- shiny::renderUI({
         if (is_logged_r()) {
-          shinydashboard::infoBox(
+          bs4Dash::infoBox(
             title = .values$settings$status_dict[.values$user$status()],
             value = .values$user$name(),
             icon = shiny::icon("users"),
-            color = "light-blue",
+            color = "primary",
             width = NULL
           )
         }
@@ -65,14 +65,14 @@ login_user_info_server <- function(id, .values) {
 
       output$user_logged_since <- shiny::renderUI({
         if (is_logged_r()) {
-          shinydashboard::infoBox(
+          bs4Dash::infoBox(
             title = "Logged in for",
             value = htmltools::div(
               class = "relative",
               logged_since_r()
             ),
             icon = shiny::icon("user-clock"),
-            color = "light-blue",
+            color = "primary",
             width = NULL
           )
         }
@@ -95,14 +95,14 @@ login_user_info_server <- function(id, .values) {
 
       output$user_last_logged <- shiny::renderUI({
         if (is_logged_r()) {
-          shinydashboard::infoBox(
+          bs4Dash::infoBox(
             title = "Last logged in before",
             value = htmltools::div(
               class = "relative",
               last_logged_r()
             ),
             icon = shiny::icon("history"),
-            color = "light-blue",
+            color = "primary",
             width = NULL
           )
         }
@@ -114,14 +114,14 @@ login_user_info_server <- function(id, .values) {
 
       output$user_times_logged <- shiny::renderUI({
         if (is_logged_r()) {
-          shinydashboard::infoBox(
+          bs4Dash::infoBox(
             title = "Number of visits",
             value = htmltools::div(
               class = "relative",
               times_logged_r()
             ),
             icon = shiny::icon("door-open"),
-            color = "light-blue",
+            color = "primary",
             width = NULL
           )
         }
