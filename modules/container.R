@@ -10,6 +10,9 @@ container_ui <- function(id) {
         ),
         user_info_ui(
           id = ns("user_info")
+        ),
+        login_ui(
+          id = ns("login")
         )
       )
     ),
@@ -22,9 +25,9 @@ container_ui <- function(id) {
     body = bs4Dash::bs4DashBody(
       bs4Dash::bs4TabItems(
         bs4Dash::bs4TabItem(
-          tabName = "login",
-          login_ui(
-            id = ns("login")
+          tabName = "welcome",
+          welcome_ui(
+            id = ns("welcome")
           )
         ),
         bs4Dash::bs4TabItem(
@@ -78,6 +81,7 @@ container_server <- function(id, .values) {
         .values = .values
       )
       
+      ## Navbar ----
       account_info_server(
         id = "account_info",
         .values = .values
@@ -93,6 +97,12 @@ container_server <- function(id, .values) {
         .values = .values
       )
 
+      ## Tab Items ----
+      welcome_server(
+        id = "welcome",
+        .values = .values
+      )
+      
       images_server(
         id = "images",
         .values = .values

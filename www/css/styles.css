@@ -13,3 +13,7 @@
 .relative {
   position: relative;
 }
+
+.dropdown-body {
+  padding: 15px;
+}

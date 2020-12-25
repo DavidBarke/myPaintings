@@ -59,8 +59,6 @@ ui_server <- function(source_to_globalenv = FALSE) {
     # extendShinyjs("www/js/extend_shinyjs.js")
   )
   
-  ui <- container_ui(id = "container")
-  
   # SERVER -------------------------------------------------------------------
   
   server <- function(input, output, session) {
@@ -98,6 +96,16 @@ ui_server <- function(source_to_globalenv = FALSE) {
       hours = "Hours",
       days = "Days"
     )
+    .values$settings$toast <- function(...) {
+      dots <- list(...)
+      
+      default <- list(
+        autohide = TRUE,
+        position = "bottomRight"
+      )
+      
+      c(dots, default)
+    }
     
     .values$update$user <- shiny::reactiveVal(0)
     

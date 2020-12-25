@@ -34,15 +34,17 @@ user_info_server <- function(id, .values) {
       })
       
       output$user <- bs4Dash::renderUser({
-        bs4Dash::dashboardUser(
-          name = name_r(),
-          image = "./img/empty_profile.png",
-          title = title_r(),
-          subtitle = subtitle_r(),
-          logout_ui(
-            id = ns("logout")
+        if (.values$user$status() != "not_logged") {
+          bs4Dash::dashboardUser(
+            name = name_r(),
+            image = "./img/empty_profile.png",
+            title = title_r(),
+            subtitle = subtitle_r(),
+            logout_ui(
+              id = ns("logout")
+            )
           )
-        )
+        }
       })
       
       logout_server(

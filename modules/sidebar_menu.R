@@ -20,22 +20,22 @@ sidebar_menu_server <- function(id, .values) {
 
       # Name of menu items that are visible according to access right
       access_list <- list(
-        not_logged = "login",
+        not_logged = "welcome",
         admin = c(
-          "login", "images", "wallet", "user_management", "settings"
+          "images", "wallet", "user_management", "settings"
         ),
         user = c(
-          "login", "images", "wallet", "settings"
+          "images", "wallet", "settings"
         )
       )
 
       # List of all possible menu items. Extraction is done according to access
       # right
       menu_item_list <- list(
-        login = bs4Dash::menuItem(
-          text = "Login",
-          tabName = "login",
-          icon = shiny::icon("sign-in-alt")
+        welcome = bs4Dash::menuItem(
+          text = "Welcome",
+          tabName = "welcome",
+          icon = shiny::icon("certificate")
         ),
         images = bs4Dash::menuItem(
           text = "Images",
