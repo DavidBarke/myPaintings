@@ -40,25 +40,13 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
             value = 1000,
             minimumValue = 0,
             currencySymbol = " $",
-            currencySymbolPlacement = "s"
+            currencySymbolPlacement = "p"
           ),
-          footer = shiny::uiOutput(
-            outputId = ns("confirm_offer")
+          footer = shiny::actionButton(
+            inputId = ns("confirm_offer"),
+            label = "Confirm Offer"
           )
         ))
-      })
-      
-      output$confirm_offer <- shiny::renderUI({
-        btn <- shiny::actionButton(
-          inputId = ns("confirm_offer"),
-          label = "Confirm Offer"
-        )
-        
-        if (offer_error_r()) shinyjs::disabled(btn) else btn
-      })
-      
-      offer_error_r <- shiny::reactive({
-        FALSE
       })
       
       shiny::observeEvent(input$confirm_offer, {

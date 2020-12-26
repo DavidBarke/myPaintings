@@ -71,3 +71,21 @@ db_get_offered_price <- function(db, image_id) {
     params = list(image_id)
   )$price
 }
+
+
+
+#' Set Offered Price for Image
+#' 
+#' @template db
+#' @param image_id Image id.
+#' 
+#' @family offered_images
+#' 
+#' @export
+db_set_offered_price <- function(db, image_id, price) {
+  DBI::dbExecute(
+    db,
+    "UPDATE offered_images SET price = ? WHERE image_id = ?",
+    params = list(price, image_id)
+  )
+}
