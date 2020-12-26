@@ -18,6 +18,24 @@ db_offer_image <- function(db, image_id, price) {
 
 
 
+#' Withdraw Image from Sale
+#' 
+#' @template db
+#' @param image_id Image id.
+#' 
+#' @family offered_images
+#' 
+#' @export
+db_withdraw_offer_image <- function(db, image_id) {
+  DBI::dbExecute(
+    db,
+    "DELETE FROM offered_images WHERE image_id = ?",
+    params = list(image_id)
+  )
+}
+
+
+
 #' Determine if Image is Offered
 #' 
 #' @template db
@@ -34,4 +52,22 @@ db_is_image_offered <- function(db, image_id) {
   )
   
   as.logical(nrow(tbl))
+}
+
+
+
+#' Get Offered Price for Image
+#' 
+#' @template db
+#' @param image_id Image id.
+#' 
+#' @family offered_images
+#' 
+#' @export
+db_get_offered_price <- function(db, image_id) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT price FROM offered_images WHERE image_id = ?",
+    params = list(image_id)
+  )$price
 }

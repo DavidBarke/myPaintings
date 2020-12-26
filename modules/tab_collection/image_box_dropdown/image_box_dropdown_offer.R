@@ -28,7 +28,8 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
           )
         }
       })
-      
+
+      ## Offer ----      
       shiny::observeEvent(input$offer_image, {
         shiny::showModal(shiny::modalDialog(
           easyClose = TRUE,
@@ -78,6 +79,30 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
             "\" for ",
             .values$settings$dollar_format(input$price),
             "."
+          ),
+          options = .values$settings$toast(
+            delay = 3000,
+            class = "bg-success"
+          )
+        )
+      })
+      
+      
+      
+      ## Withdraw offer ----
+      shiny::observeEvent(input$cancel_offer, {
+        db_withdraw_offer_image(
+          db = .values$db,
+          image_id = image_r()$image_id
+        )
+        
+        .values$update$offered_images(.values$update$offered_images() + 1)
+        
+        bs4Dash::toast(
+          paste0(
+            "Withdrew offer for \"", 
+            image_r()$title, 
+            "\"."
           ),
           options = .values$settings$toast(
             delay = 3000,
