@@ -34,3 +34,23 @@ db_get_table <- function(db, name) {
     query
   )
 }
+
+
+
+#' Get Column of a Table
+#' @template db
+#' @template name
+#' @param column Column name.
+#' 
+#' @export
+db_get_column <- function(db, name, column) {
+  DBI::dbGetQuery(
+    db,
+    paste(
+      "SELECT",
+      column,
+      "FROM",
+      name
+    )
+  )[[column]]
+}

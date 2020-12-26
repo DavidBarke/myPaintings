@@ -18,27 +18,6 @@ db_add_image <- function(db, user_id, title) {
 
 
 
-#' Get All Images
-#' 
-#' @template db
-#' 
-#' @family image
-#' 
-#' @export
-db_get_images <- function(db) {
-  tbl <- DBI::dbGetQuery(
-    db,
-    "SELECT rowid AS image_id, * FROM image"
-  )
-  
-  x <- tbl$row_id
-  names(x) <- tbl$title
-  
-  x
-}
-
-
-
 #' Get All Images from User
 #' 
 #' @template db

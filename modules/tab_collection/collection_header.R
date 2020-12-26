@@ -13,11 +13,12 @@ collection_header_ui <- function(id) {
           shiny::column(
             width = 4,
             shiny::selectInput(
-              inputId = ns("show"),
-              label = "Show",
+              inputId = ns("filter"),
+              label = "Filter",
               choices = c(
                 "All" = "all",
-                "For Sale" = "for_sale"
+                "Offered" = "offered",
+                "Not offered" = "not_offered"
               )
             )
           ),
@@ -45,6 +46,21 @@ collection_header_server <- function(id, .values) {
     function(input, output, session) {
       
       ns <- session$ns
+      
+      filter_r <- shiny::reactive({
+        input$filter
+      })
+      
+      sort_r <- shiny::reactive({
+        input$sort
+      })
+      
+      return_list <- list(
+        filter_r = filter_r,
+        sort_r = sort_r
+      )
+      
+      return(return_list)
     }
   )
 }

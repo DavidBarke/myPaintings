@@ -76,6 +76,12 @@ image_box_server <- function(id, .values, image_id) {
         .values = .values,
         image_r = image_r
       )
+      
+      return_list <- list(
+        is_offered_r = is_offered_r
+      )
+      
+      return(return_list)
     }
   )
 }
