@@ -77,3 +77,22 @@ db_get_image_entry_by_image_id <- function(db, image_id) {
     params = list(image_id)
   )
 }
+
+
+
+#' Set Image Title
+#' 
+#' @template db
+#' @param image_id Image id.
+#' @param title New image title.
+#' 
+#' @family image
+#' 
+#' @export
+db_set_image_title <- function(db, image_id, title) {
+  DBI::dbExecute(
+    db,
+    "UPDATE image SET title = ? WHERE rowid = ?",
+    params = list(title, image_id)
+  )
+}

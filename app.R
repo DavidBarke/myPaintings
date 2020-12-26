@@ -17,8 +17,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
   source("init/source_directory.R")
   
   source_directory(
-    # chdir makes it possible to use relative paths in source statements inside
-    # these sourced files (for example DataStorage2.R)
+    # chdir enables use of relative paths in source statements inside
+    # these sourced files
     path = "./modules",
     encoding = "UTF-8",
     modifiedOnly = FALSE,
