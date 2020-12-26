@@ -24,3 +24,11 @@ as_english <- function(x) {
     x
   }
 }
+
+format_currency <- function(x, currency = "$") {
+  DT::formatCurrency(
+    table = DT::datatable(tibble::tibble(x = x)), 
+    columns = "x",
+    currency = currency
+  )$x
+}

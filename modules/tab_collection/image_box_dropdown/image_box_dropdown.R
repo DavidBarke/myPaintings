@@ -23,6 +23,7 @@ image_box_dropdown_server <- function(id, .values, image_r) {
       
       image_box_dropdown_offer_server(
         id = "image_box_dropdown_offer",
+        .values = .values,
         image_r = image_r
       )
       

@@ -100,12 +100,12 @@ ui_server <- function(source_to_globalenv = FALSE) {
       dots <- list(...)
       
       default <- list(
-        autohide = TRUE,
-        position = "bottomRight"
+        autohide = TRUE
       )
       
       c(dots, default)
     }
+    .values$settings$dollar_format <- scales::dollar_format()
     
     .values$update$user <- shiny::reactiveVal(0)
     .values$update$images <- shiny::reactiveVal(0)
