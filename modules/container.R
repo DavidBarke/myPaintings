@@ -120,6 +120,16 @@ container_server <- function(id, .values) {
         .values = .values
       )
       
+      buy_server(
+        id = "buy",
+        .values = .values
+      )
+      
+      sell_server(
+        id = "sell",
+        .values = .values
+      )
+      
       wallet_server(
         id = "wallet",
         .values = .values
