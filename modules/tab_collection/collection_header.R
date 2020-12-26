@@ -11,7 +11,7 @@ collection_header_ui <- function(id) {
         solidHeader = TRUE,
         shiny::fluidRow(
           shiny::column(
-            width = 4,
+            width = 3,
             shiny::selectInput(
               inputId = ns("filter"),
               label = "Filter",
@@ -23,7 +23,7 @@ collection_header_ui <- function(id) {
             )
           ),
           shiny::column(
-            width = 4,
+            width = 3,
             shiny::selectInput(
               inputId = ns("sort"),
               label = "Sort",
@@ -32,6 +32,15 @@ collection_header_ui <- function(id) {
                 "By Year" = "year",
                 "By Painter" = "painter"
               )
+            )
+          ),
+          shiny::column(
+            width = 3,
+            shiny::selectInput(
+              inputId = ns("width"),
+              label = "Width",
+              choices = c(1, 2, 3, 4, 6, 12),
+              selected = 3
             )
           )
         )
@@ -55,9 +64,14 @@ collection_header_server <- function(id, .values) {
         input$sort
       })
       
+      width_r <- shiny::reactive({
+        as.integer(input$width)
+      })
+      
       return_list <- list(
         filter_r = filter_r,
-        sort_r = sort_r
+        sort_r = sort_r,
+        width_r = width_r
       )
       
       return(return_list)
