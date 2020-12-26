@@ -13,8 +13,31 @@ collection_ui <- function(id) {
         )
       )
     ),
-    shiny::uiOutput(
-      outputId = ns("images")
+    shiny::fluidRow(
+      shiny::column(
+        width = 3,
+        shiny::uiOutput(
+          outputId = ns("images_1")
+        )
+      ),
+      shiny::column(
+        width = 3,
+        shiny::uiOutput(
+          outputId = ns("images_2")
+        )
+      ),
+      shiny::column(
+        width = 3,
+        shiny::uiOutput(
+          outputId = ns("images_3")
+        )
+      ),
+      shiny::column(
+        width = 3,
+        shiny::uiOutput(
+          outputId = ns("images_4")
+        )
+      )
     )
   )
 }
@@ -30,42 +53,69 @@ collection_server <- function(id, .values) {
         image_box_server = integer()
       )
       
-      image_tbl_r <- shiny::reactive({
-        db_get_table(.values$db, "image")
+      image_ids_r <- shiny::reactive({
+        DBI::dbGetQuery(.values$db, "SELECT rowid FROM image")$rowid
       })
       
-      output$images <- shiny::renderUI({
-        image_ui <- purrr::pmap(image_tbl_r(), function(rowid, path, title, user_id) {
-          if (!as.integer(rowid) %in% called_rvs$image_box_server) {
-            called_rvs$image_box_server <- c(called_rvs$image_box_server, rowid)
+      shiny::observe({
+        image_ui <- purrr::map(image_ids_r(), function(image_id) {
+          if (!as.integer(image_id) %in% called_rvs$image_box_server) {
+            called_rvs$image_box_server <- c(
+              called_rvs$image_box_server, image_id
+            )
             
             image_box_server(
-              id = "image_box" %_% rowid,
+              id = "image_box" %_% image_id,
               .values = .values,
-              img = list(
-                src = path,
-                title = title
-              )
+              image_id = image_id
             )
           }
-          
-          image_box_ui(
-            id = ns("image_box" %_% rowid)
-          )
-        }) 
-        
-        shiny::fluidRow(
-          image_ui
-        )
+        })
       })
       
-      image_box_server(
-        id = "mona_lisa",
-        img = list(
-          src = "./img/mona_lisa.png",
-          title = "Mona Lisa"
-        )
-      )
+      output$images_1 <- shiny::renderUI({
+        indices <- seq_along(image_ids_r())
+        indices <- indices[indices %% 4 == 1]
+        
+        image_ui <- purrr::map(indices, function(image_id) {
+          image_box_ui(
+            id = ns("image_box" %_% image_id)
+          )
+        }) 
+      })
+      
+      output$images_2 <- shiny::renderUI({
+        indices <- seq_along(image_ids_r())
+        indices <- indices[indices %% 4 == 2]
+        
+        image_ui <- purrr::map(indices, function(image_id) {
+          image_box_ui(
+            id = ns("image_box" %_% image_id)
+          )
+        }) 
+      })
+      
+      output$images_3 <- shiny::renderUI({
+        indices <- seq_along(image_ids_r())
+        indices <- indices[indices %% 4 == 3]
+        
+        image_ui <- purrr::map(indices, function(image_id) {
+          image_box_ui(
+            id = ns("image_box" %_% image_id)
+          )
+        }) 
+      })
+      
+      output$images_4 <- shiny::renderUI({
+        indices <- seq_along(image_ids_r())
+        indices <- indices[indices %% 4 == 0]
+        
+        image_ui <- purrr::map(indices, function(image_id) {
+          image_box_ui(
+            id = ns("image_box" %_% image_id)
+          )
+        }) 
+      })
     }
   )
 }

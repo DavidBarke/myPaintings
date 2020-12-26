@@ -28,7 +28,7 @@ db_add_image <- function(db, user_id, title) {
 db_get_images <- function(db) {
   tbl <- DBI::dbGetQuery(
     db,
-    "SELECT rowid, title FROM image"
+    "SELECT rowid AS image_id, * FROM image"
   )
   
   x <- tbl$row_id
@@ -50,7 +50,7 @@ db_get_images <- function(db) {
 db_get_images_by_user_id <- function(db, user_id) {
   tbl <- DBI::dbGetQuery(
     db,
-    "SELECT rowid, title FROM image WHERE user_id = ?",
+    "SELECT rowid AS image_id, * FROM image WHERE user_id = ?",
     params = list(user_id)
   )
   
@@ -58,4 +58,22 @@ db_get_images_by_user_id <- function(db, user_id) {
   names(x) <- tbl$title
   
   x
+}
+
+
+
+#' Get Image Entry by Image ID
+#' 
+#' @template db
+#' @param image_id Image id.
+#' 
+#' @family image
+#' 
+#' @export
+db_get_image_entry_by_image_id <- function(db, image_id) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT rowid AS image_id, * FROM image WHERE rowid = ?",
+    params = list(image_id)
+  )
 }
