@@ -22,10 +22,10 @@ sidebar_menu_server <- function(id, .values) {
       access_list <- list(
         not_logged = "welcome",
         admin = c(
-          "images", "wallet", "user_management", "settings"
+          "collection", "trade", "wallet", "user_management", "settings"
         ),
         user = c(
-          "images", "wallet", "settings"
+          "collection", "trade", "wallet", "settings"
         )
       )
 
@@ -37,10 +37,22 @@ sidebar_menu_server <- function(id, .values) {
           tabName = "welcome",
           icon = shiny::icon("certificate")
         ),
-        images = bs4Dash::menuItem(
-          text = "Images",
-          tabName = "images",
+        collection = bs4Dash::menuItem(
+          text = "Collection",
+          tabName = "collection",
           icon = shiny::icon("images")
+        ),
+        trade = bs4Dash::menuItem(
+          text = "Trade",
+          icon = shiny::icon("exchange-alt"),
+          menuSubItem(
+            text = "Buy",
+            tabName = "buy"
+          ),
+          menuSubItem(
+            text = "Sell",
+            tabName = "sell"
+          )
         ),
         wallet = bs4Dash::menuItem(
           text = "Wallet",

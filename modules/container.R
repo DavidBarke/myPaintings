@@ -31,9 +31,21 @@ container_ui <- function(id) {
           )
         ),
         bs4Dash::bs4TabItem(
-          tabName = "images",
-          images_ui(
-            id = ns("images")
+          tabName = "collection",
+          collection_ui(
+            id = ns("collection")
+          )
+        ),
+        bs4Dash::tabItem(
+          tabName = "buy",
+          buy_ui(
+            id = ns("buy")
+          )
+        ),
+        bs4Dash::tabItem(
+          tabName = "sell",
+          sell_ui(
+            id = ns("sell")
           )
         ),
         bs4Dash::bs4TabItem(
@@ -103,8 +115,8 @@ container_server <- function(id, .values) {
         .values = .values
       )
       
-      images_server(
-        id = "images",
+      collection_server(
+        id = "collection",
         .values = .values
       )
       
