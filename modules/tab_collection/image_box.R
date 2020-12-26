@@ -35,13 +35,26 @@ image_box_server <- function(id, .values, image_id) {
       image_box_dropdown_server(
         id = "image_box_dropdown",
         .values = .values,
-        image_id = image_id,
         image_r = image_r
       )
       
-      image_r <- shiny::reactive({
+      is_offered_r <- shiny::reactive({
+        .values$update$offered_images()
+        db_is_image_offered(.values$db, image_id)
+      })
+      
+      entry_r <- shiny::reactive({
         .values$update$collection_image_rvs[[as.character(image_id)]]
         db_get_image_entry_by_image_id(.values$db, image_id)
+      })
+      
+      image_r <- shiny::reactive({
+        c(
+          entry_r(),
+          list(
+            is_offered = is_offered_r()
+          )
+        )
       })
       
       output$title <- shiny::renderUI({
