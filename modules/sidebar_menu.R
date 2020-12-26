@@ -43,16 +43,9 @@ sidebar_menu_server <- function(id, .values) {
           icon = shiny::icon("images")
         ),
         trade = bs4Dash::menuItem(
-          text = "Trade",
-          icon = shiny::icon("exchange-alt"),
-          menuSubItem(
-            text = "Buy",
-            tabName = "buy"
-          ),
-          menuSubItem(
-            text = "Sell",
-            tabName = "sell"
-          )
+          text = "Buy",
+          tabName = "buy",
+          icon = shiny::icon("shopping-bag")
         ),
         wallet = bs4Dash::menuItem(
           text = "Wallet",

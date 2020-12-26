@@ -42,12 +42,6 @@ container_ui <- function(id) {
             id = ns("buy")
           )
         ),
-        bs4Dash::tabItem(
-          tabName = "sell",
-          sell_ui(
-            id = ns("sell")
-          )
-        ),
         bs4Dash::bs4TabItem(
           tabName = "wallet",
           wallet_ui(
@@ -122,11 +116,6 @@ container_server <- function(id, .values) {
       
       buy_server(
         id = "buy",
-        .values = .values
-      )
-      
-      sell_server(
-        id = "sell",
         .values = .values
       )
       

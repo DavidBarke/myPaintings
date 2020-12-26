@@ -20,7 +20,7 @@ sell_image_box_ui <- function(id) {
     ),
     solidHeader = TRUE,
     status = "primary",
-    maximizable = TRUE,
+    maximizable = FALSE,
     shiny::imageOutput(
       outputId = ns("img"),
       height = NULL
