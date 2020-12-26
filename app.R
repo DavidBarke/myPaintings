@@ -108,6 +108,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
     }
     
     .values$update$user <- shiny::reactiveVal(0)
+    .values$update$images <- shiny::reactiveVal(0)
+    .values$update$offered_images <- shiny::reactiveVal(0)
     .values$update$collection_image_rvs <- shiny::reactiveValues()
     
     # Connect to db

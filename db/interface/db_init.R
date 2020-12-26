@@ -23,6 +23,7 @@ db_init <- function(path = "db/db.sqlite") {
   # create tables
   create_user_table(db)
   create_image_table(db)
+  create_offered_images_table(db)
   
   populate_user_table(db)
   populate_image_table(db)

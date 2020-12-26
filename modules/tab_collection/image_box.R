@@ -10,11 +10,9 @@ image_box_ui <- function(id) {
     title = shiny::uiOutput(
       outputId = ns("title")
     ),
-    dropdownMenu = bs4Dash::cardDropdown(
-      bs4Dash::cardDropdownItem(
-        id = ns("change_title"),
-        "Title",
-        icon = shiny::icon("edit")
+    dropdownMenu = bs4Dash::boxDropdown(
+      image_box_dropdown_ui(
+        id = ns("image_box_dropdown")
       )
     ),
     solidHeader = TRUE,
@@ -34,6 +32,13 @@ image_box_server <- function(id, .values, image_id) {
       
       ns <- session$ns
       
+      image_box_dropdown_server(
+        id = "image_box_dropdown",
+        .values = .values,
+        image_id = image_id,
+        image_r = image_r
+      )
+      
       image_r <- shiny::reactive({
         .values$update$collection_image_rvs[[as.character(image_id)]]
         db_get_image_entry_by_image_id(.values$db, image_id)
@@ -49,29 +54,6 @@ image_box_server <- function(id, .values, image_id) {
           width = "100%",
           height = "auto"
         )
-      })
-      
-      shiny::observeEvent(input$change_title, {
-        shiny::showModal(shiny::modalDialog(
-          title = "Painting Title",
-          easyClose = TRUE,
-          shiny::textInput(
-            inputId = ns("title"),
-            label = "Title",
-            value = image_r()$title
-          ),
-          footer = shiny::actionButton(
-            inputId = ns("confirm_title"),
-            label = "Confirm"
-          )
-        ))
-      })
-      
-      shiny::observeEvent(input$confirm_title, {
-        shiny::removeModal()
-        
-        db_set_image_title(.values$db, image_id, input$title)
-        .values$update$collection_image_rvs[[as.character(image_id)]] <- runif(1)
       })
     }
   )

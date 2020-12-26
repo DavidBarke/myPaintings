@@ -2,16 +2,8 @@ collection_ui <- function(id) {
   ns <- shiny::NS(id)
   
   htmltools::tagList(
-    shiny::fluidRow(
-      shiny::column(
-        width = 12,
-        bs4Dash::box(
-          width = NULL,
-          title = "Images",
-          status = "primary",
-          solidHeader = TRUE
-        )
-      )
+    collection_header_ui(
+      id = ns("collection_header")
     ),
     shiny::fluidRow(
       shiny::column(
@@ -48,6 +40,11 @@ collection_server <- function(id, .values) {
     function(input, output, session) {
       
       ns <- session$ns
+      
+      collection_header_server(
+        id = "collection_header",
+        .values = .values
+      )
       
       called_rvs <- shiny::reactiveValues(
         image_box_server = integer()
