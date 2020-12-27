@@ -34,6 +34,8 @@ image_box_dropdown_title_server <- function(id, .values, image_r) {
       shiny::observeEvent(input$confirm_title, {
         shiny::removeModal()
         
+        image_id <- image_r()$image_id
+        
         db_set_image_title(.values$db, image_id, input$title)
         .values$update$collection_image_rvs[[as.character(image_id)]] <- runif(1)
       })
