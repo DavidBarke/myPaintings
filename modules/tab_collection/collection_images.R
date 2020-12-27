@@ -74,7 +74,22 @@ collection_images_server <- function(id, .values, options) {
           )
         })
         
-        distribute_boxes(image_boxes, width = options$width_r())
+        if (options$display_r() == "details") {
+          # Column-based layout
+          distribute_boxes(image_boxes, width = options$width_r())
+        } else {
+          # Row-based layout
+          columns <- purrr::map(image_boxes, function(image_box) {
+            shiny::column(
+              width = options$width_r(),
+              image_box
+            )
+          })
+          
+          shiny::fluidRow(
+            columns
+          )
+        }
       })
       
       distribute_boxes <- function(boxes, width) {
