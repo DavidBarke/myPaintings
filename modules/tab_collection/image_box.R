@@ -17,9 +17,25 @@ image_box_server <- function(id, .values, image_id, options) {
       
       status <- sample(status_choices, 1)
       
-      displays <- list(
-        details = bs4Dash::tabBox(
+      layout_dict <- c(
+        "image" = "details",
+        "info" = "details",
+        "list" = "list"
+      )
+      
+      layouts <- list(
+        details = shiny::uiOutput(
+          outputId = ns("layout_details")
+        ),
+        list = shiny::uiOutput(
+          outputId = ns("layout_list")
+        )
+      )
+      
+      output$layout_details <- shiny::renderUI({
+        bs4Dash::tabBox(
           id = ns("image_tabset"),
+          selected = options$display_r(),
           width = NULL,
           side = "right",
           title = image_box_title_ui(
@@ -34,14 +50,27 @@ image_box_server <- function(id, .values, image_id, options) {
           status = status,
           maximizable = TRUE,
           collapsible = FALSE,
-          image_box_image_ui(
-            id = ns("image_box_image")
+          shiny::tabPanel(
+            title = "Image",
+            value = "image",
+            icon = shiny::icon("image"),
+            image_box_image_ui(
+              id = ns("image_box_image")
+            )
           ),
-          image_box_info_ui(
-            id = ns("image_box_info")
+          shiny::tabPanel(
+            title = "Info",
+            value = "info",
+            icon = shiny::icon("info-circle"),
+            image_box_info_ui(
+              id = ns("image_box_info")
+            )
           )
-        ),
-        list = bodyless_card(
+        )
+      })
+      
+      output$layout_list <- shiny::renderUI({
+        bodyless_card(
           width = NULL,
           title = image_box_title_ui(
             id = ns("image_box_title")
@@ -54,10 +83,19 @@ image_box_server <- function(id, .values, image_id, options) {
           solidHeader = TRUE,
           status = status
         )
-      )
+      })
+      
+      shiny::observeEvent(options$display_r(), {
+        if (options$display_r() %in% c("image", "info")) {
+          shiny::updateTabsetPanel(
+            inputId = "image_tabset",
+            selected = options$display_r()
+          )
+        }
+      })
       
       output$card <- shiny::renderUI({
-        displays[[options$display_r()]]
+        layouts[[layout_dict[options$display_r()]]]
       })
       
       entry_r <- shiny::reactive({

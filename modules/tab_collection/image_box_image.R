@@ -1,13 +1,9 @@
 image_box_image_ui <- function(id) {
   ns <- shiny::NS(id)
   
-  shiny::tabPanel(
-    title = "Image",
-    icon = shiny::icon("image"),
-    shiny::imageOutput(
-      outputId = ns("img"),
-      height = NULL
-    )
+  shiny::imageOutput(
+    outputId = ns("img"),
+    height = NULL
   )
 }
 

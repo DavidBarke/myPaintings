@@ -74,7 +74,7 @@ collection_images_server <- function(id, .values, options) {
           )
         })
         
-        if (options$display_r() == "details") {
+        if (options$display_r() %in% c("image", "info")) {
           # Column-based layout
           distribute_boxes(image_boxes, width = options$width_r())
         } else {

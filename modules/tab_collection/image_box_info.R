@@ -1,12 +1,8 @@
 image_box_info_ui <- function(id) {
   ns <- shiny::NS(id)
   
-  shiny::tabPanel(
-    title = "Info",
-    icon = shiny::icon("info-circle"),
-    shiny::uiOutput(
-      outputId = ns("info")
-    )
+  shiny::uiOutput(
+    outputId = ns("info")
   )
 }
 

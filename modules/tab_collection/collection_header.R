@@ -40,7 +40,8 @@ collection_header_ui <- function(id) {
               inputId = ns("display"),
               label = "Display",
               choices = c(
-                "Details" = "details",
+                "Images" = "image",
+                "Infos" = "info",
                 "List" = "list"
               )
             )
