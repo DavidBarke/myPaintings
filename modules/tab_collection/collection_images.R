@@ -33,7 +33,8 @@ collection_images_server <- function(id, .values, options) {
             image_box_return[[as.character(image_id)]] <- image_box_server(
               id = "image_box" %_% image_id,
               .values = .values,
-              image_id = image_id
+              image_id = image_id,
+              options = options
             )
           }
         })

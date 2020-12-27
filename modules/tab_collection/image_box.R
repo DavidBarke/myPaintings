@@ -1,36 +1,59 @@
 image_box_ui <- function(id) {
   ns <- shiny::NS(id)
   
-  status_choices <- c("primary", "orange", "olive", "fuchsia")
-  
-  status <- sample(status_choices, 1)
-  
-  bs4Dash::bs4Card(
-    width = NULL,
-    title = image_box_title_ui(
-      id = ns("image_box_title")
-    ),
-    dropdownMenu = bs4Dash::boxDropdown(
-      image_box_dropdown_ui(
-        id = ns("image_box_dropdown")
-      )
-    ),
-    solidHeader = TRUE,
-    status = status,
-    maximizable = TRUE,
-    collapsible = FALSE,
-    image_box_image_ui(
-      id = ns("image_box_image")
-    )
+  shiny::uiOutput(
+    outputId = ns("card")
   )
 }
 
-image_box_server <- function(id, .values, image_id) {
+image_box_server <- function(id, .values, image_id, options) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
       
       ns <- session$ns
+      
+      status_choices <- c("primary", "orange", "olive", "fuchsia")
+      
+      status <- sample(status_choices, 1)
+      
+      displays <- list(
+        details = bs4Dash::bs4Card(
+          width = NULL,
+          title = image_box_title_ui(
+            id = ns("image_box_title")
+          ),
+          dropdownMenu = bs4Dash::boxDropdown(
+            image_box_dropdown_ui(
+              id = ns("image_box_dropdown")
+            )
+          ),
+          solidHeader = TRUE,
+          status = status,
+          maximizable = TRUE,
+          collapsible = FALSE,
+          image_box_image_ui(
+            id = ns("image_box_image")
+          )
+        ),
+        list = bodyless_card(
+          width = NULL,
+          title = image_box_title_ui(
+            id = ns("image_box_title")
+          ),
+          dropdownMenu = bs4Dash::boxDropdown(
+            image_box_dropdown_ui(
+              id = ns("image_box_dropdown")
+            )
+          ),
+          solidHeader = TRUE,
+          status = status
+        )
+      )
+      
+      output$card <- shiny::renderUI({
+        displays[[options$display_r()]]
+      })
       
       entry_r <- shiny::reactive({
         .values$update$collection_image_rvs[[as.character(image_id)]]

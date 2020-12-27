@@ -11,7 +11,7 @@ collection_header_ui <- function(id) {
         solidHeader = TRUE,
         shiny::fluidRow(
           shiny::column(
-            width = 3,
+            width = 2,
             shiny::selectInput(
               inputId = ns("filter"),
               label = "Filter",
@@ -23,7 +23,7 @@ collection_header_ui <- function(id) {
             )
           ),
           shiny::column(
-            width = 3,
+            width = 2,
             shiny::selectInput(
               inputId = ns("sort"),
               label = "Sort",
@@ -35,16 +35,27 @@ collection_header_ui <- function(id) {
             )
           ),
           shiny::column(
-            width = 3,
+            width = 2,
+            shiny::selectInput(
+              inputId = ns("display"),
+              label = "Display",
+              choices = c(
+                "Details" = "details",
+                "List" = "list"
+              )
+            )
+          ),
+          shiny::column(
+            width = 2,
             shiny::selectInput(
               inputId = ns("width"),
-              label = "Width",
+              label = "Item width",
               choices = c(1, 2, 3, 4, 6, 12),
               selected = 3
             )
           ),
           shiny::column(
-            width = 3,
+            width = 2,
             shiny::selectInput(
               inputId = ns("n_entries"),
               label = "Entries per page",
@@ -73,6 +84,10 @@ collection_header_server <- function(id, .values) {
         input$sort
       })
       
+      display_r <- shiny::reactive({
+        input$display
+      })
+      
       width_r <- shiny::reactive({
         as.integer(input$width)
       })
@@ -82,6 +97,7 @@ collection_header_server <- function(id, .values) {
       })
       
       return_list <- list(
+        display_r = display_r,
         filter_r = filter_r,
         n_entries_r = n_entries_r,
         sort_r = sort_r,
