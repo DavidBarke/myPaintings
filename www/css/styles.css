@@ -17,3 +17,8 @@
 .dropdown-body {
   padding: 15px;
 }
+
+.card-header .nav-link.active {
+  background-color: unset;
+  
+}

@@ -18,8 +18,10 @@ image_box_server <- function(id, .values, image_id, options) {
       status <- sample(status_choices, 1)
       
       displays <- list(
-        details = bs4Dash::bs4Card(
+        details = bs4Dash::tabBox(
+          id = ns("image_tabset"),
           width = NULL,
+          side = "right",
           title = image_box_title_ui(
             id = ns("image_box_title")
           ),
@@ -34,6 +36,9 @@ image_box_server <- function(id, .values, image_id, options) {
           collapsible = FALSE,
           image_box_image_ui(
             id = ns("image_box_image")
+          ),
+          image_box_info_ui(
+            id = ns("image_box_info")
           )
         ),
         list = bodyless_card(
