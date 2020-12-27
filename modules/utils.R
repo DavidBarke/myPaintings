@@ -2,6 +2,8 @@
 
 `%||%` <- function(x, y) if (!is.null(x)) x else y
 
+`%NA%` <- function(x, y) if (!is.na(x)) x else y
+
 as_english <- function(x) {
   dict <- c(
     "1"  = "one",
@@ -32,3 +34,13 @@ format_currency <- function(x, currency = "$") {
     currency = currency
   )$x
 }
+
+format_museum <- function(museum, city) {
+  if (is.na(museum)) return(city %NA% "Missing")
+  
+  if (is.na(city)) return(museum)
+  
+  paste(museum, city, sep = ", ")
+}
+
+

@@ -105,6 +105,13 @@ image_box_server <- function(id, .values, image_id, options) {
         image_r = image_r
       )
       
+      image_box_info_server(
+        id = "image_box_info",
+        .values = .values,
+        image_r = image_r,
+        status = status
+      )
+      
       return_list <- list(
         is_offered_r = is_offered_r
       )
