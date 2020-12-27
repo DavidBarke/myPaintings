@@ -42,6 +42,15 @@ collection_header_ui <- function(id) {
               choices = c(1, 2, 3, 4, 6, 12),
               selected = 3
             )
+          ),
+          shiny::column(
+            width = 3,
+            shiny::selectInput(
+              inputId = ns("n_entries"),
+              label = "Entries per page",
+              choices = c(10, 25, 50, 100),
+              selected = 50
+            )
           )
         )
       )
@@ -68,8 +77,13 @@ collection_header_server <- function(id, .values) {
         as.integer(input$width)
       })
       
+      n_entries_r <- shiny::reactive({
+        as.integer(input$n_entries)
+      })
+      
       return_list <- list(
         filter_r = filter_r,
+        n_entries_r = n_entries_r,
         sort_r = sort_r,
         width_r = width_r
       )

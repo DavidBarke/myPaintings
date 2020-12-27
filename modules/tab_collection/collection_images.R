@@ -46,7 +46,7 @@ collection_images_server <- function(id, .values, options) {
         })
       })
       
-      filter_image_ids_r <- shiny::reactive({
+      filtered_image_ids_r <- shiny::reactive({
         ids <- all_image_ids_r()
         
         switch(
@@ -57,7 +57,14 @@ collection_images_server <- function(id, .values, options) {
         )
       })
       
-      image_ids_r <- filter_image_ids_r
+      indexed_image_ids_r <- shiny::reactive({
+        ids <- filtered_image_ids_r()
+        n <- length(ids)
+        indices <- 1:min(n, options$n_entries_r())
+        ids[indices]
+      })
+      
+      image_ids_r <- indexed_image_ids_r
       
       output$images <- shiny::renderUI({
         image_boxes <- purrr::map(image_ids_r(), function(image_id) {
