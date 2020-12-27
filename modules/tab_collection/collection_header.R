@@ -49,8 +49,13 @@ collection_header_ui <- function(id) {
             width = 2,
             shiny::selectInput(
               inputId = ns("width"),
-              label = "Item width",
-              choices = c(1, 2, 3, 4, 6, 12),
+              label = "Number of columns",
+              choices = c(
+                "1" = 12,
+                "2" = 6,
+                "3" = 4,
+                "4" = 3
+              ),
               selected = 3
             )
           ),
