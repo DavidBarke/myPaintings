@@ -49,6 +49,12 @@ container_ui <- function(id) {
           )
         ),
         bs4Dash::bs4TabItem(
+          tabName = "database",
+          database_ui(
+            id = ns("database")
+          )
+        ),
+        bs4Dash::bs4TabItem(
           tabName = "user_management",
           user_management_ui(
             id = ns("user_management")
@@ -121,6 +127,11 @@ container_server <- function(id, .values) {
       
       wallet_server(
         id = "wallet",
+        .values = .values
+      )
+      
+      database_server(
+        id = "database",
         .values = .values
       )
 
