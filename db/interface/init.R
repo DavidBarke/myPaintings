@@ -54,7 +54,13 @@ create_image_table <- function(db) {
   tbl <- tibble::tibble(
     path = character(),
     title = character(),
-    user_id = character()
+    original_title = character(),
+    user_id = character(),
+    year_start = numeric(),
+    year_finish = numeric(),
+    painter = character(),
+    city = character(),
+    museum = character()
   )
   
   DBI::dbCreateTable(db, "image", tbl)
@@ -85,22 +91,10 @@ populate_user_table <- function(db) {
 
 #' @export
 populate_image_table <- function(db) {
-  tbl <- tibble::tribble(
-    ~path, ~title, ~user_id,
-    "mona_lisa.png", "Mona Lisa", 1,
-    "last_supper.png", "Last Supper", 1,
-    "the_scream.jpg", "The Scream", 1,
-    "three_flowers.jpg", "Three Flowers", 1,
-    "five_flowers.jpg", "Five Flowers", 1,
-    "twelve_flowers.jpg", "Twelve Flowers", 1,
-    "water_lily_pond.jpg", "Water-Lily Pond", 1,
-    "soleil_levant.jpg", "Rising Sun", 1,
-    "creation_of_adam.jpg", "Creation of Adam", 1,
-    "starry_night.jpg", "Starry Night", 1, 
-    "girl_with_a_pearl_earring.jpg", "Girl with a Pearl Earring", 1,
-    "the_birth_of_venus.jpg", "The Birth of Venus", 1, 
-    "the_kiss.jpg", "The Kiss", 1
+  tbl <- readxl::read_xlsx(
+    "db/populate/image_table.xlsx"
   )
+  
   tbl$path <- file.path("./img", tbl$path)
   
   DBI::dbAppendTable(db, "image", tbl)
