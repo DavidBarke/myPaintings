@@ -62,6 +62,13 @@
       "Repository": "CRAN",
       "Hash": "b203113193e70978a696b2809525649d"
     },
+    "RColorBrewer": {
+      "Package": "RColorBrewer",
+      "Version": "1.1-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e031418365a7f7a766181ab5a41a5716"
+    },
     "RSQLite": {
       "Package": "RSQLite",
       "Version": "2.2.1",
@@ -142,14 +149,13 @@
       "Package": "bslib",
       "Version": "0.2.3.9000",
       "Source": "GitHub",
-      "Remotes": "rstudio/thematic, rstudio/promises, rstudio/sass,\nrstudio/htmltools, rstudio/shiny",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "bslib",
       "RemoteUsername": "rstudio",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "bslib",
+      "RemoteRef": "master",
       "RemoteSha": "338b05fc5aa551c0cb62dae2ce73ad8c2ceb8403",
-      "Hash": "163972fdd8596cbbcdef5b2773d1eb35"
+      "Hash": "edf1b6cf01366ab8166c4ce8d7498134"
     },
     "cachem": {
       "Package": "cachem",
@@ -157,11 +163,11 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "cachem",
       "RemoteUsername": "r-lib",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "cachem",
+      "RemoteRef": "master",
       "RemoteSha": "ebef4f85d84f9f878fc794e8788c81860029aac3",
-      "Hash": "f65e2d24b42e28118accc256a6e710da"
+      "Hash": "e384dcfbc4e625758fd32d7099178f49"
     },
     "cli": {
       "Package": "cli",
@@ -169,6 +175,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "3ef298932294b775fa0a3eeaa3a645b0"
+    },
+    "colorspace": {
+      "Package": "colorspace",
+      "Version": "2.0-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "abea3384649ef37f60ef51ce002f3547"
     },
     "commonmark": {
       "Package": "commonmark",
@@ -219,6 +232,13 @@
       "Repository": "CRAN",
       "Hash": "7fce217eaaf8016e72065e85c73027b5"
     },
+    "farver": {
+      "Package": "farver",
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "dad6793a5a1f73c8e91f1a1e3e834b05"
+    },
     "fastmap": {
       "Package": "fastmap",
       "Version": "1.0.1",
@@ -260,11 +280,11 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "htmltools",
       "RemoteUsername": "rstudio",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "htmltools",
+      "RemoteRef": "master",
       "RemoteSha": "d18bd8e404fb3e7d25dd448b1f8300f16a44add8",
-      "Hash": "624938244a70d1610a4f72a7cd7f93df"
+      "Hash": "2c4efca72b50b4dde3699acf9d055f22"
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
@@ -293,6 +313,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "98138e0994d41508c7a6b84a0600cfcb"
+    },
+    "labeling": {
+      "Package": "labeling",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3d5108641f47470611a32d0bdf357a72"
     },
     "later": {
       "Package": "later",
@@ -343,6 +370,13 @@
       "Repository": "CRAN",
       "Hash": "e87a35ec73b157552814869f45a63aa3"
     },
+    "munsell": {
+      "Package": "munsell",
+      "Version": "0.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6dfe8bf774944bd5595785e3229d8771"
+    },
     "openssl": {
       "Package": "openssl",
       "Version": "1.4.3",
@@ -377,11 +411,11 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "promises",
       "RemoteUsername": "rstudio",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "promises",
+      "RemoteRef": "master",
       "RemoteSha": "bbadb3d7dedfc052813bb66b4b1dcfebd5ff881a",
-      "Hash": "50eb266e7f81baec34a21e9999c78ec4"
+      "Hash": "211a4baef1d2bdacf9c09c4fe47e956a"
     },
     "purrr": {
       "Package": "purrr",
@@ -431,11 +465,18 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "sass",
       "RemoteUsername": "rstudio",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "sass",
+      "RemoteRef": "master",
       "RemoteSha": "403002c2533cc049625ae03688c442e6c4d51fe0",
-      "Hash": "e59b46facef37fa676de4f9d940c680c"
+      "Hash": "d72092356ffdf9da712773528efbf9fc"
+    },
+    "scales": {
+      "Package": "scales",
+      "Version": "1.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6f76f71042411426ec8df6c54f34e6dd"
     },
     "shiny": {
       "Package": "shiny",
@@ -450,12 +491,26 @@
       "RemoteSha": "a9f7068b2f30753ec42e5b5cee528c31b8db745c",
       "Hash": "3447f85b12b7531c75fcc09bef82993d"
     },
+    "shinyWidgets": {
+      "Package": "shinyWidgets",
+      "Version": "0.5.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2d537ac92c7ad118263cbd797c07f180"
+    },
     "shinycssloaders": {
       "Package": "shinycssloaders",
       "Version": "1.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f39bb3c44a9b496723ec7e86f9a771d8"
+    },
+    "shinydashboard": {
+      "Package": "shinydashboard",
+      "Version": "0.7.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "133639dc106955eee4ffb8ec73edac37"
     },
     "shinyjs": {
       "Package": "shinyjs",
@@ -519,6 +574,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "5cf1957f93076c19fdc81d01409d240b"
+    },
+    "viridisLite": {
+      "Package": "viridisLite",
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ce4f6271baa94776db692f1cb2055bee"
     },
     "waiter": {
       "Package": "waiter",
