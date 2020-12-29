@@ -1,4 +1,5 @@
 library(stringr)
+library(progress)
 
 extract_name <- function(author) {
   mat <- str_match(author, "([^,]*),?(.*)")
@@ -21,16 +22,21 @@ extract_life <- function(born_died) {
 }
 
 extract_url <- function(url) {
-  mat <- str_match(url, "https://www.wga.hu/html/(\\w)/(\\w+)/.*(\\w+)\\.html$")
+  mat <- str_match(url, "^https://www.wga.hu/html/(\\w)/(\\w+)(.*)/([\\w-]+)\\.html$")
+  
+  mat_2 <- str_match(url, "^https://www.wga.hu.html/(.*)\\.html$")
   
   tibble::tibble(
     url_letter = mat[,2],
     url_author = mat[,3],
-    url_title = mat[,4]
+    url_title = mat[,5],
+    url_path = mat_2[,2]
   )
 }
 
 add_letters_dirs <- function() {
+  if (!file.exists("./img/wga")) dir.create("./img/wga")
+  
   purrr::map(letters, function(letter) {
     dir_path <- file.path("./img/wga", letter)
     if (!file.exists(dir_path)) {
@@ -49,13 +55,9 @@ add_author_dirs <- function(tbl) {
 }
 
 src_path <- function(tbl) {
-  image <- paste0(tbl$url_title, ".jpg")
-  
   file.path(
     "https://www.wga.hu/art",
-    tbl$url_letter,
-    tbl$url_author,
-    image
+    paste0(tbl$url_path, ".jpg")
   )
 }
 
@@ -70,8 +72,10 @@ dest_path <- function(tbl) {
   )
 }
 
-download_wga <- function(tbl) {
-  purrr::map(seq_len(nrow(tbl)), function(i) {
-    
+download_wga <- function(src, dest) {
+  progress <- progress_bar$new(total = length(src))
+  purrr::map2(src, dest, function(url, destfile) {
+    progress$tick()
+    download.file(url, destfile, mode = "wb", quiet = TRUE)
   })
 }

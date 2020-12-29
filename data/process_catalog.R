@@ -24,4 +24,14 @@ tbl <- bind_cols(
   url_tbl
 ) %>%
   select(-author, -`born-died`) %>%
-  filter(form == "painting")
+  filter(form == "painting", !is.na(url_title))
+
+image_src <- src_path(tbl)
+image_dest <- dest_path(tbl)
+
+add_letters_dirs()
+add_author_dirs(tbl)
+
+if (FALSE) {
+  res <- download_wga(image_src, image_dest)
+}
