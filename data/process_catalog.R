@@ -1,4 +1,5 @@
 library(readxl)
+library(writexl)
 library(dplyr)
 
 source("./data/process_catalog_helpers.R")
@@ -26,8 +27,12 @@ tbl <- bind_cols(
   select(-author, -`born-died`) %>%
   filter(form == "painting", !is.na(url_title))
 
+write_xlsx(tbl, "./data/images.xlsx")
+
 image_src <- src_path(tbl)
 image_dest <- dest_path(tbl)
+
+tbl$path <- image_dest
 
 add_letters_dirs()
 add_author_dirs(tbl)
@@ -35,3 +40,4 @@ add_author_dirs(tbl)
 if (FALSE) {
   res <- download_wga(image_src, image_dest)
 }
+

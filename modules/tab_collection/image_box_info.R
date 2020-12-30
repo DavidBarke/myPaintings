@@ -15,23 +15,9 @@ image_box_info_server <- function(id, .values, image_r, status) {
       
       output$info <- shiny::renderUI({
         shiny::fluidRow(
-          title_ui_r(),
           painter_ui_r(),
-          museum_ui_r()
+          location_ui_r()
         )
-      })
-      
-      title_ui_r <- shiny::reactive({
-        bs4Dash::infoBox(
-          title = "Original Title",
-          value = title_r(),
-          width = 12,
-          icon = shiny::icon("heading")
-        )
-      })
-      
-      title_r <- shiny::reactive({
-        image_r()$original_title %NA% "Missing"
       })
       
       painter_ui_r <- shiny::reactive({
@@ -44,23 +30,23 @@ image_box_info_server <- function(id, .values, image_r, status) {
       })
       
       painter_r <- shiny::reactive({
-        image_r()$painter %NA% "Missing" 
+        format_painter(
+          first_name = image_r()$first_name,
+          last_name = image_r()$last_name
+        )
       })
       
-      museum_ui_r <- shiny::reactive({
+      location_ui_r <- shiny::reactive({
         bs4Dash::infoBox(
           title = "Exhibited at",
-          value = museum_r(),
+          value = location_r(),
           width = 12,
           icon = shiny::icon("landmark")
         )
       })
       
-      museum_r <- shiny::reactive({
-        format_museum(
-          museum = image_r()$museum,
-          city = image_r()$city
-        )
+      location_r <- shiny::reactive({
+        image_r()$location
       })
     }
   )

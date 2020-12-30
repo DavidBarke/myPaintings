@@ -7,9 +7,6 @@ image_box_dropdown_ui <- function(id) {
     ),
     image_box_dropdown_price_ui(
       id = ns("image_box_dropdown_price")
-    ),
-    image_box_dropdown_title_ui(
-      id = ns("image_box_dropdown_title")
     )
   )
 }
@@ -29,12 +26,6 @@ image_box_dropdown_server <- function(id, .values, image_r) {
       
       image_box_dropdown_price_server(
         id = "image_box_dropdown_price",
-        .values = .values,
-        image_r = image_r
-      )
-      
-      image_box_dropdown_title_server(
-        id = "image_box_dropdown_title",
         .values = .values,
         image_r = image_r
       )

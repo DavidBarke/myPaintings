@@ -24,7 +24,7 @@ collection_images_server <- function(id, .values, options) {
       })
       
       shiny::observe({
-        purrr::walk(all_image_ids_r(), function(image_id) {
+        purrr::walk(image_ids_r(), function(image_id) {
           if (!as.integer(image_id) %in% called_rvs$image_box_server) {
             called_rvs$image_box_server <- c(
               called_rvs$image_box_server, image_id

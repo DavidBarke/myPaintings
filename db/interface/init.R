@@ -52,15 +52,18 @@ create_user_table <- function(db) {
 #' @export
 create_image_table <- function(db) {
   tbl <- tibble::tibble(
-    path = character(),
     title = character(),
-    original_title = character(),
-    user_id = character(),
-    year_start = numeric(),
-    year_finish = numeric(),
-    painter = character(),
-    city = character(),
-    museum = character()
+    date = character(),
+    technique = character(),
+    location = character(),
+    form = character(),
+    type = character(),
+    school = character(),
+    timeframe = character(),
+    first_name = character(),
+    last_name = character(),
+    url = character(),
+    path = character()
   )
   
   DBI::dbCreateTable(db, "image", tbl)
@@ -92,10 +95,12 @@ populate_user_table <- function(db) {
 #' @export
 populate_image_table <- function(db) {
   tbl <- readxl::read_xlsx(
-    "db/populate/image_table.xlsx"
+    "./data/images.xlsx"
   )
   
-  tbl$path <- file.path("./img", tbl$path)
+  fields <- DBI::dbListFields(db, "image")
+  
+  tbl <- tbl[fields]
   
   DBI::dbAppendTable(db, "image", tbl)
 }
