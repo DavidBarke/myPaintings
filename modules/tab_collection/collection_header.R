@@ -59,16 +59,16 @@ collection_header_ui <- function(id) {
               ),
               selected = 3
             )
-          ),
-          shiny::column(
-            width = 2,
-            shiny::selectInput(
-              inputId = ns("n_entries"),
-              label = "Entries per page",
-              choices = c(10, 25, 50, 100),
-              selected = 50
-            )
           )
+          # shiny::column(
+          #   width = 2,
+          #   shiny::selectInput(
+          #     inputId = ns("n_entries"),
+          #     label = "Entries per page",
+          #     choices = c(10, 25, 50, 100),
+          #     selected = 50
+          #   )
+          # )
         )
       )
     )

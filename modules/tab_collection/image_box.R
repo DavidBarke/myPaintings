@@ -6,12 +6,23 @@ image_box_ui <- function(id) {
   )
 }
 
-image_box_server <- function(id, .values, image_id, options) {
+image_box_server <- function(id, .values, index, result_image_ids_r, options) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
       
       ns <- session$ns
+      
+      image_id_r <- shiny::reactive({
+        result_image_ids_r()[index]
+      })
+      
+      entry_r <- shiny::reactive({
+        db_get_image_entry_by_image_id(
+          db = .values$db,
+          image_id = image_id_r()
+        )
+      })
       
       status_choices <- c("primary", "orange", "olive", "fuchsia")
       
@@ -98,21 +109,15 @@ image_box_server <- function(id, .values, image_id, options) {
         layouts[[layout_dict[options$display_r()]]]
       })
       
-      entry_r <- shiny::reactive({
-        .values$update$collection_image_rvs[[as.character(image_id)]]
-        db_get_image_entry_by_image_id(.values$db, image_id)
-      })
-      
       is_offered_r <- shiny::reactive({
         .values$update$offered_images()
-        db_is_image_offered(.values$db, image_id)
+        db_is_image_offered(.values$db, image_id_r())
       })
       
       price_r <- shiny::reactive({
         if (!is_offered_r()) return(NULL)
         
-        .values$update$collection_image_rvs[[as.character(image_id)]]
-        db_get_offered_price(.values$db, image_id)
+        db_get_offered_price(.values$db, image_id_r())
       }) 
       
       image_r <- shiny::reactive({

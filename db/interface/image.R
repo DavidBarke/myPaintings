@@ -75,3 +75,17 @@ db_set_image_title <- function(db, image_id, title) {
     params = list(title, image_id)
   )
 }
+
+
+
+#' Get Image IDs by Filter
+#' 
+#' @template db
+#' @param filter Filter.
+#' 
+#' @family image
+#' 
+#' @export
+db_get_image_ids_by_filter <- function(db, filter) {
+  db_get_column(db, "image", "rowid")
+}
