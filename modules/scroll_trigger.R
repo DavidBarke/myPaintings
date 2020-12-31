@@ -5,8 +5,10 @@ scroll_trigger <- function(inputId, threshold = 100) {
         var win = $(window);
         var doc = $(document);
         var diff = doc.height() - win.scrollTop() - win.height();
-        if (diff < win.height()) {
-          console.log(diff);
+        var last_height = $(\"#[<inputId>]\").attr(\"last-height\");
+        var movement = doc.height() - last_height;
+        if (diff < 1.5 * win.height() && movement > 0) {
+          $(\"#[<inputId>]\").attr(\"last-height\", doc.height());
           Shiny.setInputValue(\"[<inputId>]\", diff);
         }
       }
@@ -18,6 +20,8 @@ scroll_trigger <- function(inputId, threshold = 100) {
   )
   
   htmltools::tags$script(
+    id = inputId,
+    `last-height` = 0,
     htmltools::HTML(func)
   )
 }
