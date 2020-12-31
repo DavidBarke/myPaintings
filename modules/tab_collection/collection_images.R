@@ -35,6 +35,7 @@ collection_images_server <- function(id, .values, options) {
       ns <- session$ns
       
       vis_start <- 20
+      load_offset <- 5
       
       prepared_step <- 50
       
@@ -43,6 +44,11 @@ collection_images_server <- function(id, .values, options) {
       # request (filter) is processed.
       current_visible_index_r <- shiny::reactiveVal(vis_start)
       current_prepared_index_r <- shiny::reactiveVal(prepared_step)
+      
+      ui_index_rv <- shiny::reactiveVal(prepared_step)
+      server_index_rv <- shiny::reactiveVal(vis_start)
+      
+      ui <- new.env()
       
       purrr::walk(1:vis_start, function(index) {
         image_box_server(
@@ -56,10 +62,9 @@ collection_images_server <- function(id, .values, options) {
         )
       })
       
-      result_image_ids_r <- shiny::reactive({
-        db_get_image_ids_by_filter(
-          db = .values$db,
-          filter = options$filter_r()
+      ui$boxes <- purrr::map(1:prepared_step, function(index) {
+        image_box_ui(
+          id = ns("image_box" %_% index)
         )
       })
       
@@ -71,16 +76,8 @@ collection_images_server <- function(id, .values, options) {
         ))
       })
       
-      rvs <- shiny::reactiveValues(
-        image_boxes = purrr::map(1:prepared_step, function(index) {
-          image_box_ui(
-            id = ns("image_box" %_% index)
-          )
-        })
-      )
-      
       output$images <- shiny::renderUI({
-        image_boxes <- rvs$image_boxes
+        image_boxes <- ui$boxes
         
         if (options$display_r() %in% c("image", "info")) {
           # Column-based layout
@@ -103,13 +100,14 @@ collection_images_server <- function(id, .values, options) {
       distribute_boxes <- function(boxes, width) {
         indices <- seq_along(boxes)
         
-        n <- 12 / as.integer(width)
+        n <- 12 / width
         
         columns <- purrr::map(seq_len(n), function(i) {
           # For last element mod is 0
           if (i == n) i <- 0
           shiny::column(
             width = width,
+            id = paste("img-col", i, sep = "-"),
             boxes[indices %% n == i]
           )
         })
@@ -118,13 +116,15 @@ collection_images_server <- function(id, .values, options) {
       }
       
       shiny::observeEvent(input$load_more, {
+        current_visible_index_r(current_visible_index_r() + load_offset)
+      })
+      
+      shiny::observeEvent(
+        ignoreInit = TRUE,
+        current_visible_index_r(), {
         vis_index <- current_visible_index_r()
         
-        offset <- 20
-        
-        current_visible_index_r(vis_index + offset)
-        
-        new_server_indices <- (vis_index + 1):(vis_index + offset)
+        new_server_indices <- (shiny::isolate(server_index_rv()) + 1):vis_index
         
         purrr::walk(new_server_indices, function(index) {
           image_box_server(
@@ -138,21 +138,55 @@ collection_images_server <- function(id, .values, options) {
           )
         })
         
-        if (current_visible_index_r() > current_prepared_index_r()) {
-          new_ui_indices <- (current_prepared_index_r() + 1):
-            (current_prepared_index_r() + prepared_step)
+        server_index_rv(vis_index)
+      })
+      
+      shiny::observeEvent(current_visible_index_r(), {
+        vis_index <- current_visible_index_r()
+        prep_index <- current_prepared_index_r()
+        
+        if (vis_index > prep_index) {
+          new_ui_indices <- (prep_index + 1):(prep_index + prepared_step)
           
-          rvs$image_boxes <- c(
-            rvs$image_boxes,
-            purrr::map(new_ui_indices, function(index) {
-              image_box_ui(
-                id = ns("image_box" %_% index)
-              )
-            })
+          new_boxes <- purrr::map(new_ui_indices, function(index) {
+            image_box_ui(
+              id = ns("image_box" %_% index)
+            )
+          })
+          
+          n_col <- 12 / options$width_r()
+          
+          indices <- seq_along(new_boxes)
+          
+          purrr::map(seq_len(n_col), function(i) {
+            # For last element mod is 0
+            if (i == n_col) i <- 0
+            shiny::insertUI(
+              selector = paste0("#img-col-", i),
+              where = "beforeEnd",
+              ui = new_boxes[indices %% n_col == i]
+            )
+          })
+          
+          ui$boxes <- c(
+            ui$boxes,
+            new_boxes
           )
           
-          current_prepared_index_r(current_prepared_index_r() + prepared_step)
+          current_prepared_index_r(prep_index + prepared_step)
         }
+      })
+      
+      # shiny::observe({
+      #   shiny::invalidateLater(500)
+      #   current_visible_index_r(shiny::isolate(current_visible_index_r()) + 1)
+      # })
+      
+      result_image_ids_r <- shiny::reactive({
+        db_get_image_ids_by_filter(
+          db = .values$db,
+          filter = options$filter_r()
+        )
       })
     }
   )
