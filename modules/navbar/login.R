@@ -20,7 +20,7 @@ login_server <- function(id, .values) {
       })
       
       output$login <- shiny::renderUI({
-        if (.values$user$status() == "not_logged") {
+        if (.values$user_rv()$status == "not_logged") {
           dropdown_menu(
             title = "Login",
             dropdown_menu_item(
@@ -88,9 +88,8 @@ login_server <- function(id, .values) {
         pwd_correct <- bcrypt::checkpw(input$user_password, user_pwd)
 
         if (pwd_correct) {
-          .values$user$status(db_get_user_status(.values$db, input$user_name))
-          .values$user$name(input$user_name)
-          .values$user$last_logged(db_get_user_last_logged(.values$db, input$user_name))
+          entry <- db_get_user_entry(.values$db, input$user_name)
+          .values$user_rv(entry)
           db_log_user_in(.values$db, input$user_name)
           .values$update$user(.values$update$user() + 1)
 

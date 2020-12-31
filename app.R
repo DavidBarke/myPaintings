@@ -77,11 +77,6 @@ ui_server <- function(source_to_globalenv = FALSE) {
     # store a trigger for each instance
     .values$trigger_list <- list()
     
-    .values$user$status <- shiny::reactiveVal("admin")
-    .values$user$name <- shiny::reactiveVal("Admin")
-    .values$user$last_logged <- shiny::reactiveVal("2011-11-11 11:11:11")
-    .values$user$account <- shiny::reactiveVal(1000)
-    
     .values$settings$password$length <- list(min = 4, max = 16)
     .values$settings$user_name$length <- list(min = 4, max = 16)
     .values$settings$group_name$length <- list(min = 4, max = 16)
@@ -114,6 +109,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
     
     # Connect to db
     .values$db <- DBI::dbConnect(RSQLite::SQLite(), "./db/db.sqlite")
+    # Admin is default user
+    .values$user_rv <- shiny::reactiveVal(db_get_user_entry(.values$db, "Admin"))
     
     # Enable regex on db
     RSQLite::initRegExp(.values$db)

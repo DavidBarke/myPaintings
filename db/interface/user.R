@@ -36,6 +36,24 @@ db_add_user <- function(db,
 
 
 
+#' Get User Entry
+#' 
+#' @template db
+#' @param user_id User id.
+#' 
+#' @family user
+#' 
+#' @export
+db_get_user_entry <- function(db, name) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT rowid AS user_id, * FROM user WHERE name = ?",
+    params = list(name)
+  )
+}
+
+
+
 #' Get User Name
 #' 
 #' @template db

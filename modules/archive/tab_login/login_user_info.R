@@ -27,14 +27,14 @@ login_user_info_server <- function(id, .values) {
       timer_r <- shiny::reactiveTimer(intervalMs = 5000)
 
       is_logged_r <- shiny::reactive({
-        .values$user$status() != "not_logged"
+        .values$user_rv()$status != "not_logged"
       })
 
       output$user_name <- shiny::renderUI({
         if (is_logged_r()) {
           bs4Dash::infoBox(
-            title = .values$settings$status_dict[.values$user$status()],
-            value = .values$user$name(),
+            title = .values$settings$status_dict[.values$user_rv()$status],
+            value = .values$user_rv()$name,
             icon = shiny::icon("users"),
             color = "primary",
             width = NULL
@@ -48,7 +48,7 @@ login_user_info_server <- function(id, .values) {
 
         current_logged_time <- db_get_user_last_logged(
           db = .values$db,
-          name = .values$user$name()
+          name = .values$user_rv()$name
         )
 
         current_logged_time <- lubridate::ymd_hms(current_logged_time)
@@ -81,7 +81,7 @@ login_user_info_server <- function(id, .values) {
       diff_time_last_r <- shiny::reactive({
         timer_r()
 
-        last_logged_time <- lubridate::ymd_hms(.values$user$last_logged())
+        last_logged_time <- lubridate::ymd_hms(.values$user_rv()$last_logged)
         current_time <- lubridate::ymd_hms(Sys.time())
 
         diff_time <- current_time - last_logged_time
@@ -109,7 +109,7 @@ login_user_info_server <- function(id, .values) {
       })
 
       times_logged_r <- shiny::reactive({
-        db_get_user_times_logged(.values$db, .values$user$name())
+        db_get_user_times_logged(.values$db, .values$user_rv()$name)
       })
 
       output$user_times_logged <- shiny::renderUI({
