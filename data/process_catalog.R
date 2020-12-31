@@ -27,17 +27,17 @@ tbl <- bind_cols(
   select(-author, -`born-died`) %>%
   filter(form == "painting", !is.na(url_title))
 
-write_xlsx(tbl, "./data/images.xlsx")
-
 image_src <- src_path(tbl)
 image_dest <- dest_path(tbl)
 
 tbl$path <- image_dest
 
-add_letters_dirs()
-add_author_dirs(tbl)
+write_xlsx(tbl, "./data/images.xlsx")
 
 if (FALSE) {
+  add_letters_dirs()
+  add_author_dirs(tbl)
+  
   res <- download_wga(image_src, image_dest)
 }
 
