@@ -2,27 +2,11 @@ collection_images_ui <- function(id) {
   ns <- shiny::NS(id)
   
   htmltools::tagList(
-    # shiny::fluidRow(
-    #   shiny::column(
-    #     width = 4,
-    #     id = "column-1"
-    #   ),
-    #   shiny::column(
-    #     width = 4,
-    #     id = "column-2"
-    #   ),
-    #   shiny::column(
-    #     width = 4,
-    #     id = "column-3"
-    #   )
-    # ),
     shiny::uiOutput(
       outputId = ns("images")
     ),
-    shiny::actionButton(
-      inputId = ns("load_more"),
-      label = "Load more",
-      width = "100%"
+    scroll_trigger(
+      inputId = ns("scroll_trigger")
     )
   )
 }
@@ -47,6 +31,9 @@ collection_images_server <- function(id, .values, options) {
       
       ui_index_rv <- shiny::reactiveVal(prepared_step)
       server_index_rv <- shiny::reactiveVal(vis_start)
+      
+      ui_blocked_rv <- shiny::reactiveVal(FALSE)
+      server_blocked_rv <- shiny::reactiveVal(FALSE)
       
       ui <- new.env()
       
@@ -115,31 +102,34 @@ collection_images_server <- function(id, .values, options) {
         shiny::fluidRow(columns)
       }
       
-      shiny::observeEvent(input$load_more, {
-        current_visible_index_r(current_visible_index_r() + load_offset)
-      })
-      
       shiny::observeEvent(
         ignoreInit = TRUE,
-        current_visible_index_r(), {
-        vis_index <- current_visible_index_r()
-        
-        new_server_indices <- (shiny::isolate(server_index_rv()) + 1):vis_index
-        
-        purrr::walk(new_server_indices, function(index) {
-          image_box_server(
-            id = "image_box" %_% index,
-            .values = .values,
-            # Ever image box uses its index to retrieve its current image_id
-            # by indexing result_image_ids_r
-            index = index,
-            result_image_ids_r = result_image_ids_r,
-            options = options
-          )
-        })
-        
-        server_index_rv(vis_index)
-      })
+        current_visible_index_r(), 
+        {
+          ui_blocked_rv(TRUE)
+          server_blocked_rv(TRUE)
+          
+          vis_index <- current_visible_index_r()
+          
+          new_server_indices <- (shiny::isolate(server_index_rv()) + 1):vis_index
+          
+          purrr::walk(new_server_indices, function(index) {
+            image_box_server(
+              id = "image_box" %_% index,
+              .values = .values,
+              # Ever image box uses its index to retrieve its current image_id
+              # by indexing result_image_ids_r
+              index = index,
+              result_image_ids_r = result_image_ids_r,
+              options = options
+            )
+          })
+          
+          server_index_rv(vis_index)
+          ui_blocked_rv(FALSE)
+          server_blocked_rv(FALSE)
+        }
+      )
       
       shiny::observeEvent(current_visible_index_r(), {
         vis_index <- current_visible_index_r()
@@ -177,10 +167,16 @@ collection_images_server <- function(id, .values, options) {
         }
       })
       
-      # shiny::observe({
-      #   shiny::invalidateLater(500)
-      #   current_visible_index_r(shiny::isolate(current_visible_index_r()) + 1)
-      # })
+      scroll_trigger_r <- shiny::throttle(
+        millis = 1000,
+        shiny::reactive({
+          input$scroll_trigger
+        })
+      )
+      
+      shiny::observeEvent(scroll_trigger_r(), {
+        current_visible_index_r(current_visible_index_r() + load_offset)
+      })
       
       result_image_ids_r <- shiny::reactive({
         db_get_image_ids_by_filter(
