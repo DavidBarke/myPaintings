@@ -13,7 +13,8 @@ filter_table_condition_ui <- function(id) {
       shiny::selectInput(
         inputId = ns("filter_by"),
         label = NULL,
-        choices = choices
+        choices = choices,
+        selected = "title"
       )
     ),
     htmltools::tags$td(
@@ -29,7 +30,9 @@ filter_table_condition_ui <- function(id) {
   )
 }
 
-filter_table_condition_server <- function(id, .values) {
+filter_table_condition_server <- function(
+  id, .values, query_text_start_r, query_text_in_r, query_params_in_r
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -39,7 +42,7 @@ filter_table_condition_server <- function(id, .values) {
       update_title_choices_rv <- shiny::reactiveVal(0)
       
       output$value <- shiny::renderUI({
-        value_dict[[print(input$filter_by)]]
+        value_dict[[input$filter_by]]
       })
       
       value_dict <- list(
@@ -80,6 +83,39 @@ filter_table_condition_server <- function(id, .values) {
       image_ids_r <- shiny::reactive({
         db_get_image_ids(.values$db)
       })
+      
+      query_text_out_r <- shiny::reactive({
+        c(
+          query_text_in_r(),
+          query_text_dict[[shiny::req(input$filter_by)]]
+        )
+      })
+      
+      query_text_dict <- list(
+        name = "user_image.user_id = ?",
+        title = "image.title = ?"
+      )
+      
+      query_params_out_r <- shiny::reactive({
+        c(
+          query_params_in_r(),
+          query_params_dict_fun[[shiny::req(input$filter_by)]]()
+        )
+      })
+      
+      # Reactive that returns a one element list containing the params
+      # which correspond to the query text
+      query_params_dict_fun <- list(
+        name = shiny::reactive(shiny::req(input$value_name)),
+        title = shiny::reactive(shiny::req(input$value_title))
+      )
+      
+      return_list <- list(
+        query_text_out_r = query_text_out_r,
+        query_params_out_r = query_params_out_r
+      )
+      
+      return(return_list)
     }
   )
 }
