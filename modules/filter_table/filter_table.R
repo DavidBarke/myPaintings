@@ -46,7 +46,7 @@ filter_table_server <- function(id, .values) {
           query_params_in_r <- if (n_conditions_rv() > 1) {
             return$row[[n_conditions_rv() - 1]]$query_params_out_r
           } else {
-            list()
+            shiny::reactive(list())
           }
           
           return$row[[n_conditions_rv()]] <- filter_table_condition_server(
@@ -79,7 +79,7 @@ filter_table_server <- function(id, .values) {
       })
       
       query_text_start_r <- shiny::reactive({
-        "SELECT image.rowid AS image_id FROM image INNER JOIN user_image ON image.rowid = user_image.imageid"
+        "SELECT image.rowid AS image_id FROM image INNER JOIN user_image ON image.rowid = user_image.image_id"
       })
       
       query_text_result_r <- shiny::reactive({
@@ -97,10 +97,35 @@ filter_table_server <- function(id, .values) {
         return$row[[n_conditions_rv()]]$query_params_out_r()
       })
       
-      shiny::observeEvent(query_params_result_r(), {
-        cat(query_text_result_r(), "\n")
-        str(query_params_result_r())
+      # shiny::observeEvent(query_params_result_r(), {
+      #   cat(query_text_result_r(), "\n")
+      #   str(query_params_result_r())
+      # })
+      
+      image_ids_r <- shiny::reactive({
+        if (length(query_params_result_r()) == 0) {
+          DBI::dbGetQuery(
+            .values$db,
+            query_text_result_r()
+          )
+        } else {
+          DBI::dbGetQuery(
+            .values$db,
+            query_text_result_r(),
+            params = query_params_result_r()
+          )
+        }
       })
+      
+      shiny::observeEvent(image_ids_r(), {
+        print(dplyr::as_tibble(image_ids_r()))
+      })
+      
+      return_list <- list(
+        image_ids_r = image_ids_r
+      )
+      
+      return(return_list)
     }
   )
 }

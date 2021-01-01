@@ -93,7 +93,7 @@ filter_table_condition_server <- function(
       
       query_text_dict <- list(
         name = "user_image.user_id = ?",
-        title = "image.title = ?"
+        title = "image.rowid = ?"
       )
       
       query_params_out_r <- shiny::reactive({
