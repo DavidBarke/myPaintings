@@ -31,7 +31,9 @@ image_box_server <- function(
       })
       
       is_offered_r <- shiny::reactive({
-        result_offered_r()[index]
+        result_image_ids_r()
+        dropdown_return$offer$update_r()
+        shiny::isolate(result_offered_r())[index]
       })
       
       price_r <- shiny::reactive({
@@ -141,7 +143,7 @@ image_box_server <- function(
         image_r = image_r
       )
       
-      image_box_dropdown_server(
+      dropdown_return <- image_box_dropdown_server(
         id = "image_box_dropdown",
         .values = .values,
         image_r = image_r

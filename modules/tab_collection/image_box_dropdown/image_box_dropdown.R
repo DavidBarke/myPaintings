@@ -18,18 +18,22 @@ image_box_dropdown_server <- function(id, .values, image_r) {
       
       ns <- session$ns
       
-      image_box_dropdown_offer_server(
+      offer_return <- image_box_dropdown_offer_server(
         id = "image_box_dropdown_offer",
         .values = .values,
         image_r = image_r
       )
       
-      image_box_dropdown_price_server(
+      price_return <- image_box_dropdown_price_server(
         id = "image_box_dropdown_price",
         .values = .values,
         image_r = image_r
       )
   
+      return_list <- list(
+        offer = offer_return,
+        price = price_return
+      )
     }
   )
 }

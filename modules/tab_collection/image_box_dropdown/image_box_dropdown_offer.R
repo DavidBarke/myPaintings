@@ -13,6 +13,8 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
       
       ns <- session$ns
       
+      update_rv <- shiny::reactiveVal(0)
+      
       output$offer_item <- shiny::renderUI({
         if (!image_r()$is_offered) {
           bs4Dash::cardDropdownItem(
@@ -59,6 +61,7 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
         )
 
         .values$update$offered_images(.values$update$offered_images() + 1)
+        update_rv(update_rv() + 1)
         
         bs4Dash::toast(
           paste0(
@@ -85,6 +88,7 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
         )
         
         .values$update$offered_images(.values$update$offered_images() + 1)
+        update_rv(update_rv() + 1)
         
         bs4Dash::toast(
           paste0(
@@ -98,6 +102,15 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
           )
         )
       })
+      
+      return_list <- list(
+        # is_offered_rv might be inconsistent to actual offer status after
+        # a request has been processed. Therefore only the information whether
+        # an update has occured is returned
+        update_r = shiny::reactive(update_rv())
+      )
+      
+      return(return_list)
     }
   )
 }

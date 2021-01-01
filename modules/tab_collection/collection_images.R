@@ -64,6 +64,7 @@ collection_images_server <- function(id, .values, options) {
         # Is only updated when new request is processed. In-between offerings
         # are only stored in respective image_box. This is an performance
         # improvement
+        .values$update$offered_images()
         db_is_image_offered(
           db = .values$db,
           image_id = result_image_ids_r()
