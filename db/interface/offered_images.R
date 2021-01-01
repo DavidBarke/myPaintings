@@ -30,7 +30,7 @@ db_withdraw_offer_image <- function(db, image_id) {
   DBI::dbExecute(
     db,
     "DELETE FROM offered_images WHERE image_id = ?",
-    params = list(image_id)
+    params = list(as.integer(image_id))
   )
 }
 
@@ -47,11 +47,11 @@ db_withdraw_offer_image <- function(db, image_id) {
 db_is_image_offered <- function(db, image_id) {
   tbl <- DBI::dbGetQuery(
     db,
-    "SELECT rowid FROM offered_images WHERE image_id = ?",
-    params = list(image_id)
+    "SELECT image_id FROM offered_images WHERE image_id = ?",
+    params = list(as.integer(image_id))
   )
   
-  as.logical(nrow(tbl))
+  image_id %in% tbl$image_id
 }
 
 
@@ -68,7 +68,7 @@ db_get_offered_price <- function(db, image_id) {
   DBI::dbGetQuery(
     db,
     "SELECT price FROM offered_images WHERE image_id = ?",
-    params = list(image_id)
+    params = list(as.integer(image_id))
   )$price
 }
 
@@ -86,6 +86,6 @@ db_set_offered_price <- function(db, image_id, price) {
   DBI::dbExecute(
     db,
     "UPDATE offered_images SET price = ? WHERE image_id = ?",
-    params = list(price, image_id)
+    params = list(price, as.integer(image_id))
   )
 }

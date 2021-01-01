@@ -6,7 +6,13 @@ image_box_ui <- function(id) {
   )
 }
 
-image_box_server <- function(id, .values, index, result_image_ids_r, options) {
+image_box_server <- function(
+  id, .values, 
+  index, # Index of box.
+  result_image_ids_r, # Image ids of all images that match a request.
+  result_offered_r, # Is displayed image offered?
+  options # List of reactives. Options from the collection header.
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -21,6 +27,26 @@ image_box_server <- function(id, .values, index, result_image_ids_r, options) {
         db_get_image_entry_by_image_id(
           db = .values$db,
           image_id = image_id_r()
+        )
+      })
+      
+      is_offered_r <- shiny::reactive({
+        result_offered_r()[index]
+      })
+      
+      price_r <- shiny::reactive({
+        if (!is_offered_r()) return(NULL)
+        
+        db_get_offered_price(.values$db, image_id_r())
+      }) 
+      
+      image_r <- shiny::reactive({
+        c(
+          entry_r(),
+          list(
+            is_offered = is_offered_r(),
+            price = price_r()
+          )
         )
       })
       
@@ -107,27 +133,6 @@ image_box_server <- function(id, .values, index, result_image_ids_r, options) {
       
       output$card <- shiny::renderUI({
         layouts[[layout_dict[options$display_r()]]]
-      })
-      
-      is_offered_r <- shiny::reactive({
-        .values$update$offered_images()
-        db_is_image_offered(.values$db, image_id_r())
-      })
-      
-      price_r <- shiny::reactive({
-        if (!is_offered_r()) return(NULL)
-        
-        db_get_offered_price(.values$db, image_id_r())
-      }) 
-      
-      image_r <- shiny::reactive({
-        c(
-          entry_r(),
-          list(
-            is_offered = is_offered_r(),
-            price = price_r()
-          )
-        )
       })
       
       image_box_title_server(

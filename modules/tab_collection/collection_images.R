@@ -32,9 +32,6 @@ collection_images_server <- function(id, .values, options) {
       ui_index_rv <- shiny::reactiveVal(prepared_step)
       server_index_rv <- shiny::reactiveVal(vis_start)
       
-      ui_blocked_rv <- shiny::reactiveVal(FALSE)
-      server_blocked_rv <- shiny::reactiveVal(FALSE)
-      
       ui <- new.env()
       
       purrr::walk(1:vis_start, function(index) {
@@ -45,6 +42,7 @@ collection_images_server <- function(id, .values, options) {
           # by indexing result_image_ids_r
           index = index,
           result_image_ids_r = result_image_ids_r,
+          result_offered_r = result_offered_r,
           options = options
         )
       })
@@ -52,6 +50,23 @@ collection_images_server <- function(id, .values, options) {
       ui$boxes <- purrr::map(1:prepared_step, function(index) {
         image_box_ui(
           id = ns("image_box" %_% index)
+        )
+      })
+      
+      result_image_ids_r <- shiny::reactive({
+        db_get_image_ids_by_filter(
+          db = .values$db,
+          filter = options$filter_r()
+        )
+      })
+      
+      result_offered_r <- shiny::reactive({
+        # Is only updated when new request is processed. In-between offerings
+        # are only stored in respective image_box. This is an performance
+        # improvement
+        db_is_image_offered(
+          db = .values$db,
+          image_id = result_image_ids_r()
         )
       })
       
@@ -106,9 +121,6 @@ collection_images_server <- function(id, .values, options) {
         ignoreInit = TRUE,
         current_visible_index_r(), 
         {
-          ui_blocked_rv(TRUE)
-          server_blocked_rv(TRUE)
-          
           vis_index <- current_visible_index_r()
           
           new_server_indices <- (shiny::isolate(server_index_rv()) + 1):vis_index
@@ -121,13 +133,12 @@ collection_images_server <- function(id, .values, options) {
               # by indexing result_image_ids_r
               index = index,
               result_image_ids_r = result_image_ids_r,
+              result_offered_r = result_offered_r,
               options = options
             )
           })
           
           server_index_rv(vis_index)
-          ui_blocked_rv(FALSE)
-          server_blocked_rv(FALSE)
         }
       )
       
@@ -176,13 +187,6 @@ collection_images_server <- function(id, .values, options) {
       
       shiny::observeEvent(scroll_trigger_r(), {
         current_visible_index_r(current_visible_index_r() + load_offset)
-      })
-      
-      result_image_ids_r <- shiny::reactive({
-        db_get_image_ids_by_filter(
-          db = .values$db,
-          filter = options$filter_r()
-        )
       })
     }
   )
