@@ -36,6 +36,10 @@ image_box_server <- function(
         shiny::isolate(result_offered_r())[index]
       })
       
+      is_visible_r <- shiny::reactive({
+        index <= length(result_image_ids_r())
+      })
+      
       price_r <- shiny::reactive({
         if (!is_offered_r()) return(NULL)
         
@@ -139,6 +143,7 @@ image_box_server <- function(
       })
       
       output$card <- shiny::renderUI({
+        if (!is_visible_r()) return(NULL)
         layouts[[layout_dict[options$display_r()]]]
       })
       

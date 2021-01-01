@@ -24,6 +24,12 @@ collection_header_ui <- function(id) {
           ),
           shiny::column(
             width = 2,
+            shiny::uiOutput(
+              outputId = ns("user_names")
+            )
+          ),
+          shiny::column(
+            width = 2,
             shiny::selectInput(
               inputId = ns("sort"),
               label = "Sort",
@@ -82,6 +88,20 @@ collection_header_server <- function(id, .values) {
       
       ns <- session$ns
       
+      output$user_names <- shiny::renderUI({
+        user_names <- db_get_user_ids(.values$db)
+        
+        shiny::selectInput(
+          inputId = ns("user_names"),
+          label = "User name",
+          choices = user_names
+        )
+      })
+      
+      user_ids_r <- shiny::reactive({
+        as.integer(input$user_names)
+      })
+      
       filter_r <- shiny::reactive({
         input$filter
       })
@@ -107,6 +127,7 @@ collection_header_server <- function(id, .values) {
         filter_r = filter_r,
         n_entries_r = n_entries_r,
         sort_r = sort_r,
+        user_ids_r = user_ids_r,
         width_r = width_r
       )
       

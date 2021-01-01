@@ -117,15 +117,20 @@ db_set_user_status <- function(db, name, status) {
 }
 
 
-#' Get User Names
+#' Get User IDs
 #'
 #' @template db
 #'
 #' @family user
 #'
 #' @export
-db_get_user_names <- function(db) {
-  DBI::dbGetQuery(db, "SELECT name FROM user")$name
+db_get_user_ids <- function(db) {
+  tbl <- DBI::dbGetQuery(db, "SELECT rowid, name FROM user")
+  
+  x <- tbl$rowid
+  names(x) <- tbl$name
+  
+  x
 }
 
 
@@ -201,7 +206,7 @@ db_set_password <- function(db, name, password) {
 #'
 #' @export
 db_has_user_name <- function(db, name) {
-  name %in% db_get_user_names(db)
+  name %in% names(db_get_user_ids(db))
 }
 
 

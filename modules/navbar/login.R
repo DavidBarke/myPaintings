@@ -13,12 +13,6 @@ login_server <- function(id, .values) {
 
       ns <- session$ns
       
-      user_name_choices_r <- shiny::reactive({
-        .values$update$user()
-        
-        sort(db_get_user_names(.values$db))
-      })
-      
       output$login <- shiny::renderUI({
         if (.values$user_rv()$status == "not_logged") {
           dropdown_menu(

@@ -26,17 +26,16 @@ db_add_image <- function(db, user_id, title) {
 #' @family image
 #' 
 #' @export
-db_get_images_by_user_id <- function(db, user_id) {
-  tbl <- DBI::dbGetQuery(
-    db,
-    "SELECT rowid AS image_id, * FROM image WHERE user_id = ?",
+db_get_image_ids_by_user_id <- function(db, user_id) {
+  DBI::dbGetQuery(
+    db, 
+    "SELECT image.rowid AS image_id, user_image.user_id
+    FROM image 
+    INNER JOIN user_image 
+    ON image.rowid = user_image.image_id 
+    WHERE user_image.user_id = ?", 
     params = list(user_id)
-  )
-  
-  x <- tbl$rowid
-  names(x) <- tbl$title
-  
-  x
+  )$image_id
 }
 
 

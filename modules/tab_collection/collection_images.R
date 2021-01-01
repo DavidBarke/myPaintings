@@ -54,9 +54,9 @@ collection_images_server <- function(id, .values, options) {
       })
       
       result_image_ids_r <- shiny::reactive({
-        db_get_image_ids_by_filter(
+        db_get_image_ids_by_user_id(
           db = .values$db,
-          filter = options$filter_r()
+          user_id = options$user_ids_r()
         )
       })
       
