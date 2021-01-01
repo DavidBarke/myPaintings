@@ -22,3 +22,8 @@
   background-color: unset;
   
 }
+
+.filter-table {
+  table-layout: fixed;
+  width: 100%;
+}

@@ -77,14 +77,21 @@ db_set_image_title <- function(db, image_id, title) {
 
 
 
-#' Get Image IDs by Filter
+#' Get Image IDs
 #' 
 #' @template db
-#' @param filter Filter.
 #' 
 #' @family image
 #' 
 #' @export
-db_get_image_ids_by_filter <- function(db, filter) {
-  db_get_column(db, "image", "rowid")
+db_get_image_ids <- function(db) {
+  tbl <- DBI::dbGetQuery(
+    db,
+    "SELECT rowid, title FROM image"
+  )
+  
+  x <- tbl$rowid
+  names(x) <- tbl$title
+  
+  x
 }

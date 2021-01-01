@@ -11,33 +11,9 @@ collection_header_ui <- function(id) {
         solidHeader = TRUE,
         shiny::fluidRow(
           shiny::column(
-            width = 2,
-            shiny::selectInput(
-              inputId = ns("filter"),
-              label = "Filter",
-              choices = c(
-                "All" = "all",
-                "Offered" = "offered",
-                "Not offered" = "not_offered"
-              )
-            )
-          ),
-          shiny::column(
-            width = 2,
-            shiny::uiOutput(
-              outputId = ns("user_names")
-            )
-          ),
-          shiny::column(
-            width = 2,
-            shiny::selectInput(
-              inputId = ns("sort"),
-              label = "Sort",
-              choices = c(
-                "By Title" = "title",
-                "By Year" = "year",
-                "By Painter" = "painter"
-              )
+            width = 8,
+            filter_table_ui(
+              id = ns("filter_table")
             )
           ),
           shiny::column(
@@ -66,15 +42,6 @@ collection_header_ui <- function(id) {
               selected = 3
             )
           )
-          # shiny::column(
-          #   width = 2,
-          #   shiny::selectInput(
-          #     inputId = ns("n_entries"),
-          #     label = "Entries per page",
-          #     choices = c(10, 25, 50, 100),
-          #     selected = 50
-          #   )
-          # )
         )
       )
     )
@@ -88,26 +55,8 @@ collection_header_server <- function(id, .values) {
       
       ns <- session$ns
       
-      output$user_names <- shiny::renderUI({
-        user_names <- db_get_user_ids(.values$db)
-        
-        shiny::selectInput(
-          inputId = ns("user_names"),
-          label = "User name",
-          choices = user_names
-        )
-      })
-      
       user_ids_r <- shiny::reactive({
-        as.integer(input$user_names)
-      })
-      
-      filter_r <- shiny::reactive({
-        input$filter
-      })
-      
-      sort_r <- shiny::reactive({
-        input$sort
+        2L
       })
       
       display_r <- shiny::reactive({
@@ -118,15 +67,13 @@ collection_header_server <- function(id, .values) {
         as.integer(input$width)
       })
       
-      n_entries_r <- shiny::reactive({
-        as.integer(input$n_entries)
-      })
+      filter_table_server(
+        id = "filter_table",
+        .values = .values
+      )
       
       return_list <- list(
         display_r = display_r,
-        filter_r = filter_r,
-        n_entries_r = n_entries_r,
-        sort_r = sort_r,
         user_ids_r = user_ids_r,
         width_r = width_r
       )
