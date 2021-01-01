@@ -65,8 +65,8 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
         
         bs4Dash::toast(
           paste0(
-            "Offered \"", 
-            image_r()$title, 
+            "Offered \"",
+            image_r()$title,
             "\" for ",
             .values$settings$dollar_format(input$price),
             "."
@@ -92,8 +92,8 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
         
         bs4Dash::toast(
           paste0(
-            "Withdrew offer for \"", 
-            image_r()$title, 
+            "Withdrew offer for \"",
+            image_r()$title,
             "\"."
           ),
           options = .values$settings$toast(

@@ -117,7 +117,7 @@ populate_user_table <- function(db) {
 populate_user_image_table <- function(db) {
   n <- db_length(db, "image")
   image_ids <- seq_len(n)
-  user_ids <- sample(1:100, n, replace = TRUE)
+  user_ids <- sample(2:101, n, replace = TRUE)
   
   tbl <- tibble::tibble(
     image_id = image_ids,

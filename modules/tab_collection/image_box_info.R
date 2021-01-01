@@ -3,6 +3,12 @@ image_box_info_ui <- function(id) {
   
   shiny::fluidRow(
     bs4Dash::infoBox(
+      title = "Owner",
+      value = shiny::uiOutput(outputId = ns("owner")),
+      width = 12,
+      icon = shiny::icon("user")
+    ),
+    bs4Dash::infoBox(
       title = "Painter",
       value = shiny::uiOutput(ns("painter")),
       width = 12,
@@ -41,6 +47,10 @@ image_box_info_server <- function(id, .values, image_r, status) {
     function(input, output, session) {
       
       ns <- session$ns
+      
+      output$owner <- shiny::renderUI({
+        image_r()$owner
+      })
       
       output$painter <- shiny::renderUI({
         format_painter(

@@ -42,12 +42,17 @@ image_box_server <- function(
         db_get_offered_price(.values$db, image_id_r())
       }) 
       
+      owner_name_r <- shiny::reactive({
+        db_get_image_owner(db, image_id_r())
+      })
+      
       image_r <- shiny::reactive({
         c(
           entry_r(),
           list(
             is_offered = is_offered_r(),
-            price = price_r()
+            price = price_r(),
+            owner = owner_name_r()
           )
         )
       })
