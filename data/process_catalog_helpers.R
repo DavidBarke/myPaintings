@@ -5,7 +5,7 @@ extract_name <- function(author) {
   mat <- str_match(author, "([^,]*),?(.*)")
   
   tibble::tibble(
-    first_name = mat[,3],
+    first_name = str_trim(mat[,3]),
     last_name = str_to_title(mat[,2])
   )
 }

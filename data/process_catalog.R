@@ -10,30 +10,49 @@ src_tbl <- read_excel("./data/catalog.xlsx")
 # Transform ----
 names(src_tbl) <- tolower(names(src_tbl))
 
-src_tbl <- src_tbl %>% filter(form == "painting")
-
-name_tbl <- extract_name(src_tbl$author)
-
-life_tbl <- extract_life(src_tbl$`born-died`)
+src_tbl <- src_tbl %>% 
+  filter(form == "painting") %>%
+  mutate(painter_id = match(author, unique(author)))
 
 url_tbl <- extract_url(src_tbl$url)
 
-tbl <- bind_cols(
+# Images ----
+images <- bind_cols(
   src_tbl,
-  name_tbl,
-  life_tbl,
   url_tbl
 ) %>%
-  select(-author, -`born-died`) %>%
-  filter(form == "painting", !is.na(url_title))
+  select(-author, -`born-died`, -form) %>%
+  filter(!is.na(url_title))
 
-image_src <- src_path(tbl)
-image_dest <- dest_path(tbl)
+image_src <- src_path(images)
+image_dest <- dest_path(images)
 
-tbl$path <- image_dest
+images$path <- image_dest
 
-write_xlsx(tbl, "./data/images.xlsx")
+# Painters ----
+painters <- src_tbl %>%
+  select(painter_id, author, `born-died`) %>%
+  distinct() %>%
+  group_by(painter_id) %>%
+  # Remove duplicates
+  filter(row_number() == 1)
 
+painters_name <- extract_name(painters$author)
+
+painters_life <- extract_life(painters$`born-died`)
+
+painters <- bind_cols(
+  painters,
+  painters_name,
+  painters_life
+) %>%
+  select(-author, -`born-died`)
+
+# Write ----
+write_xlsx(images, "./data/images.xlsx")
+write_xlsx(painters, "./data/painters.xlsx")
+
+# WGA ----
 if (FALSE) {
   add_letters_dirs()
   add_author_dirs(tbl)

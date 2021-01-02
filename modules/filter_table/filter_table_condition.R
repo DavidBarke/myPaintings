@@ -3,6 +3,7 @@ filter_table_condition_ui <- function(id) {
   
   choices <- c(
     "Owner" = "name",
+    "Painter" = "painter",
     "Title" = "title"
   )
   
@@ -49,6 +50,9 @@ filter_table_condition_server <- function(
         name = shiny::uiOutput(
           outputId = ns("value_name")
         ),
+        painter = shiny::uiOutput(
+          outputId = ns("value_painter")
+        ),
         title = shiny::uiOutput(
           outputId = ns("value_title")
         )
@@ -59,6 +63,14 @@ filter_table_condition_server <- function(
           inputId = ns("value_name"),
           label = NULL,
           choices = db_get_user_ids(.values$db)
+        )
+      })
+      
+      output$value_painter <- shiny::renderUI({
+        shiny::selectInput(
+          inputId = ns("value_painter"),
+          label = NULL,
+          choices = db_get_painter(.values$db)
         )
       })
       
