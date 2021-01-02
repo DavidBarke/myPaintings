@@ -43,6 +43,7 @@ filter_table_condition_server <- function(
       
       ns <- session$ns
       
+      update_painter_choices_rv <- shiny::reactiveVal(0)
       update_title_choices_rv <- shiny::reactiveVal(0)
       
       output$value <- shiny::renderUI({
@@ -78,15 +79,34 @@ filter_table_condition_server <- function(
       
       ## By painter ----
       output$value_painter <- shiny::renderUI({
+        input$filter_by
+        first_condition_r()
+        update_painter_choices_rv(
+          shiny::isolate(update_painter_choices_rv()) + 1
+        )
+        
         shiny::selectInput(
           inputId = ns("value_painter"),
           label = NULL,
-          choices = db_get_painters(.values$db)
+          choices = NULL
         )
+      })
+      
+      shiny::observeEvent(update_painter_choices_rv(), {
+        shiny::updateSelectizeInput(
+          inputId = "value_painter",
+          choices = painters_r(),
+          server = TRUE
+        )
+      })
+      
+      painters_r <- shiny::reactive({
+        db_get_painters(.values$db)
       })
       
       ## By title ----
       output$value_title <- shiny::renderUI({
+        input$filter_by
         first_condition_r()
         update_title_choices_rv(shiny::isolate(update_title_choices_rv()) + 1)
         
