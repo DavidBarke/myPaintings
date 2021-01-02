@@ -5,7 +5,8 @@ filter_table_condition_ui <- function(id) {
     "Owner" = "name",
     "Painter" = "painter",
     "Title" = "title",
-    "School" = "school"
+    "School" = "school",
+    "Type" = "type"
   )
   
   htmltools::tags$tr(
@@ -60,6 +61,9 @@ filter_table_condition_server <- function(
         ),
         school = shiny::uiOutput(
           outputId = ns("value_school")
+        ),
+        type = shiny::uiOutput(
+          outputId = ns("value_type")
         )
       )
       
@@ -110,7 +114,19 @@ filter_table_condition_server <- function(
         shiny::selectInput(
           inputId = ns("value_school"),
           label = NULL,
-          choices = db_get_schools(.values$db)
+          choices = db_get_image_schools(.values$db)
+        )
+      })
+      
+      ## By type ----
+      output$value_type <- shiny::renderUI({
+        choices <- db_get_image_types(.values$db)
+        names(choices) <- stringr::str_to_title(choices)
+        
+        shiny::selectInput(
+          inputId = ns("value_type"),
+          label = NULL,
+          choices = choices
         )
       })
       
@@ -125,7 +141,8 @@ filter_table_condition_server <- function(
         name = "user_image.user_id = ?",
         painter = "image.painter_id = ?",
         title = "image.rowid = ?",
-        school = "image.school = ?"
+        school = "image.school = ?",
+        type = "image.type = ?"
       )
       
       query_params_out_r <- shiny::reactive({
@@ -141,7 +158,8 @@ filter_table_condition_server <- function(
         name = shiny::reactive(shiny::req(input$value_name)),
         painter = shiny::reactive(shiny::req(input$value_painter)),
         title = shiny::reactive(shiny::req(input$value_title)),
-        school = shiny::reactive(shiny::req(input$value_school))
+        school = shiny::reactive(shiny::req(input$value_school)),
+        type = shiny::reactive(shiny::req(input$value_type))
       )
       
       return_list <- list(
