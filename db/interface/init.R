@@ -39,6 +39,7 @@ db_init <- function(path = "db/db.sqlite") {
   
   populate_user_table(db)
   populate_image_table(db)
+  populate_painter_table(db)
   populate_user_image_table(db)
 }
 

@@ -51,7 +51,14 @@ db_get_image_ids_by_user_id <- function(db, user_id) {
 db_get_image_entry_by_image_id <- function(db, image_id) {
   DBI::dbGetQuery(
     db,
-    "SELECT rowid AS image_id, * FROM image WHERE rowid = ?",
+    "SELECT image.rowid AS image_id, image.title, image.date, image.technique,
+      image.location, image.type, image.school, image.timeframe, image.url,
+      image.path, painter.first_name, painter.last_name, painter.year_born,
+      painter.year_died, painter.location_born, painter.location_died
+    FROM image 
+    INNER JOIN painter
+    ON image.painter_id = painter.painter_id
+    WHERE image.rowid = ?",
     params = list(image_id)
   )
 }
