@@ -5,7 +5,7 @@
 #' @family painter
 #' 
 #' @export
-db_get_painter <- function(db) {
+db_get_painters <- function(db) {
   tbl <- DBI::dbGetQuery(
     db,
     "SELECT painter_id, first_name, last_name FROM painter"

@@ -102,3 +102,19 @@ db_get_image_ids <- function(db) {
   
   x
 }
+
+
+
+#' Get All Schools
+#' 
+#' @template db
+#' 
+#' @family image
+#' 
+#' @export
+db_get_schools <- function(db) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT DISTINCT school FROM image"
+  )$school
+}

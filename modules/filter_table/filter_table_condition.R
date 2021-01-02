@@ -4,7 +4,8 @@ filter_table_condition_ui <- function(id) {
   choices <- c(
     "Owner" = "name",
     "Painter" = "painter",
-    "Title" = "title"
+    "Title" = "title",
+    "School" = "school"
   )
   
   htmltools::tags$tr(
@@ -55,9 +56,13 @@ filter_table_condition_server <- function(
         ),
         title = shiny::uiOutput(
           outputId = ns("value_title")
+        ),
+        school = shiny::uiOutput(
+          outputId = ns("value_school")
         )
       )
       
+      ## By user name ----
       output$value_name <- shiny::renderUI({
         shiny::selectInput(
           inputId = ns("value_name"),
@@ -66,14 +71,16 @@ filter_table_condition_server <- function(
         )
       })
       
+      ## By painter ----
       output$value_painter <- shiny::renderUI({
         shiny::selectInput(
           inputId = ns("value_painter"),
           label = NULL,
-          choices = db_get_painter(.values$db)
+          choices = db_get_painters(.values$db)
         )
       })
       
+      ## By title ----
       output$value_title <- shiny::renderUI({
         update_title_choices_rv(shiny::isolate(update_title_choices_rv()) + 1)
         
@@ -96,6 +103,15 @@ filter_table_condition_server <- function(
         db_get_image_ids(.values$db)
       })
       
+      ## By school ----
+      output$value_school <- shiny::renderUI({
+        shiny::selectInput(
+          inputId = ns("value_school"),
+          label = NULL,
+          choices = db_get_schools(.values$db)
+        )
+      })
+      
       query_text_out_r <- shiny::reactive({
         c(
           query_text_in_r(),
@@ -106,7 +122,8 @@ filter_table_condition_server <- function(
       query_text_dict <- list(
         name = "user_image.user_id = ?",
         painter = "image.painter_id = ?",
-        title = "image.rowid = ?"
+        title = "image.rowid = ?",
+        school = "image.school = ?"
       )
       
       query_params_out_r <- shiny::reactive({
@@ -121,7 +138,8 @@ filter_table_condition_server <- function(
       query_params_dict_fun <- list(
         name = shiny::reactive(shiny::req(input$value_name)),
         painter = shiny::reactive(shiny::req(input$value_painter)),
-        title = shiny::reactive(shiny::req(input$value_title))
+        title = shiny::reactive(shiny::req(input$value_title)),
+        school = shiny::reactive(shiny::req(input$value_school))
       )
       
       return_list <- list(
