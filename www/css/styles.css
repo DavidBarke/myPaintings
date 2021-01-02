@@ -27,3 +27,7 @@
   table-layout: fixed;
   width: 100%;
 }
+
+td .form-group {
+  margin-bottom: 0;
+}

@@ -22,7 +22,9 @@ filter_table_condition_ui <- function(id) {
     ),
     htmltools::tags$td(
       style = "width: 20%",
-      "="
+      shiny::uiOutput(
+        outputId = ns("operation")
+      )
     ),
     htmltools::tags$td(
       style = "width: 50%",
@@ -67,6 +69,36 @@ filter_table_condition_server <- function(
           outputId = ns("value_type")
         )
       )
+      
+      output$operation <- shiny::renderUI({
+        operation_dict[[operation_group_dict[input$filter_by]]]
+      })
+      
+      operation_dict <- list(
+        text = shiny::uiOutput(
+          outputId = ns("operation_text")
+        )
+      )
+      
+      operation_group_dict <- c(
+        name = "text",
+        painter = "text",
+        title = "text",
+        school = "text",
+        type = "text"
+      )
+      
+      output$operation_text <- shiny::renderUI({
+        shiny::selectInput(
+          inputId = ns("operation_text"),
+          label = NULL,
+          choices = c(
+            "=" = "eq",
+            "IN" = "in",
+            "REGEXP" = "regexp"
+          )
+        )
+      })
       
       ## By user name ----
       output$value_name <- shiny::renderUI({
