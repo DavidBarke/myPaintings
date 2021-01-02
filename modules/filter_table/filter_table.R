@@ -16,6 +16,11 @@ filter_table_ui <- function(id) {
       inputId = ns("reset"),
       label = "Reset",
       width = "100%"
+    ),
+    shiny::actionButton(
+      inputId = ns("apply"),
+      label = "Apply",
+      width = "100%"
     )
   )
 }
@@ -102,7 +107,7 @@ filter_table_server <- function(id, .values) {
       #   str(query_params_result_r())
       # })
       
-      image_ids_r <- shiny::reactive({
+      image_ids_r <- shiny::eventReactive(input$apply, {
         if (length(query_params_result_r()) == 0) {
           DBI::dbGetQuery(
             .values$db,
@@ -122,7 +127,7 @@ filter_table_server <- function(id, .values) {
       })
       
       return_list <- list(
-        image_ids_r = image_ids_r
+        image_ids_r = shiny::reactive(image_ids_r()$image_id)
       )
       
       return(return_list)
