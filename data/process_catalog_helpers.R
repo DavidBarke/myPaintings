@@ -14,8 +14,8 @@ extract_life <- function(born_died) {
   mat <- str_match(born_died, "^\\(b\\.\\s(\\d+),\\s(\\w+),\\sd\\.\\s(\\d+),\\s(\\w+)\\)$")
   
   tibble <- tibble::tibble(
-    year_born = mat[,2],
-    year_died = mat[,4],
+    year_born = as.integer(mat[,2]),
+    year_died = as.integer(mat[,4]),
     location_born = mat[,3],
     location_died = mat[,5]
   )

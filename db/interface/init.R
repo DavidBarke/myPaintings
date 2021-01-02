@@ -33,6 +33,7 @@ db_init <- function(path = "db/db.sqlite") {
   # create tables
   create_user_table(db)
   create_image_table(db)
+  create_painter_table(db)
   create_user_image_table(db)
   create_offered_images_table(db)
   
@@ -63,15 +64,13 @@ create_user_table <- function(db) {
 create_image_table <- function(db) {
   tbl <- tibble::tibble(
     title = character(),
+    painter_id = integer(),
     date = character(),
     technique = character(),
     location = character(),
-    form = character(),
     type = character(),
     school = character(),
     timeframe = character(),
-    first_name = character(),
-    last_name = character(),
     url = character(),
     path = character()
   )
@@ -79,6 +78,23 @@ create_image_table <- function(db) {
   DBI::dbCreateTable(db, "image", tbl)
 }
 
+#' @export
+create_painter_table <- function(db) {
+  tbl <- tibble::tibble(
+    # Don't use rowid
+    painter_id = integer(),
+    first_name = character(),
+    last_name = character(),
+    year_born = integer(),
+    year_died = integer(),
+    location_born = character(),
+    location_died = character()
+  )
+  
+  DBI::dbCreateTable(db, "painter", tbl)
+}
+
+#' @export
 create_user_image_table <- function(db) {
   tbl <- tibble::tibble(
     user_id = integer(),
@@ -114,19 +130,6 @@ populate_user_table <- function(db) {
   })
 }
 
-populate_user_image_table <- function(db) {
-  n <- db_length(db, "image")
-  image_ids <- seq_len(n)
-  user_ids <- sample(2:101, n, replace = TRUE)
-  
-  tbl <- tibble::tibble(
-    image_id = image_ids,
-    user_id = user_ids
-  )
-  
-  DBI::dbAppendTable(db, "user_image", tbl)
-}
-
 #' @export
 populate_image_table <- function(db) {
   tbl <- readxl::read_xlsx(
@@ -138,4 +141,31 @@ populate_image_table <- function(db) {
   tbl <- tbl[fields]
   
   DBI::dbAppendTable(db, "image", tbl)
+}
+
+#' @export
+populate_painter_table <- function(db) {
+  tbl <- readxl::read_xlsx(
+    "./data/painters.xlsx"
+  )
+  
+  fields <- DBI::dbListFields(db, "painter")
+  
+  tbl <- tbl[fields]
+  
+  DBI::dbAppendTable(db, "painter", tbl)
+}
+
+#' @export
+populate_user_image_table <- function(db) {
+  n <- db_length(db, "image")
+  image_ids <- seq_len(n)
+  user_ids <- sample(2:101, n, replace = TRUE)
+  
+  tbl <- tibble::tibble(
+    image_id = image_ids,
+    user_id = user_ids
+  )
+  
+  DBI::dbAppendTable(db, "user_image", tbl)
 }
