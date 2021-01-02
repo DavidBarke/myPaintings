@@ -33,7 +33,8 @@ filter_table_condition_ui <- function(id) {
 }
 
 filter_table_condition_server <- function(
-  id, .values, query_text_start_r, query_text_in_r, query_params_in_r
+  id, .values, query_text_start_r, query_text_in_r, query_params_in_r,
+  first_condition_r # needed to trigger server side selectize inputs
 ) {
   shiny::moduleServer(
     id,
@@ -82,6 +83,7 @@ filter_table_condition_server <- function(
       
       ## By title ----
       output$value_title <- shiny::renderUI({
+        first_condition_r()
         update_title_choices_rv(shiny::isolate(update_title_choices_rv()) + 1)
         
         shiny::selectizeInput(
