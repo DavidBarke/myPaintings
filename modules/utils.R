@@ -2,7 +2,7 @@
 
 `%||%` <- function(x, y) if (!is.null(x)) x else y
 
-`%NA%` <- function(x, y) if (!is.na(x)) x else y
+`%NA%` <- function(x, y) ifelse(!is.na(x), x, y)
 
 as_english <- function(x) {
   dict <- c(

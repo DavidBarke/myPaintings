@@ -105,6 +105,7 @@ filter_table_condition_server <- function(
       
       query_text_dict <- list(
         name = "user_image.user_id = ?",
+        painter = "image.painter_id = ?",
         title = "image.rowid = ?"
       )
       
@@ -119,6 +120,7 @@ filter_table_condition_server <- function(
       # which correspond to the query text
       query_params_dict_fun <- list(
         name = shiny::reactive(shiny::req(input$value_name)),
+        painter = shiny::reactive(shiny::req(input$value_painter)),
         title = shiny::reactive(shiny::req(input$value_title))
       )
       
