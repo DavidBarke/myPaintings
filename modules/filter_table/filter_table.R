@@ -92,7 +92,15 @@ filter_table_server <- function(id, .values) {
       })
       
       query_text_start_r <- shiny::reactive({
-        "SELECT image.rowid AS image_id FROM image INNER JOIN user_image ON image.rowid = user_image.image_id"
+        "SELECT image.rowid AS image_id 
+        FROM user_image
+          INNER JOIN user 
+            ON user_image.user_id = user.rowid
+          INNER JOIN image
+            ON user_image.image_id = image.rowid
+          INNER JOIN painter
+            ON image.painter_id = painter.painter_id
+        "
       })
       
       query_text_result_r <- shiny::reactive({

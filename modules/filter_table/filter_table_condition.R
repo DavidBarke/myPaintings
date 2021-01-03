@@ -249,7 +249,7 @@ filter_table_condition_server <- function(
         )
       })
       
-      query_col_dict_list <- list(
+      query_col_dict_default <- list(
         name = "user_image.user_id",
         painter = "image.painter_id",
         title = "image.rowid",
@@ -257,12 +257,20 @@ filter_table_condition_server <- function(
         type = "image.type"
       )
       
+      query_col_dict_regexp <- list(
+        name = "user.name",
+        painter = "painter.name",
+        title = "image.title",
+        school = "image.school",
+        type = "image.type"
+      )
+      
       query_col_dict <- function(filter_by, operation_text) {
-        if (operation_text == "REGEXP" && filter_by == "title") {
-          return("image.title")
+        if (operation_text == "REGEXP") {
+          query_col_dict_regexp[[filter_by]]
+        } else {
+          query_col_dict_default[[filter_by]]
         }
-        
-        query_col_dict_list[[filter_by]] 
       }
       
       query_operator_dict <- list(
