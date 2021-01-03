@@ -92,7 +92,9 @@ filter_table_server <- function(id, .values) {
       })
       
       query_text_start_r <- shiny::reactive({
-        "SELECT image.rowid AS image_id 
+        "SELECT 
+          image.rowid AS image_id,
+          CASE WHEN offered_images.price NOT NULL THEN 1 ELSE 0 END AS is_offered
         FROM user_image
           INNER JOIN user 
             ON user_image.user_id = user.rowid
@@ -100,6 +102,8 @@ filter_table_server <- function(id, .values) {
             ON user_image.image_id = image.rowid
           INNER JOIN painter
             ON image.painter_id = painter.painter_id
+          LEFT JOIN offered_images
+            ON user_image.image_id = offered_images.image_id
         "
       })
       
