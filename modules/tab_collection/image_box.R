@@ -30,11 +30,19 @@ image_box_server <- function(
         )
       })
       
+      is_offered_rv <- shiny::reactiveVal(NULL)
+      
+      shiny::observeEvent(result_offered_r(), {
+        is_offered_rv(result_offered_r()[index])
+      })
+      
+      shiny::observeEvent(dropdown_return$offer$is_offered_r(), {
+        is_offered_rv(dropdown_return$offer$is_offered_r())
+      }, ignoreInit = TRUE)
+      
       is_offered_r <- shiny::reactive({
         shiny::req(is_visible_r())
-        result_image_ids_r()
-        dropdown_return$offer$update_r()
-        shiny::isolate(result_offered_r())[index]
+        is_offered_rv()
       })
       
       is_visible_r <- shiny::reactive({

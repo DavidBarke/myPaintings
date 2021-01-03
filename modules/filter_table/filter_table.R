@@ -127,7 +127,7 @@ filter_table_server <- function(id, .values) {
       #   str(query_params_result_r())
       # })
       
-      image_ids_r <- shiny::eventReactive(input$apply, {
+      filter_query_r <- shiny::eventReactive(input$apply, {
         if (length(query_params_result_r()) == 0) {
           DBI::dbGetQuery(
             .values$db,
@@ -147,7 +147,8 @@ filter_table_server <- function(id, .values) {
       # })
       
       return_list <- list(
-        image_ids_r = shiny::reactive(image_ids_r()$image_id)
+        image_ids_r = shiny::reactive(filter_query_r()$image_id),
+        is_offered_r = shiny::reactive(filter_query_r()$is_offered)
       )
       
       return(return_list)
