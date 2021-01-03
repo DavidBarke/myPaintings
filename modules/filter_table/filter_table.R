@@ -130,9 +130,9 @@ filter_table_server <- function(id, .values) {
         }
       })
       
-      shiny::observeEvent(image_ids_r(), {
-        print(dplyr::as_tibble(image_ids_r()))
-      })
+      # shiny::observeEvent(image_ids_r(), {
+      #   print(dplyr::as_tibble(image_ids_r()))
+      # })
       
       return_list <- list(
         image_ids_r = shiny::reactive(image_ids_r()$image_id)
