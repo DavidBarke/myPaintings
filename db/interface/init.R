@@ -36,11 +36,13 @@ db_init <- function(path = "db/db.sqlite") {
   create_painter_table(db)
   create_user_image_table(db)
   create_offered_images_table(db)
+  create_buy_sell_table(db)
   
   populate_user_table(db)
   populate_image_table(db)
   populate_painter_table(db)
   populate_user_image_table(db)
+  populate_buy_sell_table(db)
 }
 
 
@@ -104,6 +106,7 @@ create_user_image_table <- function(db) {
   DBI::dbCreateTable(db, "user_image", tbl)
 }
 
+#' @export
 create_offered_images_table <- function(db) {
   tbl <- tibble::tibble(
     image_id = character(),
@@ -113,6 +116,18 @@ create_offered_images_table <- function(db) {
   DBI::dbCreateTable(db, "offered_images", tbl)
 }
 
+#' @export
+create_buy_sell_table <- function(db) {
+  tbl <- tibble::tibble(
+    image_id = integer(),
+    seller_id = integer(),
+    buyer_id = integer(),
+    price = integer(),
+    date = character()
+  )
+  
+  DBI::dbCreateTable(db, "buy_sell", tbl)
+}
 
 
 #' @export
@@ -160,7 +175,7 @@ populate_painter_table <- function(db) {
 populate_user_image_table <- function(db) {
   n <- db_length(db, "image")
   image_ids <- seq_len(n)
-  user_ids <- sample(2:101, n, replace = TRUE)
+  user_ids <- sample(db_get_user_ids(db), n, replace = TRUE)
   
   tbl <- tibble::tibble(
     image_id = image_ids,
@@ -168,4 +183,30 @@ populate_user_image_table <- function(db) {
   )
   
   DBI::dbAppendTable(db, "user_image", tbl)
+}
+
+#' @export
+populate_buy_sell_table <- function(db) {
+  # Every user has bought 100 images
+  user_ids <- db_get_user_ids(db)
+  
+  tbl <- purrr::map_dfr(user_ids, function(user_id) {
+    image_ids <- db_get_image_ids_by_user_id(db, user_id)
+    bought_image_ids <- sample(image_ids, 100, replace = FALSE)
+    seller_ids <- sample(user_ids[user_ids != user_id], 100, replace = TRUE)
+    tibble::tibble(
+      image_id = bought_image_ids,
+      seller_id = seller_ids,
+      buyer_id = user_id
+    )
+  })
+  
+  dates <- seq(lubridate::ymd_hms("2019-01-01 00:00:00"), lubridate::ymd_hms("2020-12-31 23:59:59"), by = "sec")
+  # expected value is 2e5
+  price <- round(1e5 * rchisq(nrow(tbl), df = 2), digits = 2)
+  
+  tbl$date <- as.character(sample(dates, nrow(tbl), replace = TRUE))
+  tbl$price <- price
+  
+  DBI::dbAppendTable(db, "buy_sell", tbl)
 }
