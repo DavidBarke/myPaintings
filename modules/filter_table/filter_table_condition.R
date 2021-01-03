@@ -93,35 +93,56 @@ filter_table_condition_server <- function(
           inputId = ns("operation_text"),
           label = NULL,
           choices = c(
-            "=" = "eq",
-            "IN" = "in",
-            "REGEXP" = "regexp"
+            "=" = "=",
+            "IN" = "IN",
+            "REGEXP" = "REGEXP"
           )
         )
       })
       
       ## By user name ----
       output$value_name <- shiny::renderUI({
-        shiny::selectInput(
-          inputId = ns("value_name"),
-          label = NULL,
-          choices = db_get_user_ids(.values$db)
-        )
+        if (shiny::req(input$operation_text) == "REGEXP") {
+          shiny::textInput(
+            inputId = ns("value_name"),
+            label = NULL
+          )
+        } else {
+          multiple <- shiny::req(input$operation_text) == "IN"
+          
+          shiny::selectInput(
+            inputId = ns("value_name"),
+            label = NULL,
+            choices = db_get_user_ids(.values$db),
+            multiple = multiple
+          )
+        }
       })
       
       ## By painter ----
       output$value_painter <- shiny::renderUI({
         input$filter_by
         first_condition_r()
-        update_painter_choices_rv(
-          shiny::isolate(update_painter_choices_rv()) + 1
-        )
         
-        shiny::selectInput(
-          inputId = ns("value_painter"),
-          label = NULL,
-          choices = NULL
-        )
+        if (shiny::req(input$operation_text) == "REGEXP") {
+          shiny::textInput(
+            inputId = ns("value_painter"),
+            label = NULL
+          )
+        } else {
+          update_painter_choices_rv(
+            shiny::isolate(update_painter_choices_rv()) + 1
+          )
+          
+          multiple <- shiny::req(input$operation_text) == "IN"
+          
+          shiny::selectInput(
+            inputId = ns("value_painter"),
+            label = NULL,
+            choices = NULL,
+            multiple = multiple
+          )
+        }
       })
       
       shiny::observeEvent(update_painter_choices_rv(), {
@@ -140,13 +161,24 @@ filter_table_condition_server <- function(
       output$value_title <- shiny::renderUI({
         input$filter_by
         first_condition_r()
-        update_title_choices_rv(shiny::isolate(update_title_choices_rv()) + 1)
         
-        shiny::selectizeInput(
-          inputId = ns("value_title"),
-          label = NULL,
-          choices = NULL
-        )
+        if (shiny::req(input$operation_text) == "REGEXP") {
+          shiny::textInput(
+            inputId = ns("value_title"),
+            label = NULL
+          )
+        } else {
+          update_title_choices_rv(shiny::isolate(update_title_choices_rv()) + 1)
+          
+          multiple <- shiny::req(input$operation_text) == "IN"
+          
+          shiny::selectInput(
+            inputId = ns("value_title"),
+            label = NULL,
+            choices = NULL,
+            multiple = multiple
+          )
+        }
       })
       
       shiny::observeEvent(update_title_choices_rv(), {
@@ -163,44 +195,86 @@ filter_table_condition_server <- function(
       
       ## By school ----
       output$value_school <- shiny::renderUI({
-        shiny::selectInput(
-          inputId = ns("value_school"),
-          label = NULL,
-          choices = db_get_image_schools(.values$db)
-        )
+        if (shiny::req(input$operation_text) == "REGEXP") {
+          shiny::textInput(
+            inputId = ns("value_school"),
+            label = NULL
+          )
+        } else {
+          multiple <- shiny::req(input$operation_text) == "IN"
+          
+          shiny::selectInput(
+            inputId = ns("value_school"),
+            label = NULL,
+            choices = db_get_image_schools(.values$db),
+            multiple = multiple
+          )
+        }
       })
       
       ## By type ----
       output$value_type <- shiny::renderUI({
-        choices <- db_get_image_types(.values$db)
-        names(choices) <- stringr::str_to_title(choices)
-        
-        shiny::selectInput(
-          inputId = ns("value_type"),
-          label = NULL,
-          choices = choices
-        )
+        if (shiny::req(input$operation_text) == "REGEXP") {
+          shiny::textInput(
+            inputId = ns("value_type"),
+            label = NULL
+          )
+        } else {
+          multiple <- shiny::req(input$operation_text) == "IN"
+          
+          choices <- db_get_image_types(.values$db)
+          names(choices) <- stringr::str_to_title(choices)
+          
+          shiny::selectInput(
+            inputId = ns("value_type"),
+            label = NULL,
+            choices = choices,
+            multiple = multiple
+          )
+        }
       })
       
+      ## Query ----
       query_text_out_r <- shiny::reactive({
         c(
           query_text_in_r(),
-          query_text_dict[[shiny::req(input$filter_by)]]
+          paste(
+            query_col_dict(
+              shiny::req(input$filter_by),
+              shiny::req(input$operation_text)
+            ),
+            query_operator_dict[[shiny::req(input$operation_text)]],
+            "?"
+          )
         )
       })
       
-      query_text_dict <- list(
-        name = "user_image.user_id = ?",
-        painter = "image.painter_id = ?",
-        title = "image.rowid = ?",
-        school = "image.school = ?",
-        type = "image.type = ?"
+      query_col_dict_list <- list(
+        name = "user_image.user_id",
+        painter = "image.painter_id",
+        title = "image.rowid",
+        school = "image.school",
+        type = "image.type"
+      )
+      
+      query_col_dict <- function(filter_by, operation_text) {
+        if (operation_text == "REGEXP" && filter_by == "title") {
+          return("image.title")
+        }
+        
+        query_col_dict_list[[filter_by]] 
+      }
+      
+      query_operator_dict <- list(
+        "=" = "=",
+        "IN" = "=",
+        "REGEXP" = "REGEXP"
       )
       
       query_params_out_r <- shiny::reactive({
         c(
           query_params_in_r(),
-          query_params_dict_fun[[shiny::req(input$filter_by)]]()
+          list(query_params_dict_fun[[shiny::req(input$filter_by)]]())
         )
       })
       
@@ -214,6 +288,7 @@ filter_table_condition_server <- function(
         type = shiny::reactive(shiny::req(input$value_type))
       )
       
+      ## Return ----
       return_list <- list(
         query_text_out_r = query_text_out_r,
         query_params_out_r = query_params_out_r
