@@ -6,7 +6,8 @@ filter_table_condition_ui <- function(id) {
     "Painter" = "painter",
     "Title" = "title",
     "School" = "school",
-    "Type" = "type"
+    "Type" = "type",
+    "Status" = "status"
   )
   
   htmltools::tags$tr(
@@ -48,6 +49,54 @@ filter_table_condition_server <- function(
       update_painter_choices_rv <- shiny::reactiveVal(0)
       update_title_choices_rv <- shiny::reactiveVal(0)
       
+      ## Operation ----
+      operation_group_dict <- c(
+        name = "text",
+        painter = "text",
+        title = "text",
+        school = "text",
+        type = "text",
+        status = "status"
+      )
+      
+      operation_dict <- list(
+        text = shiny::uiOutput(
+          outputId = ns("operation_text")
+        ),
+        status = shiny::uiOutput(
+          outputId = ns("operation_status")
+        )
+      )
+      
+      operation_r <- shiny::reactive({
+        operation_group_dict[[input$filter_by]]
+      })
+      
+      output$operation <- shiny::renderUI({
+        operation_dict[[operation_r()]]
+      })
+      
+      output$operation_text <- shiny::renderUI({
+        shiny::selectInput(
+          inputId = ns("operation_text"),
+          label = NULL,
+          choices = c(
+            "=" = "=",
+            "IN" = "IN",
+            "REGEXP" = "REGEXP"
+          )
+        )
+      })
+      
+      output$operation_status <- shiny::renderUI({
+        shiny::selectInput(
+          inputId = ns("operation_status"),
+          label = NULL,
+          choices = c("=" = "=")
+        )
+      })
+      
+      ## Value ----
       output$value <- shiny::renderUI({
         value_dict[[input$filter_by]]
       })
@@ -67,38 +116,11 @@ filter_table_condition_server <- function(
         ),
         type = shiny::uiOutput(
           outputId = ns("value_type")
+        ),
+        status = shiny::uiOutput(
+          outputId = ns("value_status")
         )
       )
-      
-      output$operation <- shiny::renderUI({
-        operation_dict[[operation_group_dict[input$filter_by]]]
-      })
-      
-      operation_dict <- list(
-        text = shiny::uiOutput(
-          outputId = ns("operation_text")
-        )
-      )
-      
-      operation_group_dict <- c(
-        name = "text",
-        painter = "text",
-        title = "text",
-        school = "text",
-        type = "text"
-      )
-      
-      output$operation_text <- shiny::renderUI({
-        shiny::selectInput(
-          inputId = ns("operation_text"),
-          label = NULL,
-          choices = c(
-            "=" = "=",
-            "IN" = "IN",
-            "REGEXP" = "REGEXP"
-          )
-        )
-      })
       
       ## By user name ----
       output$value_name <- shiny::renderUI({
@@ -234,14 +256,36 @@ filter_table_condition_server <- function(
         }
       })
       
+      ## By status ----
+      output$value_status <- shiny::renderUI({
+        shiny::selectInput(
+          inputId = ns("value_status"),
+          label = NULL,
+          choices = c(
+            "All" = "all",
+            "Offered" = "offered",
+            "Not Offered" = "not_offered"
+          )
+        )
+      })
+      
       ## Query ----
+      query_operation_dict <- list(
+        text = shiny::reactive(shiny::req(input$operation_text)),
+        status = shiny::reactive(shiny::req(input$operation_status))
+      )
+      
+      query_operation_r <- shiny::reactive({
+        query_operation_dict[[operation_r()]]()
+      })
+      
       query_text_out_r <- shiny::reactive({
         c(
           query_text_in_r(),
           paste(
             query_col_dict(
               shiny::req(input$filter_by),
-              shiny::req(input$operation_text)
+              operation_r()
             ),
             query_operator_dict[[shiny::req(input$operation_text)]],
             "?"
@@ -254,7 +298,8 @@ filter_table_condition_server <- function(
         painter = "image.painter_id",
         title = "image.rowid",
         school = "image.school",
-        type = "image.type"
+        type = "image.type",
+        status = "is_offered"
       )
       
       query_col_dict_regexp <- list(
@@ -263,6 +308,7 @@ filter_table_condition_server <- function(
         title = "image.title",
         school = "image.school",
         type = "image.type"
+        # status not needed
       )
       
       query_col_dict <- function(filter_by, operation_text) {
@@ -293,7 +339,15 @@ filter_table_condition_server <- function(
         painter = shiny::reactive(shiny::req(input$value_painter)),
         title = shiny::reactive(shiny::req(input$value_title)),
         school = shiny::reactive(shiny::req(input$value_school)),
-        type = shiny::reactive(shiny::req(input$value_type))
+        type = shiny::reactive(shiny::req(input$value_type)),
+        status = shiny::reactive({
+          switch(
+            shiny::req(input$value_status),
+            "all" = c(0, 1),
+            "offered" = 1,
+            "not_offered" = 0
+          )
+        })
       )
       
       ## Return ----
