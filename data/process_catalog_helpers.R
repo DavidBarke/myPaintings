@@ -1,13 +1,21 @@
 library(stringr)
 library(progress)
 
+`%NA%` <- function(x, y) ifelse(!is.na(x), x, y)
+
+format_painter <- function(first_name, last_name) {
+  first_name <- first_name %NA% ""
+  
+  ifelse(nchar(first_name), paste(first_name, last_name), last_name)
+}
+
 extract_name <- function(author) {
   mat <- str_match(author, "([^,]*),?(.*)")
   
-  tibble::tibble(
-    first_name = str_trim(mat[,3]),
-    last_name = str_to_title(mat[,2])
-  )
+  first_name <- str_trim(mat[,3])
+  last_name <- str_to_title(mat[,2])
+  
+  format_painter(first_name, last_name)
 }
 
 extract_life <- function(born_died) {

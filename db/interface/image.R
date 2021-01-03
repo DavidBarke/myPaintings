@@ -53,7 +53,7 @@ db_get_image_entry_by_image_id <- function(db, image_id) {
     db,
     "SELECT image.rowid AS image_id, image.title, image.date, image.technique,
       image.location, image.type, image.school, image.timeframe, image.url,
-      image.path, painter.first_name, painter.last_name, painter.year_born,
+      image.path, painter.name, painter.year_born,
       painter.year_died, painter.location_born, painter.location_died
     FROM image 
     INNER JOIN painter

@@ -53,10 +53,7 @@ image_box_info_server <- function(id, .values, image_r, status) {
       })
       
       output$painter <- shiny::renderUI({
-        format_painter(
-          first_name = image_r()$first_name,
-          last_name = image_r()$last_name
-        )
+        image_r()$name
       })
       
       output$date <- shiny::renderUI({

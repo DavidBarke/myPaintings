@@ -84,8 +84,7 @@ create_painter_table <- function(db) {
   tbl <- tibble::tibble(
     # Don't use rowid
     painter_id = integer(),
-    first_name = character(),
-    last_name = character(),
+    name = character(),
     year_born = integer(),
     year_died = integer(),
     location_born = character(),

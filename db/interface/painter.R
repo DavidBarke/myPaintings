@@ -8,11 +8,11 @@
 db_get_painters <- function(db) {
   tbl <- DBI::dbGetQuery(
     db,
-    "SELECT painter_id, first_name, last_name FROM painter"
+    "SELECT painter_id, name FROM painter"
   )
   
   x <- tbl$painter_id
-  names(x) <- format_painter(tbl$first_name, tbl$last_name)
+  names(x) <- tbl$name
   
   x
 }

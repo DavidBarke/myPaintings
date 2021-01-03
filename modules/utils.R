@@ -43,10 +43,4 @@ format_museum <- function(museum, city) {
   paste(museum, city, sep = ", ")
 }
 
-format_painter <- function(first_name, last_name) {
-  first_name <- first_name %NA% ""
-
-  ifelse(nchar(first_name), paste(first_name, last_name), last_name)
-}
-
 

@@ -35,15 +35,13 @@ painters <- src_tbl %>%
   distinct() %>%
   group_by(painter_id) %>%
   # Remove duplicates
-  filter(row_number() == 1)
-
-painters_name <- extract_name(painters$author)
+  filter(row_number() == 1) %>%
+  mutate(name = extract_name(author))
 
 painters_life <- extract_life(painters$`born-died`)
 
 painters <- bind_cols(
   painters,
-  painters_name,
   painters_life
 ) %>%
   select(-author, -`born-died`)
