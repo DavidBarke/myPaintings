@@ -47,7 +47,7 @@ image_box_server <- function(
       }) 
       
       owner_name_r <- shiny::reactive({
-        db_get_image_owner(db, image_id_r())
+        db_get_image_owner(.values$db, image_id_r())
       })
       
       image_r <- shiny::reactive({

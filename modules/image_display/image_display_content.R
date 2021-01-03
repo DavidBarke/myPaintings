@@ -1,4 +1,4 @@
-collection_images_ui <- function(id) {
+image_display_content_ui <- function(id) {
   ns <- shiny::NS(id)
   
   htmltools::tagList(
@@ -11,7 +11,7 @@ collection_images_ui <- function(id) {
   )
 }
 
-collection_images_server <- function(id, .values, options) {
+image_display_content_server <- function(id, .values, options) {
   shiny::moduleServer(
     id,
     function(input, output, session) {

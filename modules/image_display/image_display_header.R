@@ -1,4 +1,4 @@
-collection_header_ui <- function(id) {
+image_display_header_ui <- function(id) {
   ns <- shiny::NS(id)
   
   shiny::fluidRow(
@@ -48,7 +48,7 @@ collection_header_ui <- function(id) {
   )
 }
 
-collection_header_server <- function(id, .values) {
+image_display_header_server <- function(id, .values) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
