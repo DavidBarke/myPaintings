@@ -31,6 +31,7 @@ image_box_server <- function(
       })
       
       is_offered_r <- shiny::reactive({
+        shiny::req(is_visible_r())
         result_image_ids_r()
         dropdown_return$offer$update_r()
         shiny::isolate(result_offered_r())[index]
