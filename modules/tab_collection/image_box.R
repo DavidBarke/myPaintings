@@ -30,6 +30,12 @@ image_box_server <- function(
         )
       })
       
+      ## Is visible ----
+      is_visible_r <- shiny::reactive({
+        index <= length(result_image_ids_r())
+      })
+      
+      ## Is offered ----
       is_offered_rv <- shiny::reactiveVal(NULL)
       
       shiny::observeEvent(result_offered_r(), {
@@ -45,20 +51,36 @@ image_box_server <- function(
         is_offered_rv()
       })
       
-      is_visible_r <- shiny::reactive({
-        index <= length(result_image_ids_r())
+      ## Price ----
+      price_rv <- shiny::reactiveVal(NULL)
+      
+      shiny::observeEvent(c(
+        image_id_r(),
+        dropdown_return$offer$is_offered_r()
+      ), {
+        if (!is_offered_r()) return()
+        
+        price_rv(
+          db_get_offered_price(.values$db, image_id_r())
+        )
       })
+      
+      shiny::observeEvent(dropdown_return$price$price_r(), {
+        price_rv(dropdown_return$price$price_r())
+      }, ignoreInit = TRUE)
       
       price_r <- shiny::reactive({
         if (!is_offered_r()) return(NULL)
         
-        db_get_offered_price(.values$db, image_id_r())
+        price_rv()
       }) 
       
+      ## Owner ----
       owner_name_r <- shiny::reactive({
         db_get_image_owner(.values$db, image_id_r())
       })
       
+      ## Image ----
       image_r <- shiny::reactive({
         c(
           entry_r(),
@@ -70,6 +92,7 @@ image_box_server <- function(
         )
       })
       
+      ## UI ----
       status_choices <- c("primary", "orange", "olive", "fuchsia")
       
       status <- sample(status_choices, 1)

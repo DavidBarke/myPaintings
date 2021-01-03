@@ -13,6 +13,8 @@ image_box_dropdown_price_server <- function(id, .values, image_r) {
       
       ns <- session$ns
       
+      price_rv <- shiny::reactiveVal()
+      
       output$price_item <- shiny::renderUI({
         if (image_r()$is_offered) {
           bs4Dash::cardDropdownItem(
@@ -55,7 +57,7 @@ image_box_dropdown_price_server <- function(id, .values, image_r) {
           price = input$price
         )
         
-        .values$update$offered_images(.values$update$offered_images() + 1)
+        price_rv(input$price)
         
         bs4Dash::toast(
           paste0(
@@ -71,6 +73,12 @@ image_box_dropdown_price_server <- function(id, .values, image_r) {
           )
         )
       })
+      
+      return_list <- list(
+        price_r = shiny::reactive(price_rv())
+      )
+      
+      return(return_list)
     }
   )
 }
