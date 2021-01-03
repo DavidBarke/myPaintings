@@ -37,7 +37,8 @@ database_server <- function(id, .values) {
       output$table <- DT::renderDataTable({
         shiny::req(input$select_table)
         DT::datatable(
-          db_get_table(.values$db, input$select_table)
+          db_get_table(.values$db, input$select_table),
+          rownames = FALSE
         )
       })
     }
