@@ -4,7 +4,7 @@ image_display_content_ui <- function(id) {
   htmltools::tagList(
     shiny::uiOutput(
       outputId = ns("images")
-    ),
+    ) %>% shinycssloaders::withSpinner(),
     scroll_trigger(
       inputId = ns("scroll_trigger")
     )
