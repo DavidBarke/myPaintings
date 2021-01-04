@@ -62,13 +62,34 @@ filter_table_condition_server <- function(
       
       is_active_rv <- shiny::reactiveVal(FALSE)
       
+      # did this condition change from not active to active
+      gets_active_r <- shiny::reactive({
+        gets_active_rv()
+      })
+      
+      gets_active_rv <- shiny::reactiveVal(0)
+      
+      last_n_conditions_rv <- shiny::reactiveVal(0)
+      
       shiny::observeEvent(n_conditions_r(), {
-        is_active <- n_conditions_r() == index
+        n <- n_conditions_r()
+        last_n <- last_n_conditions_rv()
+        
+        # Update early (before first return)
+        last_n_conditions_rv(n)
+        
+        is_active <- n == index
         
         if (is_active == is_active_rv()) return()
       
         # only update is_active_rv when active status changed
         is_active_rv(is_active)
+        
+        # only update gets_active_rv when active status changes to active and
+        # condition was just added (not removed)
+        if (is_active && n > last_n) {
+          gets_active_rv(gets_active_rv() + 1)
+        }
       })
       
       shiny::observeEvent(is_active_r(), {
@@ -198,7 +219,7 @@ filter_table_condition_server <- function(
       
       output$value_painter <- shiny::renderUI({
         input$filter_by
-        is_active_r()
+        gets_active_r()
         
         if (shiny::req(input$operation_text) == "REGEXP") {
           shiny::textInput(
@@ -244,7 +265,7 @@ filter_table_condition_server <- function(
       
       output$value_title <- shiny::renderUI({
         input$filter_by
-        is_active_r()
+        gets_active_r()
         
         if (shiny::req(input$operation_text) == "REGEXP") {
           shiny::textInput(
@@ -267,17 +288,21 @@ filter_table_condition_server <- function(
       })
       
       shiny::observeEvent(update_title_choices_rv(), {
+        selected <- if (is.null(input$value_title) || input$value_title == "") {
+          NULL
+        } else input$value_title
+        
         shiny::updateSelectizeInput(
           inputId = "value_title",
           choices = image_ids_r(),
-          selected = input$value_title,
+          selected = selected,
           server = TRUE
         )
         
         if (!is_active_r()) {
           js$disable_selectize_input(id = ns("value_title"), asis = TRUE)
         }
-      })
+      }, ignoreInit = TRUE)
       
       image_ids_r <- shiny::reactive({
         db_get_image_ids(.values$db)
