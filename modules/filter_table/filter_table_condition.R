@@ -187,6 +187,7 @@ filter_table_condition_server <- function(
             inputId = ns("value_name"),
             label = NULL,
             choices = db_get_user_ids(.values$db),
+            selected = shiny::isolate(input$value_name),
             multiple = multiple
           )
         }
@@ -197,7 +198,6 @@ filter_table_condition_server <- function(
       
       output$value_painter <- shiny::renderUI({
         input$filter_by
-        #first_condition_r()
         is_active_r()
         
         if (shiny::req(input$operation_text) == "REGEXP") {
@@ -212,10 +212,11 @@ filter_table_condition_server <- function(
           
           multiple <- shiny::req(input$operation_text) == "IN"
           
-          shiny::selectInput(
+          shiny::selectizeInput(
             inputId = ns("value_painter"),
             label = NULL,
             choices = NULL,
+            selected = shiny::isolate(input$value_painter),
             multiple = multiple
           )
         }
@@ -225,8 +226,13 @@ filter_table_condition_server <- function(
         shiny::updateSelectizeInput(
           inputId = "value_painter",
           choices = painters_r(),
+          selected = input$value_painter,
           server = TRUE
         )
+        
+        if (!is_active_r()) {
+          js$disable_selectize_input(id = ns("value_title"), asis = TRUE)
+        }
       })
       
       painters_r <- shiny::reactive({
@@ -238,7 +244,6 @@ filter_table_condition_server <- function(
       
       output$value_title <- shiny::renderUI({
         input$filter_by
-        #first_condition_r()
         is_active_r()
         
         if (shiny::req(input$operation_text) == "REGEXP") {
@@ -254,24 +259,21 @@ filter_table_condition_server <- function(
           shiny::selectizeInput(
             inputId = ns("value_title"),
             label = NULL,
-            choices = NULL
+            choices = NULL,
+            selected = shiny::isolate(input$value_title),
+            multiple = multiple
           )
         }
       })
-      
-      update_title_choices_occured_rv <- shiny::reactiveVal(0)
       
       shiny::observeEvent(update_title_choices_rv(), {
         shiny::updateSelectizeInput(
           inputId = "value_title",
           choices = image_ids_r(),
+          selected = input$value_title,
           server = TRUE
         )
         
-        update_title_choices_occured_rv(update_title_choices_occured_rv() + 1)
-      })
-      
-      shiny::observeEvent(update_title_choices_occured_rv(), {
         if (!is_active_r()) {
           js$disable_selectize_input(id = ns("value_title"), asis = TRUE)
         }
@@ -295,6 +297,7 @@ filter_table_condition_server <- function(
             inputId = ns("value_school"),
             label = NULL,
             choices = db_get_image_schools(.values$db),
+            selected = shiny::isolate(input$value_school),
             multiple = multiple
           )
         }
@@ -317,6 +320,7 @@ filter_table_condition_server <- function(
             inputId = ns("value_type"),
             label = NULL,
             choices = choices,
+            selected = shiny::isolate(input$value_type),
             multiple = multiple
           )
         }
@@ -331,7 +335,8 @@ filter_table_condition_server <- function(
             "All" = "all",
             "Offered" = "offered",
             "Not Offered" = "not_offered"
-          )
+          ),
+          selected = shiny::isolate(input$value_status)
         )
       })
       
