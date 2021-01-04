@@ -49,28 +49,38 @@ filter_table_server <- function(id, .values) {
         if (n_conditions_rv() == 1) first_condition_rv(first_condition_rv() + 1)
         
         if (n_conditions_rv() > max_conditions_rv()) {
-          query_text_in_r <- if (n_conditions_rv() > 1) {
-            return$row[[n_conditions_rv() - 1]]$query_text_out_r
+          index <- n_conditions_rv()
+          
+          query_text_in_r <- if (index > 1) {
+            return$row[[index - 1]]$query_text_out_r
           } else {
             shiny::reactive(character())
           }
           
-          query_params_in_r <- if (n_conditions_rv() > 1) {
-            return$row[[n_conditions_rv() - 1]]$query_params_out_r
+          query_params_in_r <- if (index > 1) {
+            return$row[[index - 1]]$query_params_out_r
           } else {
             shiny::reactive(list())
           }
           
-          return$row[[n_conditions_rv()]] <- filter_table_condition_server(
-            id = "filter_table_condition" %_% n_conditions_rv(),
+          return$row[[index]] <- filter_table_condition_server(
+            id = "filter_table_condition" %_% index,
             .values = .values,
+            index = index,
             query_text_start_r = query_text_start_r,
             query_text_in_r = query_text_in_r,
             query_params_in_r = query_params_in_r,
-            first_condition_r = shiny::reactive(first_condition_rv())
+            first_condition_r = shiny::reactive(first_condition_rv()),
+            n_conditions_r = shiny::reactive(n_conditions_rv())
           )
           
-          max_conditions_rv(n_conditions_rv())
+          shiny::observeEvent(return$row[[index]]$remove_r(), {
+            print(index)
+            n_conditions_rv(n_conditions_rv() - 1)
+            print(n_conditions_rv())
+          }, ignoreInit = TRUE)
+          
+          max_conditions_rv(index)
         }
         
         shiny::insertUI(

@@ -11,9 +11,9 @@ filter_table_condition_ui <- function(id) {
   )
   
   htmltools::tags$tr(
+    id = ns("row"),
     class = "filter-table-row",
     htmltools::tags$td(
-      style = "width: 30%",
       shiny::selectInput(
         inputId = ns("filter_by"),
         label = NULL,
@@ -22,23 +22,29 @@ filter_table_condition_ui <- function(id) {
       )
     ),
     htmltools::tags$td(
-      style = "width: 20%",
       shiny::uiOutput(
         outputId = ns("operation")
       )
     ),
     htmltools::tags$td(
-      style = "width: 50%",
       shiny::uiOutput(
         outputId = ns("value")
+      )
+    ),
+    htmltools::tags$td(
+      shiny::uiOutput(
+        outputId = ns("remove_btn")
       )
     )
   )
 }
 
 filter_table_condition_server <- function(
-  id, .values, query_text_start_r, query_text_in_r, query_params_in_r,
-  first_condition_r # needed to trigger server side selectize inputs
+  id, .values, 
+  index,
+  query_text_start_r, query_text_in_r, query_params_in_r,
+  first_condition_r, # needed to trigger server side selectize inputs,
+  n_conditions_r
 ) {
   shiny::moduleServer(
     id,
@@ -46,8 +52,40 @@ filter_table_condition_server <- function(
       
       ns <- session$ns
       
-      update_painter_choices_rv <- shiny::reactiveVal(0)
-      update_title_choices_rv <- shiny::reactiveVal(0)
+      force(index)
+      
+      # is this condition the last condition
+      is_active_r <- shiny::reactive({
+        n_conditions_r() == index
+      })
+      
+      shiny::observeEvent(is_active_r(), {
+        if (!is_active_r()) {
+          shinyjs::disable(ns("row"), asis = TRUE)
+        } else {
+          shinyjs::enable(ns("row"), asis = TRUE)
+        }
+      })
+      
+      output$remove_btn <- shiny::renderUI({
+        if (is_active_r()) {
+          shiny::actionButton(
+            inputId = ns("remove_row"),
+            label = NULL,
+            icon = shiny::icon("times")
+          )
+        }
+      })
+      
+      remove_rv <- shiny::reactiveVal(0)
+      
+      shiny::observeEvent(input$remove_row, {
+        shiny::removeUI(
+          selector = paste0("#", ns("row"))
+        )
+        
+        remove_rv(remove_rv() + 1)
+      })
       
       ## Operation ----
       operation_group_dict <- c(
@@ -142,6 +180,8 @@ filter_table_condition_server <- function(
       })
       
       ## By painter ----
+      update_painter_choices_rv <- shiny::reactiveVal(0)
+      
       output$value_painter <- shiny::renderUI({
         input$filter_by
         first_condition_r()
@@ -180,6 +220,8 @@ filter_table_condition_server <- function(
       })
       
       ## By title ----
+      update_title_choices_rv <- shiny::reactiveVal(0)
+      
       output$value_title <- shiny::renderUI({
         input$filter_by
         first_condition_r()
@@ -353,7 +395,8 @@ filter_table_condition_server <- function(
       ## Return ----
       return_list <- list(
         query_text_out_r = query_text_out_r,
-        query_params_out_r = query_params_out_r
+        query_params_out_r = query_params_out_r,
+        remove_r = shiny::reactive(remove_rv())
       )
       
       return(return_list)
