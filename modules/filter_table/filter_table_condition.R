@@ -56,7 +56,19 @@ filter_table_condition_server <- function(
       
       # is this condition the last condition
       is_active_r <- shiny::reactive({
-        n_conditions_r() == index
+        # keeping updates on a minimum by querying reactiveVal
+        is_active_rv()
+      })
+      
+      is_active_rv <- shiny::reactiveVal(FALSE)
+      
+      shiny::observeEvent(n_conditions_r(), {
+        is_active <- n_conditions_r() == index
+        
+        if (is_active == is_active_rv()) return()
+      
+        # only update is_active_rv when active status changed
+        is_active_rv(is_active)
       })
       
       shiny::observeEvent(is_active_r(), {
@@ -84,6 +96,7 @@ filter_table_condition_server <- function(
           selector = paste0("#", ns("row"))
         )
         
+        # Notify filter table
         remove_rv(remove_rv() + 1)
       })
       
@@ -184,7 +197,8 @@ filter_table_condition_server <- function(
       
       output$value_painter <- shiny::renderUI({
         input$filter_by
-        first_condition_r()
+        #first_condition_r()
+        is_active_r()
         
         if (shiny::req(input$operation_text) == "REGEXP") {
           shiny::textInput(
@@ -224,7 +238,8 @@ filter_table_condition_server <- function(
       
       output$value_title <- shiny::renderUI({
         input$filter_by
-        first_condition_r()
+        #first_condition_r()
+        is_active_r()
         
         if (shiny::req(input$operation_text) == "REGEXP") {
           shiny::textInput(
@@ -236,14 +251,15 @@ filter_table_condition_server <- function(
           
           multiple <- shiny::req(input$operation_text) == "IN"
           
-          shiny::selectInput(
+          shiny::selectizeInput(
             inputId = ns("value_title"),
             label = NULL,
-            choices = NULL,
-            multiple = multiple
+            choices = NULL
           )
         }
       })
+      
+      update_title_choices_occured_rv <- shiny::reactiveVal(0)
       
       shiny::observeEvent(update_title_choices_rv(), {
         shiny::updateSelectizeInput(
@@ -251,6 +267,14 @@ filter_table_condition_server <- function(
           choices = image_ids_r(),
           server = TRUE
         )
+        
+        update_title_choices_occured_rv(update_title_choices_occured_rv() + 1)
+      })
+      
+      shiny::observeEvent(update_title_choices_occured_rv(), {
+        if (!is_active_r()) {
+          js$disable_selectize_input(id = ns("value_title"), asis = TRUE)
+        }
       })
       
       image_ids_r <- shiny::reactive({

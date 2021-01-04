@@ -74,10 +74,9 @@ filter_table_server <- function(id, .values) {
             n_conditions_r = shiny::reactive(n_conditions_rv())
           )
           
+          # Listen on clicking remove button in filter condition
           shiny::observeEvent(return$row[[index]]$remove_r(), {
-            print(index)
             n_conditions_rv(n_conditions_rv() - 1)
-            print(n_conditions_rv())
           }, ignoreInit = TRUE)
           
           max_conditions_rv(index)

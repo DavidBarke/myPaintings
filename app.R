@@ -56,7 +56,7 @@ ui_server <- function(source_to_globalenv = FALSE) {
     # Enable shinyjs
     useShinyjs(),
     # Extend shinyjs with custom JavaScript
-    # extendShinyjs("www/js/extend_shinyjs.js")
+    extendShinyjs("js/extend_shinyjs.js", functions = c("disable_selectize_input"))
   )
   
   # SERVER -------------------------------------------------------------------
