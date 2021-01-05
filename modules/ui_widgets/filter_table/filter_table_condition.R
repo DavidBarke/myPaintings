@@ -10,10 +10,11 @@ filter_table_condition_ui <- function(id) {
     "Status" = "status"
   )
   
-  htmltools::tags$tr(
+  shiny::fluidRow(
     id = ns("row"),
     class = "filter-table-row",
-    htmltools::tags$td(
+    shiny::column(
+      width = 4,
       shiny::selectInput(
         inputId = ns("filter_by"),
         label = NULL,
@@ -21,17 +22,20 @@ filter_table_condition_ui <- function(id) {
         selected = "title"
       )
     ),
-    htmltools::tags$td(
+    shiny::column(
+      width = 2,
       shiny::uiOutput(
         outputId = ns("operation")
       )
     ),
-    htmltools::tags$td(
+    shiny::column(
+      width = 4,
       shiny::uiOutput(
         outputId = ns("value")
       )
     ),
-    htmltools::tags$td(
+    shiny::column(
+      width = 2,
       shiny::uiOutput(
         outputId = ns("remove_btn")
       )

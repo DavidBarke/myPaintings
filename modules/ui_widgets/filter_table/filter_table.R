@@ -2,7 +2,7 @@ filter_table_ui <- function(id) {
   ns <- shiny::NS(id)
   
   htmltools::tagList(
-    htmltools::tags$table(
+    htmltools::div(
       id = ns("table"),
       class = "filter-table"
     ),
