@@ -24,7 +24,10 @@ transaction_display_content_server <- function(id, .values, options) {
       output$transaction_table <- DT::renderDataTable({
         tbl <- options$transactions_r()
         
-        DT::datatable(tbl)
+        DT::datatable(tbl) %>%
+          DT::formatCurrency(
+            columns = "Price"
+          )
       })
     }
   )
