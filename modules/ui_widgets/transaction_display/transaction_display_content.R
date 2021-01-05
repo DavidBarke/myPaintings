@@ -3,7 +3,7 @@ transaction_display_content_ui <- function(id) {
   
   shiny::fluidRow(
     bs4Dash::box(
-      title = "Transactions",
+      title = shiny::uiOutput(outputId = ns("title")),
       width = 12,
       status = "primary",
       solidHeader = TRUE,
@@ -20,6 +20,16 @@ transaction_display_content_server <- function(id, .values, options) {
     function(input, output, session) {
       
       ns <- session$ns
+      
+      output$title <- shiny::renderUI({
+        paste(
+          "Transactions (from", 
+          options$date_start_r(), 
+          "until", 
+          options$date_end_r(),
+          ")"
+        )
+      })
       
       output$transaction_table <- DT::renderDataTable({
         tbl <- options$transactions_r()

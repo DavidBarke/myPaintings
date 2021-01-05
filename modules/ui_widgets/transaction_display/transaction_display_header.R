@@ -47,12 +47,33 @@ transaction_display_header_server <- function(id, .values) {
       
       ns <- session$ns
       
+      default_date_start <- "2019-01-01"
+      default_date_end <- "2021-12-31"
+      
+      date_start_rv <- shiny::reactiveVal(default_date_start)
+      date_end_rv <- shiny::reactiveVal(default_date_end)
+      
+      shiny::observeEvent(input$apply_date, {
+        date_start_rv(as.character(input$date[1]))
+        date_end_rv(as.character(input$date[2]))
+      })
+      
+      shiny::observeEvent(input$reset_date, {
+        date_start_rv(default_date_start)
+        date_end_rv(default_date_end)
+        shiny::updateDateRangeInput(
+          inputId = "date",
+          start = default_date_start,
+          end = default_date_end
+        )
+      })
+      
       transaction_ids_r <- shiny::reactive({
         db_get_transaction_ids_by_filter(
           db = .values$db,
           user_id = .values$user_rv()$user_id,
-          date_start = as.character(input$date[1]),
-          date_end = as.character(input$date[2])
+          date_start = date_start_rv(),
+          date_end = date_end_rv()
         )
       })
       
@@ -64,6 +85,8 @@ transaction_display_header_server <- function(id, .values) {
       })
       
       return_list <- list(
+        date_start_r = shiny::reactive(date_start_rv()),
+        date_end_r = shiny::reactive(date_end_rv()),
         n_r = shiny::reactive(nrow(transactions_r())),
         transactions_r = transactions_r
       )
