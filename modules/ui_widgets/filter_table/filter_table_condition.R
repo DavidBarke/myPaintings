@@ -381,7 +381,7 @@ filter_table_condition_server <- function(
           paste(
             query_col_dict(
               shiny::req(input$filter_by),
-              operation_r()
+              shiny::req(input$operation_text)
             ),
             query_operator_dict[[shiny::req(input$operation_text)]],
             "?"
