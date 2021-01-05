@@ -26,7 +26,17 @@ transaction_display_content_server <- function(id, .values, options) {
         
         tbl$is_sold <- tbl$Seller == .values$user_rv()$name
         
-        DT::datatable(tbl) %>%
+        DT::datatable(
+          tbl,
+          options = list(
+            columnDefs = list(
+              list(
+                visible = FALSE,
+                targets = length(tbl)
+              )
+            )
+          )
+        ) %>%
           DT::formatCurrency(
             columns = "Price"
           ) %>%
