@@ -22,7 +22,7 @@ transaction_display_header_server <- function(id, .values) {
       ns <- session$ns
       
       transactions_r <- shiny::reactive({
-        db_get_transactions_by_user_id(
+        db_get_transactions_by_user_id_for_display(
           .values$db,
           .values$user_rv()$user_id
         )
