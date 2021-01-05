@@ -5,7 +5,7 @@ image_display_ui <- function(id) {
     image_display_header_ui(
       id = ns("image_display_header")
     ),
-    image_display_results_number_ui(
+    display_results_number_ui(
       id = ns("image_display_results_number")
     ),
     image_display_content_ui(
@@ -26,7 +26,7 @@ image_display_server <- function(id, .values) {
         .values = .values
       )
       
-      image_display_results_number_server(
+      display_results_number_server(
         id = "image_display_results_number",
         .values = .values,
         n_r = header_return$n_r
