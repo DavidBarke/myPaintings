@@ -1,42 +1,11 @@
-image_display_ui <- function(id) {
-  ns <- shiny::NS(id)
-  
-  htmltools::tagList(
-    image_display_header_ui(
-      id = ns("image_display_header")
-    ),
-    display_results_number_ui(
-      id = ns("image_display_results_number")
-    ),
-    image_display_content_ui(
-      id = ns("image_display_content")
-    )
-  )
-}
+image_display_ui <- display_ui_factory(
+  header_ui = image_display_header_ui,
+  results_number_ui = display_results_number_ui,
+  content_ui = image_display_content_ui
+)
 
-image_display_server <- function(id, .values) {
-  shiny::moduleServer(
-    id,
-    function(input, output, session) {
-      
-      ns <- session$ns
-      
-      header_return <- image_display_header_server(
-        id = "image_display_header",
-        .values = .values
-      )
-      
-      display_results_number_server(
-        id = "image_display_results_number",
-        .values = .values,
-        n_r = header_return$n_r
-      )
-      
-      image_display_content_server(
-        id = "image_display_content",
-        .values = .values,
-        options = header_return
-      )
-    }
-  )
-}
+image_display_server <- display_server_factory(
+  header_server= image_display_header_server,
+  results_number_server = display_results_number_server,
+  content_server = image_display_content_server
+)
