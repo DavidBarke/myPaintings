@@ -59,7 +59,11 @@ image_box_server <- function(
       shiny::observeEvent(c(
         image_id_r(),
         dropdown_return$offer$is_offered_r()
-      ), {
+      ),
+      # Make sure that this observeEvent updates last when initialising the
+      # server, so that is_offered_r reflects the offered status correctly.
+      priority = -1
+      {
         if (!is_offered_r()) return()
         
         price_rv(
@@ -73,7 +77,7 @@ image_box_server <- function(
       
       price_r <- shiny::reactive({
         if (!is_offered_r()) return(NULL)
-        
+
         price_rv()
       }) 
       
