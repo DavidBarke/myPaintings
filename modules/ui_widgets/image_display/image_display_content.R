@@ -12,7 +12,7 @@ image_display_content_ui <- function(id) {
   )
 }
 
-image_display_content_server <- function(id, .values, options) {
+image_display_content_server <- function(id, .values, display_args, options) {
   shiny::moduleServer(
     id,
     function(input, output, session) {

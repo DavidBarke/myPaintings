@@ -14,7 +14,7 @@ transaction_display_content_ui <- function(id) {
   )
 }
 
-transaction_display_content_server <- function(id, .values, options) {
+transaction_display_content_server <- function(id, .values, display_args, options) {
   shiny::moduleServer(
     id,
     function(input, output, session) {

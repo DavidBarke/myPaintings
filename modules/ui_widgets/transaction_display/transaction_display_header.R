@@ -40,7 +40,7 @@ transaction_display_header_ui <- function(id) {
   )
 }
 
-transaction_display_header_server <- function(id, .values) {
+transaction_display_header_server <- function(id, .values, display_args) {
   shiny::moduleServer(
     id,
     function(input, output, session) {

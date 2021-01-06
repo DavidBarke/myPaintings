@@ -48,7 +48,7 @@ image_display_header_ui <- function(id) {
   )
 }
 
-image_display_header_server <- function(id, .values) {
+image_display_header_server <- function(id, .values, display_args) {
   shiny::moduleServer(
     id,
     function(input, output, session) {

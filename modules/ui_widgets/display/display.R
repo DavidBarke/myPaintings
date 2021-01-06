@@ -23,7 +23,8 @@ display_ui_factory <- function(
 display_server_factory <- function(
   header_server,
   results_number_server,
-  content_server
+  content_server,
+  display_args
 ) {
   function(id, .values) {
     shiny::moduleServer(
@@ -34,7 +35,8 @@ display_server_factory <- function(
         
         header_return <- header_server(
           id = "display_header",
-          .values = .values
+          .values = .values,
+          display_args = display_args$header
         )
         
         results_number_server(
@@ -46,6 +48,7 @@ display_server_factory <- function(
         content_server(
           id = "display_content",
           .values = .values,
+          display_args = display_args$content,
           options = header_return
         )
       }
