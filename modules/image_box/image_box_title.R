@@ -14,6 +14,7 @@ image_box_title_server <- function(id, .values, image_r) {
       ns <- session$ns
       
       price_badge_r <- shiny::reactive({
+        if (image_r()$index == 1) print(image_r()$price)
         if (image_r()$is_offered) {
           bs4Dash::bs4Badge(
             .values$settings$dollar_format(image_r()$price),
@@ -24,7 +25,7 @@ image_box_title_server <- function(id, .values, image_r) {
       
       output$title <- shiny::renderUI({
         htmltools::tagList(
-          paste(image_r()$title, image_r()$index),
+          image_r()$title,
           price_badge_r()
         )
       })
