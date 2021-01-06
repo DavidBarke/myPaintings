@@ -23,10 +23,9 @@ display_ui_factory <- function(
 display_server_factory <- function(
   header_server,
   results_number_server,
-  content_server,
-  display_args
+  content_server
 ) {
-  function(id, .values) {
+  function(id, .values, display_args) {
     shiny::moduleServer(
       id,
       function(input, output, session) {

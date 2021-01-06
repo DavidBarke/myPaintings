@@ -26,12 +26,11 @@ filter_table_ui <- function(id) {
 }
 
 filter_table_server <- function(id, 
-                                .values, 
-                                filter_choices = c(
-                                  "name", "painter", "title", "school", "type", 
-                                  "status"
-                                )
+                                .values,
+                                tab = c("browse", "collection", "trade")
 ) {
+  tab <- match.arg(tab)
+  
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -78,7 +77,7 @@ filter_table_server <- function(id,
             query_params_in_r = query_params_in_r,
             first_condition_r = shiny::reactive(first_condition_rv()),
             n_conditions_r = shiny::reactive(n_conditions_rv()),
-            filter_choices = filter_choices
+            tab = tab
           )
           
           # Listen on clicking remove button in filter condition

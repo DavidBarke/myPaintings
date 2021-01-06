@@ -15,7 +15,13 @@ collection_server <- function(id, .values) {
       
       image_display_server(
         id = "collection",
-        .values = .values
+        .values = .values,
+        display_args = list(
+          header = list(
+            tab = "collection"
+          ),
+          content = list()
+        )
       )
     }
   )

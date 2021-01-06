@@ -15,7 +15,13 @@ browse_server <- function(id, .values) {
       
       image_display_server(
         id = "image_display",
-        .values = .values
+        .values = .values,
+        display_args = list(
+          header = list(
+            tab = "browse"
+          ),
+          content = list()
+        )
       )
     }
   )

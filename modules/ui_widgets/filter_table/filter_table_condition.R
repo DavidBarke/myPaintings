@@ -37,11 +37,8 @@ filter_table_condition_server <- function(
   query_text_start_r, query_text_in_r, query_params_in_r,
   first_condition_r, # needed to trigger server side selectize inputs,
   n_conditions_r,
-  filter_choices = c("name", "painter", "title", "school", "type", "status")
+  tab
 ) {
-  
-  filter_choices <- match.arg(filter_choices, several.ok = TRUE)
-  
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -118,23 +115,28 @@ filter_table_condition_server <- function(
       })
       
       ## Filter by ----
-      choices_tbl <- tibble::tibble(
-        label = c("Owner", "Painter", "Title", "School", "Type", "Status"),
-        value = c("name", "painter", "title", "school", "type", "status")
+      tab_choices <- list(
+        browse = c("title", "painter", "name", "school", "type", "status"),
+        collection = c("title", "painter", "school", "type", "status"),
+        trade = c("title", "painter", "name", "school", "type")
       )
       
-      choices <- choices_tbl$value
-      names(choices) <- choices
-      choices <- choices[filter_choices]
+      choices <- c(
+        "Owner" = "name",
+        "Painter" = "painter",
+        "Title" = "title",
+        "School" = "school",
+        "Type" = "type",
+        "Status" = "status"
+      )
       
-      names(choices) <- choices_tbl$label
+      choices <- choices[match(tab_choices[[tab]], choices)]
       
       output$filter_by <- shiny::renderUI({
         shiny::selectInput(
           inputId = ns("filter_by"),
           label = NULL,
-          choices = choices,
-          selected = "title"
+          choices = choices
         )
       })
       
