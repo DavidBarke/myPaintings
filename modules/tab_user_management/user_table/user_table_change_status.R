@@ -87,7 +87,7 @@ user_table_change_status_server <- function(id, .values, user_name, status) {
           )
         }
 
-        .values$update$user(.values$update$user() + 1)
+        .values$update$db_user_rv(.values$update$db_user_rv() + 1)
       })
     }
   )

@@ -85,7 +85,7 @@ login_server <- function(id, .values) {
           entry <- db_get_user_entry(.values$db, input$user_name)
           .values$user_rv(entry)
           db_log_user_in(.values$db, input$user_name)
-          .values$update$user(.values$update$user() + 1)
+          .values$update$db_user_rv(.values$update$db_user_rv() + 1)
 
           shiny::showNotification(
             ui = "Login successful.",

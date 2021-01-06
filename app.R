@@ -105,10 +105,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
     }
     .values$settings$dollar_format <- scales::dollar_format()
     
-    .values$update$user <- shiny::reactiveVal(0)
-    .values$update$images <- shiny::reactiveVal(0)
-    .values$update$offered_images <- shiny::reactiveVal(0)
-    .values$update$collection_image_rvs <- shiny::reactiveValues()
+    .values$update$db_user_rv <- shiny::reactiveVal(0)
+    .values$update$db_offered_images_rv <- shiny::reactiveVal(0)
     
     # Connect to db
     .values$db <- DBI::dbConnect(RSQLite::SQLite(), "./db/db.sqlite")

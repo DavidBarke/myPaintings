@@ -61,7 +61,7 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
           price = input$price
         )
 
-        .values$update$offered_images(.values$update$offered_images() + 1)
+        .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)
         is_offered_rv(TRUE)
         
         bs4Dash::toast(
@@ -88,7 +88,7 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
           image_id = image_r()$image_id
         )
         
-        .values$update$offered_images(.values$update$offered_images() + 1)
+        .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)
         is_offered_rv(FALSE)
         
         bs4Dash::toast(

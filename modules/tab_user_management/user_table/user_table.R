@@ -26,7 +26,7 @@ user_table_server <- function(id, .values) {
       )
 
       output$user_table <- DT::renderDataTable({
-        .values$update$user()
+        .values$update$db_user_rv()
 
         tbl <- db_get_table(.values$db, "user")
 

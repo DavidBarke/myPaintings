@@ -89,7 +89,7 @@ user_table_remove_user_server <- function(id,
           )
         }
 
-        .values$update$user(.values$update$user() + 1)
+        .values$update$db_user_rv(.values$update$db_user_rv() + 1)
       })
     }
   )

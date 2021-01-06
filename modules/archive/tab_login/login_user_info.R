@@ -43,7 +43,7 @@ login_user_info_server <- function(id, .values) {
       })
 
       diff_time_since_r <- shiny::reactive({
-        .values$update$user()
+        .values$update$db_user_rv()
         timer_r()
 
         current_logged_time <- db_get_user_last_logged(

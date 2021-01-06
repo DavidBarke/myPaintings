@@ -200,7 +200,7 @@ add_user_server <- function(id, .values) {
           added_from = .values$user_rv()$name
         )
 
-        .values$update$user(.values$update$user() + 1)
+        .values$update$db_user_rv(.values$update$db_user_rv() + 1)
       })
     }
   )

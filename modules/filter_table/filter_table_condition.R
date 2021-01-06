@@ -193,6 +193,7 @@ filter_table_condition_server <- function(
       })
       
       output$operation_price <- shiny::renderUI({
+        .values$update$db_offered_images_rv()
         max <- db_get_max_offered_price(.values$db)
         
         shiny::sliderInput(
