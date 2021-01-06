@@ -4,7 +4,7 @@ image_box_image_ui <- function(id) {
   shiny::imageOutput(
     outputId = ns("img"),
     height = NULL
-  ) %>% shinycssloaders::withSpinner()
+  ) #%>% shinycssloaders::withSpinner()
 }
 
 image_box_image_server <- function(id, .values, image_r) {

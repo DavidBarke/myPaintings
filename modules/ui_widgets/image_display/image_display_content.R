@@ -6,7 +6,8 @@ image_display_content_ui <- function(id) {
       outputId = ns("images")
     ) %>% shinycssloaders::withSpinner(),
     scroll_trigger(
-      inputId = ns("scroll_trigger")
+      inputId = ns("scroll_trigger"),
+      containerId = ns("images")
     )
   )
 }
@@ -176,6 +177,7 @@ image_display_content_server <- function(id, .values, options) {
       )
       
       shiny::observeEvent(scroll_trigger_r(), {
+        print("scroll_trigger")
         current_visible_index_r(current_visible_index_r() + load_offset)
       })
     }

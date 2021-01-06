@@ -58,7 +58,7 @@ ui_server <- function(source_to_globalenv = FALSE) {
     # Extend shinyjs with custom JavaScript
     extendShinyjs(
       "js/extend_shinyjs.js", 
-      functions = c("disable_selectize_input", "reset_scroll_trigger")
+      functions = c("disable_selectize_input")
     )
   )
   
