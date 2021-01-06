@@ -58,6 +58,7 @@ image_box_dropdown_price_server <- function(id, .values, image_r) {
         )
         
         price_rv(input$price)
+        .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)
         
         bs4Dash::toast(
           paste0(
