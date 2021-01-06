@@ -70,7 +70,7 @@ image_display_header_server <- function(id, .values, display_args) {
       filter_table_return <- filter_table_server(
         id = "filter_table",
         .values = .values,
-        tab = print(display_args$tab)
+        tab = display_args$tab
       )
       
       return_list <- list(
