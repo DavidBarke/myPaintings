@@ -116,9 +116,9 @@ filter_table_condition_server <- function(
       
       ## Filter by ----
       tab_choices <- list(
-        browse = c("title", "painter", "name", "school", "type", "status"),
+        browse = c("title", "painter", "name", "school", "type", "status", "price"),
         collection = c("title", "painter", "school", "type", "status"),
-        trade = c("title", "painter", "name", "school", "type")
+        trade = c("title", "painter", "name", "school", "type", "price")
       )
       
       choices <- c(
@@ -127,7 +127,8 @@ filter_table_condition_server <- function(
         "Title" = "title",
         "School" = "school",
         "Type" = "type",
-        "Status" = "status"
+        "Status" = "status",
+        "Price" = "price"
       )
       
       choices <- choices[match(tab_choices[[tab]], choices)]
@@ -147,7 +148,8 @@ filter_table_condition_server <- function(
         title = "text",
         school = "text",
         type = "text",
-        status = "status"
+        status = "status",
+        price = "price"
       )
       
       operation_dict <- list(
@@ -156,6 +158,9 @@ filter_table_condition_server <- function(
         ),
         status = shiny::uiOutput(
           outputId = ns("operation_status")
+        ),
+        price = shiny::uiOutput(
+          outputId = ns("operation_price")
         )
       )
       
@@ -184,6 +189,19 @@ filter_table_condition_server <- function(
           inputId = ns("operation_status"),
           label = NULL,
           choices = c("=" = "=")
+        )
+      })
+      
+      output$operation_price <- shiny::renderUI({
+        max <- db_get_max_offered_price(.values$db)
+        
+        shiny::sliderInput(
+          inputId = ns("operation_price"),
+          label = NULL,
+          min = 0,
+          max = max,
+          value = c(0, max),
+          pre = "$"
         )
       })
       

@@ -89,3 +89,21 @@ db_set_offered_price <- function(db, image_id, price) {
     params = list(price, as.integer(image_id))
   )
 }
+
+
+
+#' Get Maximum Offered Price
+#' 
+#' @template db
+#' 
+#' @family offered_images
+#' 
+#' @export
+db_get_max_offered_price <- function(db) {
+  max_price <- DBI::dbGetQuery(
+    db,
+    "SELECT MAX(price) AS max_price FROM offered_images"
+  )$max_price
+  
+  if (is.na(max_price)) 0 else max_price
+}
