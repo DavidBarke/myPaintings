@@ -25,7 +25,13 @@ filter_table_ui <- function(id) {
   )
 }
 
-filter_table_server <- function(id, .values, filter_choices) {
+filter_table_server <- function(id, 
+                                .values, 
+                                filter_choices = c(
+                                  "name", "painter", "title", "school", "type", 
+                                  "status"
+                                )
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
