@@ -41,12 +41,12 @@ sidebar_menu_server <- function(id, .values) {
         browse = bs4Dash::menuItem(
           text = "Browse",
           tabName = "browse",
-          icon = shiny::icon("browse")
+          icon = shiny::icon("images")
         ),
         collection = bs4Dash::menuItem(
           text = "Collection",
           tabName = "collection",
-          icon = shiny::icon("images")
+          icon = shiny::icon("portrait")
         ),
         trade = bs4Dash::menuItem(
           text = "Buy",
