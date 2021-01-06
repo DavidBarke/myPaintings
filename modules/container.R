@@ -31,6 +31,12 @@ container_ui <- function(id) {
           )
         ),
         bs4Dash::bs4TabItem(
+          tabName = "browse",
+          browse_ui(
+            id = ns("browse")
+          )
+        ),
+        bs4Dash::bs4TabItem(
           tabName = "collection",
           collection_ui(
             id = ns("collection")
@@ -112,6 +118,11 @@ container_server <- function(id, .values) {
       ## Tab Items ----
       welcome_server(
         id = "welcome",
+        .values = .values
+      )
+      
+      browse_server(
+        id = "browse",
         .values = .values
       )
       
