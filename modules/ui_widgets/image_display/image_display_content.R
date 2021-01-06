@@ -25,7 +25,7 @@ image_display_content_server <- function(id, .values, options) {
       # gets incrementey by user scroll and gets reset whenever a new user
       # request (filter) is processed.
       current_visible_index_r <- shiny::reactiveVal(vis_start)
-      max_visible_index_r <- shiny::reactiveVal(vis_start)
+      last_visible_index_r <- shiny::reactiveVal(vis_start)
       
       prepared_index_rv <- shiny::reactiveVal(vis_start)
       
@@ -64,7 +64,10 @@ image_display_content_server <- function(id, .values, options) {
           immediate = TRUE
         )
         
+        js$reset_scroll_trigger(id = ns("scroll_trigger"), asis = TRUE)
+        
         current_visible_index_r(vis_start)
+        last_visible_index_r(vis_start)
       })
       
       ## Visible output ----
@@ -110,6 +113,7 @@ image_display_content_server <- function(id, .values, options) {
       
       shiny::observeEvent(current_visible_index_r(), {
         vis_index <- current_visible_index_r()
+        last_vis_index <- last_visible_index_r()
         prep_index <- prepared_index_rv()
         
         if (vis_index > prep_index) {
@@ -135,26 +139,32 @@ image_display_content_server <- function(id, .values, options) {
             )
           })
           
-          n_col <- 12 / options$width_r()
-          
-          indices <- seq_along(new_boxes)
-          
-          purrr::map(seq_len(n_col), function(i) {
-            # For last element mod is 0
-            if (i == n_col) i <- 0
-            shiny::insertUI(
-              selector = paste0("#img-col-", i),
-              where = "beforeEnd",
-              ui = new_boxes[indices %% n_col == i]
-            )
-          })
-          
           ui$boxes <- c(
             ui$boxes,
             new_boxes
           )
           
           prepared_index_rv(vis_index)
+        }
+        
+        if (vis_index > last_vis_index) {
+          n_col <- 12 / options$width_r()
+          
+          indices <- (last_vis_index + 1):vis_index
+          
+          new_boxes <- ui$boxes[indices]
+          
+          purrr::walk2(new_boxes, indices, function(box, index) {
+            i <- index %% n_col
+            if (i == n_col) i <- 0
+            shiny::insertUI(
+              selector = paste0("#img-col-", i),
+              where = "beforeEnd",
+              ui = box
+            )
+          })
+          
+          last_visible_index_r(current_visible_index_r())
         }
       })
       

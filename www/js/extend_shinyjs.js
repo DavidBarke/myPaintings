@@ -6,3 +6,8 @@ shinyjs.disable_selectize_input = function(params) {
     $el[0].selectize.disable();
   }, 1);
 };
+
+shinyjs.reset_scroll_trigger = function(params) {
+  scroll_trigger = $("#" + params.id);
+  scroll_trigger.attr("last-height", $(window).scrollTop() + $(window).height());
+};
