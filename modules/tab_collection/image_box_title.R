@@ -24,7 +24,7 @@ image_box_title_server <- function(id, .values, image_r) {
       
       output$title <- shiny::renderUI({
         htmltools::tagList(
-          image_r()$title,
+          paste(image_r()$title, image_r()$index),
           price_badge_r()
         )
       })

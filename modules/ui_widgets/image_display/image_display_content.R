@@ -21,16 +21,15 @@ image_display_content_server <- function(id, .values, options) {
       vis_start <- 20
       load_offset <- 5
       
-      prepared_step <- 50
-      
       # This reactiveVal holds the number of currently visible image boxes. It
       # gets incrementey by user scroll and gets reset whenever a new user
       # request (filter) is processed.
       current_visible_index_r <- shiny::reactiveVal(vis_start)
-      current_prepared_index_r <- shiny::reactiveVal(prepared_step)
+      max_visible_index_r <- shiny::reactiveVal(vis_start)
       
-      ui_index_rv <- shiny::reactiveVal(prepared_step)
-      server_index_rv <- shiny::reactiveVal(vis_start)
+      prepared_index_rv <- shiny::reactiveVal(vis_start)
+      
+      rerender_boxes_rv <- shiny::reactiveVal(0)
       
       ui <- new.env()
       
@@ -47,9 +46,10 @@ image_display_content_server <- function(id, .values, options) {
         )
       })
       
-      ui$boxes <- purrr::map(1:prepared_step, function(index) {
+      ui$boxes <- purrr::map(1:vis_start, function(index) {
         image_box_ui(
-          id = ns("image_box" %_% index)
+          id = ns("image_box" %_% index),
+          index = index
         )
       })
       
@@ -57,15 +57,19 @@ image_display_content_server <- function(id, .values, options) {
       
       result_offered_r <- options$is_offered_r
       
-      ## Visible output ----
-      visible_indices_r <- shiny::reactive({
-        seq_len(min(
-          current_visible_index_r(),
-          length(result_image_ids_r())
-        ))
+      shiny::observeEvent(result_image_ids_r(), {
+        shiny::removeUI(
+          selector = ".not-start-box",
+          multiple = TRUE,
+          immediate = TRUE
+        )
+        
+        current_visible_index_r(vis_start)
       })
       
+      ## Visible output ----
       output$images <- shiny::renderUI({
+        #rerender_boxes_rv()
         image_boxes <- ui$boxes
         
         if (options$display_r() %in% c("image", "info")) {
@@ -104,15 +108,14 @@ image_display_content_server <- function(id, .values, options) {
         shiny::fluidRow(columns)
       }
       
-      shiny::observeEvent(
-        ignoreInit = TRUE,
-        current_visible_index_r(), 
-        {
-          vis_index <- current_visible_index_r()
+      shiny::observeEvent(current_visible_index_r(), {
+        vis_index <- current_visible_index_r()
+        prep_index <- prepared_index_rv()
+        
+        if (vis_index > prep_index) {
+          new_indices <- (prep_index + 1):(vis_index)
           
-          new_server_indices <- (shiny::isolate(server_index_rv()) + 1):vis_index
-          
-          purrr::walk(new_server_indices, function(index) {
+          purrr::walk(new_indices, function(index) {
             image_box_server(
               id = "image_box" %_% index,
               .values = .values,
@@ -125,20 +128,10 @@ image_display_content_server <- function(id, .values, options) {
             )
           })
           
-          server_index_rv(vis_index)
-        }
-      )
-      
-      shiny::observeEvent(current_visible_index_r(), {
-        vis_index <- current_visible_index_r()
-        prep_index <- current_prepared_index_r()
-        
-        if (vis_index > prep_index) {
-          new_ui_indices <- (prep_index + 1):(prep_index + prepared_step)
-          
-          new_boxes <- purrr::map(new_ui_indices, function(index) {
+          new_boxes <- purrr::map(new_indices, function(index) {
             image_box_ui(
-              id = ns("image_box" %_% index)
+              id = ns("image_box" %_% index),
+              index = index
             )
           })
           
@@ -161,7 +154,7 @@ image_display_content_server <- function(id, .values, options) {
             new_boxes
           )
           
-          current_prepared_index_r(prep_index + prepared_step)
+          prepared_index_rv(vis_index)
         }
       })
       

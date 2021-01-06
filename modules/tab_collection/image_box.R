@@ -1,8 +1,9 @@
-image_box_ui <- function(id) {
+image_box_ui <- function(id, index) {
   ns <- shiny::NS(id)
   
   shiny::uiOutput(
-    outputId = ns("card")
+    outputId = ns("card"),
+    class = if (index > 20) "not-start-box" else NULL
   )
 }
 
@@ -87,7 +88,8 @@ image_box_server <- function(
           list(
             is_offered = is_offered_r(),
             price = price_r(),
-            owner = owner_name_r()
+            owner = owner_name_r(),
+            index = index
           )
         )
       })
