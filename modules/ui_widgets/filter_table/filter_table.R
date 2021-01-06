@@ -149,7 +149,8 @@ filter_table_server <- function(id, .values) {
             params = query_params_result_r()
           )
         }
-      })
+      }) %>%
+        shiny::throttle(1000)
       
       # shiny::observeEvent(image_ids_r(), {
       #   print(dplyr::as_tibble(image_ids_r()))

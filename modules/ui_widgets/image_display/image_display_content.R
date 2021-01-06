@@ -30,8 +30,6 @@ image_display_content_server <- function(id, .values, options) {
       
       prepared_index_rv <- shiny::reactiveVal(vis_start)
       
-      rerender_boxes_rv <- shiny::reactiveVal(0)
-      
       ui <- new.env()
       
       purrr::walk(1:vis_start, function(index) {
@@ -54,9 +52,25 @@ image_display_content_server <- function(id, .values, options) {
         )
       })
       
-      result_image_ids_r <- options$image_ids_r
+      result_image_ids_rv <- shiny::reactiveVal(NULL)
       
-      result_offered_r <- options$is_offered_r
+      shiny::observeEvent(options$image_ids_r(), {
+        result_image_ids_rv(options$image_ids_r())
+      })
+      
+      result_image_ids_r <- shiny::reactive({
+        result_image_ids_rv()
+      })
+      
+      result_offered_rv <- shiny::reactiveVal(NULL)
+      
+      shiny::observeEvent(options$is_offered_r(), {
+        result_offered_rv(options$is_offered_r())
+      })
+      
+      result_offered_r <- shiny::reactive({
+        result_offered_rv()
+      })
       
       shiny::observeEvent(result_image_ids_r(), {
         shiny::removeUI(
@@ -65,15 +79,12 @@ image_display_content_server <- function(id, .values, options) {
           immediate = TRUE
         )
         
-        js$reset_scroll_trigger(id = ns("scroll_trigger"), asis = TRUE)
-        
         current_visible_index_r(vis_start)
         last_visible_index_r(vis_start)
-      })
+      }, priority = 1)
       
       ## Visible output ----
       output$images <- shiny::renderUI({
-        #rerender_boxes_rv()
         image_boxes <- ui$boxes
         
         if (options$display_r() %in% c("image", "info")) {
@@ -177,7 +188,6 @@ image_display_content_server <- function(id, .values, options) {
       )
       
       shiny::observeEvent(scroll_trigger_r(), {
-        print("scroll_trigger")
         current_visible_index_r(current_visible_index_r() + load_offset)
       })
     }

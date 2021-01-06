@@ -49,7 +49,7 @@ image_box_server <- function(
       
       is_offered_r <- shiny::reactive({
         shiny::req(is_visible_r())
-        is_offered_rv()
+        shiny::req(is_offered_rv())
       })
       
       ## Price ----
