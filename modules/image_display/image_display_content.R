@@ -45,13 +45,6 @@ image_display_content_server <- function(id, .values, display_args, options) {
         )
       })
       
-      ui$boxes <- purrr::map(1:vis_start, function(index) {
-        image_box_ui(
-          id = ns("image_box" %_% index),
-          index = index
-        )
-      })
-      
       result_image_ids_rv <- shiny::reactiveVal(NULL)
       
       shiny::observeEvent(options$image_ids_r(), {

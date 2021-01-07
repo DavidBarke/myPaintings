@@ -1,9 +1,43 @@
-image_box_ui <- function(id, index) {
+image_box_ui <- function(id, src) {
   ns <- shiny::NS(id)
   
-  shiny::uiOutput(
-    outputId = ns("card"),
-    class = if (index > 20) "not-start-box" else NULL
+  status_choices <- c("primary", "orange", "olive", "fuchsia")
+  
+  status <- sample(status_choices, 1)
+  
+  bs4Dash::tabBox(
+    id = ns("image_tabset"),
+    width = NULL,
+    side = "right",
+    title = image_box_title_ui(
+      id = ns("image_box_title")
+    ),
+    dropdownMenu = bs4Dash::boxDropdown(
+      image_box_dropdown_ui(
+        id = ns("image_box_dropdown")
+      )
+    ),
+    solidHeader = TRUE,
+    status = status,
+    maximizable = TRUE,
+    collapsible = FALSE,
+    shiny::tabPanel(
+      title = "Image",
+      value = "image",
+      icon = shiny::icon("image"),
+      image_box_image_ui(
+        id = ns("image_box_image"),
+        src = src
+      )
+    ),
+    shiny::tabPanel(
+      title = "Info",
+      value = "info",
+      icon = shiny::icon("info-circle"),
+      image_box_info_ui(
+        id = ns("image_box_info")
+      )
+    )
   )
 }
 
@@ -100,78 +134,6 @@ image_box_server <- function(
       })
       
       ## UI ----
-      status_choices <- c("primary", "orange", "olive", "fuchsia")
-      
-      status <- sample(status_choices, 1)
-      
-      layout_dict <- c(
-        "image" = "details",
-        "info" = "details",
-        "list" = "list"
-      )
-      
-      layouts <- list(
-        details = shiny::uiOutput(
-          outputId = ns("layout_details")
-        ),
-        list = shiny::uiOutput(
-          outputId = ns("layout_list")
-        )
-      )
-      
-      output$layout_details <- shiny::renderUI({
-        bs4Dash::tabBox(
-          id = ns("image_tabset"),
-          selected = options$display_r(),
-          width = NULL,
-          side = "right",
-          title = image_box_title_ui(
-            id = ns("image_box_title")
-          ),
-          dropdownMenu = bs4Dash::boxDropdown(
-            image_box_dropdown_ui(
-              id = ns("image_box_dropdown")
-            )
-          ),
-          solidHeader = TRUE,
-          status = status,
-          maximizable = TRUE,
-          collapsible = FALSE,
-          shiny::tabPanel(
-            title = "Image",
-            value = "image",
-            icon = shiny::icon("image"),
-            image_box_image_ui(
-              id = ns("image_box_image")
-            )
-          ),
-          shiny::tabPanel(
-            title = "Info",
-            value = "info",
-            icon = shiny::icon("info-circle"),
-            image_box_info_ui(
-              id = ns("image_box_info")
-            )
-          )
-        )
-      })
-      
-      output$layout_list <- shiny::renderUI({
-        bodyless_card(
-          width = NULL,
-          title = image_box_title_ui(
-            id = ns("image_box_title")
-          ),
-          dropdownMenu = bs4Dash::boxDropdown(
-            image_box_dropdown_ui(
-              id = ns("image_box_dropdown")
-            )
-          ),
-          solidHeader = TRUE,
-          status = status
-        )
-      })
-      
       shiny::observeEvent(options$display_r(), {
         if (options$display_r() %in% c("image", "info")) {
           shiny::updateTabsetPanel(
@@ -179,11 +141,6 @@ image_box_server <- function(
             selected = options$display_r()
           )
         }
-      })
-      
-      output$card <- shiny::renderUI({
-        if (!is_visible_r()) return(NULL)
-        layouts[[layout_dict[options$display_r()]]]
       })
       
       image_box_title_server(
@@ -194,12 +151,6 @@ image_box_server <- function(
       
       dropdown_return <- image_box_dropdown_server(
         id = "image_box_dropdown",
-        .values = .values,
-        image_r = image_r
-      )
-      
-      image_box_image_server(
-        id = "image_box_image",
         .values = .values,
         image_r = image_r
       )
