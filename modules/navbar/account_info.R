@@ -21,7 +21,7 @@ account_info_server <- function(id, .values) {
       ns <- session$ns
       
       account_label_r <- shiny::reactive({
-        .values$settings$dollar_format(.values$user_rv()$capital)
+        scales::dollar_format()(.values$user_rv()$capital)
       })
       
       output$account <- bs4Dash::renderMenu({
