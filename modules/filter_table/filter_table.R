@@ -210,8 +210,8 @@ filter_table_server <- function(id,
       # })
       
       return_list <- list(
-        image_ids_r = shiny::reactive(filter_query_r()$image_id),
-        is_offered_r = shiny::reactive(filter_query_r()$is_offered)
+        images_r = filter_query_r,
+        image_ids_r = shiny::reactive(filter_query_r()$image_id)
       )
       
       return(return_list)

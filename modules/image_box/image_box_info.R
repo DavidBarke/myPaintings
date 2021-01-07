@@ -1,82 +1,48 @@
-image_box_info_ui <- function(id) {
+image_box_info_ui <- function(id, image) {
   ns <- shiny::NS(id)
+  
+  if (image$image_id == 1) print(image)
   
   shiny::fluidRow(
     bs4Dash::infoBox(
       title = "Owner",
-      value = shiny::uiOutput(outputId = ns("owner")),
+      value = image$owner,
       width = 12,
       icon = shiny::icon("user")
     ),
     bs4Dash::infoBox(
       title = "Painter",
-      value = shiny::uiOutput(ns("painter")),
+      value = image$painter,
       width = 12,
       icon = shiny::icon("paint-brush")
     ),
     bs4Dash::infoBox(
       title = "Created in",
-      value = shiny::uiOutput(ns("date")),
+      value = image$date,
       width = 12,
       icon = shiny::icon("hourglass")
     ),
     bs4Dash::infoBox(
       title = "Exhibited at",
-      value = shiny::uiOutput(ns("location")),
+      value = image$location,
       width = 12,
       icon = shiny::icon("landmark")
     ),
     bs4Dash::infoBox(
       title = "School",
-      value = shiny::uiOutput(ns("school")),
+      value = image$school,
       width = 12,
       icon = shiny::icon("school")
     ),
     bs4Dash::infoBox(
       title = "Source",
-      value = shiny::uiOutput(ns("source")),
+      value = htmltools::tags$a(
+        href = image$url,
+        target = "_blank",
+        image$url
+      ),
       width = 12,
       icon = shiny::icon("copyright")
     )
-  )
-}
-
-image_box_info_server <- function(id, .values, image_r, status) {
-  shiny::moduleServer(
-    id,
-    function(input, output, session) {
-      
-      ns <- session$ns
-      
-      output$owner <- shiny::renderUI({
-        image_r()$owner
-      })
-      
-      output$painter <- shiny::renderUI({
-        image_r()$name
-      })
-      
-      output$date <- shiny::renderUI({
-        image_r()$date
-      })
-      
-      output$location <- shiny::renderUI({
-        image_r()$location
-      })
-      
-      output$school <- shiny::renderUI({
-        image_r()$school
-      })
-      
-      output$source <- shiny::renderUI({
-        url <- image_r()$url
-        
-        htmltools::tags$a(
-          href = url,
-          target = "_blank",
-          url
-        )
-      })
-    }
   )
 }

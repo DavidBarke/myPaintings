@@ -75,8 +75,8 @@ image_display_header_server <- function(id, .values, display_args) {
       
       return_list <- list(
         display_r = display_r,
+        images_r = filter_table_return$images_r,
         image_ids_r = filter_table_return$image_ids_r,
-        is_offered_r = filter_table_return$is_offered_r,
         n_r = shiny::reactive(length(filter_table_return$image_ids_r())),
         width_r = width_r
       )
