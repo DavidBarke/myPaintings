@@ -69,7 +69,7 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
             "Offered \"",
             image_r()$title,
             "\" for ",
-            .values$settings$dollar_format(input$price),
+            scales::dollar_format()(input$price),
             "."
           ),
           options = .values$settings$toast(

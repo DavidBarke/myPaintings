@@ -108,7 +108,17 @@ filter_table_server <- function(id,
       
       query_text_start_dict <- list(
         browse = "
-          SELECT image.rowid AS image_id,
+          SELECT 
+            image.rowid AS image_id, 
+            user.name AS owner,
+            painter.name AS painter,
+            image.date,
+            image.location,
+            image.school,
+            image.url,
+            image.path,
+            image.title,
+            offered_images.price,
             CASE WHEN offered_images.price NOT NULL THEN 1 ELSE 0 END AS is_offered
           FROM user_image
             INNER JOIN user 
@@ -122,7 +132,15 @@ filter_table_server <- function(id,
         ",
         collection = "
           SELECT image.rowid AS image_id,
-            1 AS is_offered 
+            painter.name AS painter,
+            image.date,
+            image.location,
+            image.school,
+            image.url,
+            image.path,
+            image.title,
+            offered_images.price,
+            CASE WHEN offered_images.price NOT NULL THEN 1 ELSE 0 END AS is_offered
           FROM user_image
             INNER JOIN image
               ON user_image.image_id = image.rowid
@@ -132,7 +150,16 @@ filter_table_server <- function(id,
               ON user_image.image_id = offered_images.image_id
         ",
         trade = "
-          SELECT image.rowid AS image_id,
+          SELECT 
+            image.rowid AS image_id,
+            painter.name AS painter,
+            image.date,
+            image.location,
+            image.school,
+            image.url,
+            image.path,
+            image.title,
+            offered_images.price,
             1 AS is_offered
           FROM user_image
             INNER JOIN image
@@ -210,8 +237,8 @@ filter_table_server <- function(id,
       # })
       
       return_list <- list(
-        image_ids_r = shiny::reactive(filter_query_r()$image_id),
-        is_offered_r = shiny::reactive(filter_query_r()$is_offered)
+        images_r = filter_query_r,
+        image_ids_r = shiny::reactive(filter_query_r()$image_id)
       )
       
       return(return_list)
