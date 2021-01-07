@@ -115,7 +115,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
           if (i == n) i <- 0
           shiny::column(
             width = width,
-            id = paste("img-col", i, sep = "-"),
+            id = ns(paste("img-col", i, sep = "-")),
             boxes[indices %% n == i]
           )
         })
@@ -170,7 +170,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
             i <- index %% n_col
             if (i == n_col) i <- 0
             shiny::insertUI(
-              selector = paste0("#img-col-", i),
+              selector = paste0("#", ns(paste0("img-col-", i))),
               where = "beforeEnd",
               ui = box
             )

@@ -59,13 +59,13 @@ filter_table_server <- function(id,
           query_text_in_r <- if (index > 1) {
             return$row[[index - 1]]$query_text_out_r
           } else {
-            shiny::reactive(character())
+            query_text_in_start_r
           }
           
           query_params_in_r <- if (index > 1) {
             return$row[[index - 1]]$query_params_out_r
           } else {
-            shiny::reactive(list())
+            query_params_start_r
           }
           
           return$row[[index]] <- filter_table_condition_server(
@@ -106,33 +106,80 @@ filter_table_server <- function(id,
         )
       })
       
-      query_text_start_r <- shiny::reactive({
-        "SELECT 
-          image.rowid AS image_id,
-          CASE WHEN offered_images.price NOT NULL THEN 1 ELSE 0 END AS is_offered
-        FROM user_image
-          INNER JOIN user 
-            ON user_image.user_id = user.rowid
-          INNER JOIN image
-            ON user_image.image_id = image.rowid
-          INNER JOIN painter
-            ON image.painter_id = painter.painter_id
-          LEFT JOIN offered_images
-            ON user_image.image_id = offered_images.image_id
+      query_text_start_dict <- list(
+        browse = "
+          SELECT image.rowid AS image_id,
+            CASE WHEN offered_images.price NOT NULL THEN 1 ELSE 0 END AS is_offered
+          FROM user_image
+            INNER JOIN user 
+              ON user_image.user_id = user.rowid
+            INNER JOIN image
+              ON user_image.image_id = image.rowid
+            INNER JOIN painter
+              ON image.painter_id = painter.painter_id
+            LEFT JOIN offered_images
+              ON user_image.image_id = offered_images.image_id
+        ",
+        collection = "
+          SELECT image.rowid AS image_id,
+            1 AS is_offered 
+          FROM user_image
+            INNER JOIN image
+              ON user_image.image_id = image.rowid
+            INNER JOIN painter
+              ON image.painter_id = painter.painter_id
+            LEFT JOIN offered_images
+              ON user_image.image_id = offered_images.image_id
+        ",
+        trade = "
+          SELECT image.rowid AS image_id,
+            1 AS is_offered
+          FROM user_image
+            INNER JOIN image
+              ON user_image.image_id = image.rowid
+            INNER JOIN painter
+              ON image.painter_id = painter.painter_id
+            INNER JOIN offered_images
+              ON user_image.image_id = offered_images.image_id
         "
+      )
+      
+      query_text_start_r <- shiny::reactive({
+        query_text_start_dict[[tab]]
       })
       
+      query_text_in_start_r <- switch(
+        tab,
+        "browse" = shiny::reactive(character()),
+        "collection" = shiny::reactive("user_image.user_id = ?"),
+        "trade" = shiny::reactive("user_image.user_id != ?")
+      )
+      
       query_text_result_r <- shiny::reactive({
-        if (n_conditions_rv() == 0) return(query_text_start_r())
-        
-        construct_query_text(
-          query_text_start_r(),
-          return$row[[n_conditions_rv()]]$query_text_out_r()
+        if (n_conditions_rv() == 0) {
+          construct_query_text(
+            query_text_start_r(),
+            query_text_in_start_r()
+          )
+        } else {
+          construct_query_text(
+            query_text_start_r(),
+            return$row[[n_conditions_rv()]]$query_text_out_r()
+          )
+        }
+      })
+      
+      query_params_start_r <- shiny::reactive({
+        switch(
+          tab,
+          "browse" = list(),
+          "collection" = list(.values$user_rv()$user_id),
+          "trade" = list(.values$user_rv()$user_id)
         )
       })
       
       query_params_result_r <- shiny::reactive({
-        if (n_conditions_rv() == 0) return(list())
+        if (n_conditions_rv() == 0) return(query_params_start_r())
         
         return$row[[n_conditions_rv()]]$query_params_out_r()
       })
@@ -143,17 +190,17 @@ filter_table_server <- function(id,
       # })
       
       filter_query_r <- shiny::eventReactive(input$apply, {
-        if (length(query_params_result_r()) == 0) {
-          DBI::dbGetQuery(
-            .values$db,
-            query_text_result_r()
-          )
-        } else {
+        if (length(query_params_result_r())) {
           DBI::dbGetQuery(
             .values$db,
             query_text_result_r(),
             params = query_params_result_r()
-          )
+          ) 
+        } else {
+          DBI::dbGetQuery(
+            .values$db,
+            query_text_result_r()
+          ) 
         }
       }) %>%
         shiny::throttle(1000)

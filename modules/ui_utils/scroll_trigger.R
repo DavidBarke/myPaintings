@@ -20,7 +20,6 @@ scroll_trigger <- function(inputId, containerId, threshold = 100) {
   
   htmltools::tags$script(
     id = inputId,
-    `last-height` = 0,
     htmltools::HTML(func)
   )
 }

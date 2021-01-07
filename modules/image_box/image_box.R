@@ -62,7 +62,7 @@ image_box_server <- function(
       ),
       # Make sure that this observeEvent updates last when initialising the
       # server, so that is_offered_r reflects the offered status correctly.
-      priority = -1
+      priority = -1,
       {
         if (!is_offered_r()) return()
         
