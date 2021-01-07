@@ -27,7 +27,7 @@ images <- bind_cols(
 image_src <- src_path(images)
 image_dest <- dest_path(images)
 
-images$path <- image_dest
+images$path <- str_match(image_dest, "./img/(.*)")[,2]
 
 # Painters ----
 painters <- src_tbl %>%

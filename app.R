@@ -66,6 +66,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
   
   server <- function(input, output, session) {
     
+    shiny::addResourcePath(prefix = "wga", directoryPath = "./img/wga")
+    
     # .VALUES ENVIRONMENT ------------------------------------------------
     
     # The .values environment is available to all modules so that arbitrary information
