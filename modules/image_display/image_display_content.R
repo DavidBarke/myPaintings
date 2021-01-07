@@ -4,11 +4,7 @@ image_display_content_ui <- function(id) {
   htmltools::tagList(
     shiny::uiOutput(
       outputId = ns("images")
-    ) %>% shinycssloaders::withSpinner(),
-    scroll_trigger(
-      inputId = ns("scroll_trigger"),
-      containerId = ns("images")
-    )
+    ) %>% shinycssloaders::withSpinner()
   )
 }
 
@@ -20,7 +16,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
       ns <- session$ns
       
       server_start <- 20
-      load_offset <- 5
+      load_offset <- 20
       
       max_loaded_server_rv <- shiny::reactiveVal(server_start)
       
@@ -68,7 +64,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
           immediate = TRUE
         )
         
-        current_visible_index_rv(5)
+        current_visible_index_rv(server_start)
         last_visible_index_rv(0)
       }, priority = 1)
       
@@ -144,12 +140,14 @@ image_display_content_server <- function(id, .values, display_args, options) {
         }
       })
       
-      scroll_trigger_r <- shiny::throttle(
-        millis = 1000,
-        shiny::reactive({
-          input$scroll_trigger
-        })
+      js$scroll_trigger(
+        container_id = ns("images"),
+        scroll_trigger_id = ns("scroll_trigger")
       )
+      
+      scroll_trigger_r <- shiny::reactive({
+        input$scroll_trigger
+      })
       
       shiny::observeEvent(scroll_trigger_r(), {
         current_visible_index_rv(current_visible_index_rv() + load_offset)
