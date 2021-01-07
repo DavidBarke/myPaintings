@@ -65,7 +65,7 @@ image_box_dropdown_price_server <- function(id, .values, image_r) {
             "Changed price for \"", 
             image_r()$title, 
             "\" to ",
-            .values$settings$dollar_format(input$price),
+            scales::dollar_format()(input$price),
             "."
           ),
           options = .values$settings$toast(

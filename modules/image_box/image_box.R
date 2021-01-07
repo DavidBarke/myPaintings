@@ -12,7 +12,8 @@ image_box_ui <- function(id, image) {
       width = NULL,
       side = "right",
       title = image_box_title_ui(
-        id = ns("image_box_title")
+        id = ns("image_box_title"),
+        image = image
       ),
       dropdownMenu = bs4Dash::boxDropdown(
         image_box_dropdown_ui(
@@ -64,12 +65,6 @@ image_box_server <- function(
           )
         }
       })
-      
-      image_box_title_server(
-        id = "image_box_title",
-        .values = .values,
-        image_r = image_r
-      )
       
       dropdown_return <- image_box_dropdown_server(
         id = "image_box_dropdown",
