@@ -118,6 +118,7 @@ filter_table_server <- function(id,
             image.url,
             image.path,
             image.title,
+            offered_images.price,
             CASE WHEN offered_images.price NOT NULL THEN 1 ELSE 0 END AS is_offered
           FROM user_image
             INNER JOIN user 
@@ -138,7 +139,8 @@ filter_table_server <- function(id,
             image.url,
             image.path,
             image.title,
-            1 AS is_offered 
+            offered_images.price,
+            CASE WHEN offered_images.price NOT NULL THEN 1 ELSE 0 END AS is_offered
           FROM user_image
             INNER JOIN image
               ON user_image.image_id = image.rowid
@@ -157,6 +159,7 @@ filter_table_server <- function(id,
             image.url,
             image.path,
             image.title,
+            offered_images.price,
             1 AS is_offered
           FROM user_image
             INNER JOIN image

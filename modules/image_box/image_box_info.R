@@ -1,8 +1,6 @@
 image_box_info_ui <- function(id, image) {
   ns <- shiny::NS(id)
   
-  if (image$image_id == 1) print(image)
-  
   shiny::fluidRow(
     bs4Dash::infoBox(
       title = "Owner",

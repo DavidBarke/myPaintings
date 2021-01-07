@@ -76,55 +76,25 @@ image_display_content_server <- function(id, .values, display_args, options) {
       output$images <- shiny::renderUI({
         image_boxes <- ui$boxes
         
-        if (options$display_r() %in% c("image", "info")) {
-          # Column-based layout
-          # distribute_boxes(image_boxes, width = options$width_r())
-          n_col <- 12 / options$width_r()
-          
-          columns <- purrr::map(seq_len(n_col), function(i) {
-            # For last element mod is 0
-            if (i == n_col) i <- 0
-            shiny::column(
-              width = options$width_r(),
-              id = ns(paste("img-col", i, sep = "-"))
-            )
-          })
-          
-          shiny::fluidRow(
-            columns
-          )
-        } else {
-          # Row-based layout
-          columns <- purrr::map(image_boxes, function(image_box) {
-            shiny::column(
-              width = options$width_r(),
-              image_box
-            )
-          })
-          
-          shiny::fluidRow(
-            columns
-          )
-        }
-      })
-      
-      distribute_boxes <- function(boxes, width) {
-        indices <- seq_along(boxes)
+        # Number of columns is bootstrap grid total width divided by width of
+        # single column
+        n_col <- 12 / options$width_r()
         
-        n <- 12 / width
-        
-        columns <- purrr::map(seq_len(n), function(i) {
+        box_indices <- seq_along(image_boxes)
+        columns <- purrr::map(seq_len(n_col), function(i) {
           # For last element mod is 0
-          if (i == n) i <- 0
+          if (i == n_col) i <- 0
           shiny::column(
-            width = width,
+            width = options$width_r(),
             id = ns(paste("img-col", i, sep = "-")),
-            boxes[indices %% n == i]
+            ui$boxes[box_indices %% n_col == i]
           )
         })
         
-        shiny::fluidRow(columns)
-      }
+        shiny::fluidRow(
+          columns
+        )
+      })
       
       shiny::observeEvent(current_visible_index_rv(), {
         vis_index <- current_visible_index_rv()
