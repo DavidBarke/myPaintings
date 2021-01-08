@@ -112,7 +112,12 @@ ui_server <- function(source_to_globalenv = FALSE) {
     # Connect to db
     .values$db <- DBI::dbConnect(RSQLite::SQLite(), "./db/db.sqlite")
     # Admin is default user
-    .values$user_rv <- shiny::reactiveVal(db_get_user_entry(.values$db, "Admin"))
+    #.values$user_rv <- shiny::reactiveVal(db_get_user_entry(.values$db, "Admin"))
+    .values$user_rv <- shiny::reactiveVal(list(
+      status = "not_logged",
+      name = "",
+      last_logged = ""
+    ))
     
     # Enable regex on db
     RSQLite::initRegExp(.values$db)

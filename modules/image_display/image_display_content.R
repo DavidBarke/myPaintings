@@ -68,7 +68,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
           immediate = TRUE
         )
         
-        current_visible_index_rv(server_start)
+        current_visible_index_rv(server_start + runif(1))
         last_visible_index_rv(0)
       }, priority = 1)
       
@@ -97,7 +97,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
       })
       
       shiny::observeEvent(current_visible_index_rv(), {
-        vis_index <- current_visible_index_rv()
+        vis_index <- as.integer(current_visible_index_rv())
         last_vis_index <- last_visible_index_rv()
         max_server <- max_loaded_server_rv()
         
@@ -141,7 +141,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
             )
           })
           
-          last_visible_index_rv(current_visible_index_rv())
+          last_visible_index_rv(as.integer(current_visible_index_rv()))
         }
       })
       
@@ -155,7 +155,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
       })
       
       shiny::observeEvent(scroll_trigger_r(), {
-        current_visible_index_rv(current_visible_index_rv() + load_offset)
+        current_visible_index_rv(as.integer(current_visible_index_rv()) + load_offset)
       })
     }
   )
