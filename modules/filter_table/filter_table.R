@@ -132,7 +132,7 @@ filter_table_server <- function(id,
         ",
         collection = "
           SELECT 
-            image.rowid AS image_id
+            image.rowid AS image_id,
             painter.name AS painter,
             image.date,
             image.location,
@@ -220,7 +220,7 @@ filter_table_server <- function(id,
       #   str(query_params_result_r())
       # })
       
-      filter_query_r <- shiny::eventReactive(input$apply, {
+      filter_query_r <- shiny::eventReactive(input$apply, ignoreNULL = FALSE, {
         if (length(query_params_result_r())) {
           DBI::dbGetQuery(
             .values$db,
@@ -231,7 +231,7 @@ filter_table_server <- function(id,
           DBI::dbGetQuery(
             .values$db,
             query_text_result_r()
-          ) 
+          )
         }
       }) %>%
         shiny::throttle(1000)
