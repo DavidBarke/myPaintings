@@ -47,6 +47,10 @@ image_display_content_server <- function(id, .values, display_args, options) {
         result_image_ids_rv()
       })
       
+      result_length_r <- shiny::reactive({
+        length(result_image_ids_r())
+      })
+      
       result_offered_rv <- shiny::reactiveVal(NULL)
       
       shiny::observeEvent(options$image_ids_r(), {
@@ -114,6 +118,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
         
         if (vis_index > last_vis_index) {
           new_indices <- (last_vis_index + 1):vis_index
+          new_indices <- new_indices[new_indices <= result_length_r()]
           
           new_boxes <- purrr::map(new_indices, function(index) {
             image_box_ui(
