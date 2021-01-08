@@ -6,7 +6,7 @@ image_box_dropdown_offer_ui <- function(id) {
   )
 }
 
-image_box_dropdown_offer_server <- function(id, .values, image_r) {
+image_box_dropdown_offer_server <- function(id, .values, image_r, box_id) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -63,6 +63,12 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
           image_id = image_r()$image_id,
           price = input$price
         )
+        
+        shiny::insertUI(
+          selector = paste0("#", box_id, " .card-title"),
+          where = "beforeEnd",
+          ui = price_badge(input$price)
+        )
 
         .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)
         is_offered_rv(TRUE)
@@ -89,6 +95,10 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
         db_withdraw_offer_image(
           db = .values$db,
           image_id = image_r()$image_id
+        )
+        
+        shiny::removeUI(
+          selector = print(paste0("#", box_id, " .price-badge"))
         )
         
         .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)

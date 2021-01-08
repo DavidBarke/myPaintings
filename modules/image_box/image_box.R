@@ -69,7 +69,8 @@ image_box_server <- function(
       dropdown_return <- image_box_dropdown_server(
         id = "image_box_dropdown",
         .values = .values,
-        image_r = image_r
+        image_r = image_r,
+        box_id = ns("image_tabset")
       )
     }
   )
