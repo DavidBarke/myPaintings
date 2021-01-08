@@ -165,7 +165,7 @@ filter_table_server <- function(id,
             1 AS is_offered
           FROM user_image
             INNER JOIN user
-              ON user_image.user_id = user.name
+              ON user_image.user_id = user.rowid
             INNER JOIN image
               ON user_image.image_id = image.rowid
             INNER JOIN painter
