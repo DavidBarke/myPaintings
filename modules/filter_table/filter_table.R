@@ -131,7 +131,8 @@ filter_table_server <- function(id,
               ON user_image.image_id = offered_images.image_id
         ",
         collection = "
-          SELECT image.rowid AS image_id,
+          SELECT 
+            image.rowid AS image_id
             painter.name AS painter,
             image.date,
             image.location,
@@ -152,6 +153,7 @@ filter_table_server <- function(id,
         buy = "
           SELECT 
             image.rowid AS image_id,
+            user.name AS owner,
             painter.name AS painter,
             image.date,
             image.location,
@@ -162,6 +164,8 @@ filter_table_server <- function(id,
             offered_images.price,
             1 AS is_offered
           FROM user_image
+            INNER JOIN user
+              ON user_image.user_id = user.name
             INNER JOIN image
               ON user_image.image_id = image.rowid
             INNER JOIN painter
