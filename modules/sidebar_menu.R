@@ -26,7 +26,7 @@ sidebar_menu_server <- function(id, .values) {
           "settings"
         ),
         user = c(
-          "collection", "browse", "trade", "wallet", "settings"
+          "collection", "browse", "buy", "wallet", "settings"
         )
       )
 
@@ -48,7 +48,7 @@ sidebar_menu_server <- function(id, .values) {
           tabName = "collection",
           icon = shiny::icon("portrait")
         ),
-        trade = bs4Dash::menuItem(
+        buy = bs4Dash::menuItem(
           text = "Buy",
           tabName = "buy",
           icon = shiny::icon("shopping-bag")
