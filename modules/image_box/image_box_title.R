@@ -3,6 +3,7 @@ image_box_title_ui <- function(id, image) {
   
   price_badge <- if (image$is_offered) {
     bs4Dash::bs4Badge(
+      class = "price-badge",
       scales::dollar_format()(image$price),
       color = "danger"
     )
