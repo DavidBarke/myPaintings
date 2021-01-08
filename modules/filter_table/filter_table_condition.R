@@ -118,7 +118,7 @@ filter_table_condition_server <- function(
       tab_choices <- list(
         browse = c("title", "painter", "name", "school", "type", "status", "price"),
         collection = c("title", "painter", "school", "type", "status"),
-        trade = c("title", "painter", "name", "school", "type", "price")
+        buy = c("title", "painter", "name", "school", "type", "price")
       )
       
       choices <- c(

@@ -27,7 +27,7 @@ filter_table_ui <- function(id) {
 
 filter_table_server <- function(id, 
                                 .values,
-                                tab = c("browse", "collection", "trade")
+                                tab = c("browse", "collection", "buy")
 ) {
   tab <- match.arg(tab)
   
@@ -149,7 +149,7 @@ filter_table_server <- function(id,
             LEFT JOIN offered_images
               ON user_image.image_id = offered_images.image_id
         ",
-        trade = "
+        buy = "
           SELECT 
             image.rowid AS image_id,
             painter.name AS painter,
@@ -179,7 +179,7 @@ filter_table_server <- function(id,
         tab,
         "browse" = shiny::reactive(character()),
         "collection" = shiny::reactive("user_image.user_id = ?"),
-        "trade" = shiny::reactive("user_image.user_id != ?")
+        "buy" = shiny::reactive("user_image.user_id != ?")
       )
       
       query_text_result_r <- shiny::reactive({
@@ -201,7 +201,7 @@ filter_table_server <- function(id,
           tab,
           "browse" = list(),
           "collection" = list(.values$user_rv()$user_id),
-          "trade" = list(.values$user_rv()$user_id)
+          "buy" = list(.values$user_rv()$user_id)
         )
       })
       
