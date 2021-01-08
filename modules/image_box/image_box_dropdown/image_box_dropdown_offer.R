@@ -6,7 +6,13 @@ image_box_dropdown_offer_ui <- function(id) {
   )
 }
 
-image_box_dropdown_offer_server <- function(id, .values, image_r, box_id) {
+image_box_dropdown_offer_server <- function(id, 
+                                            .values, 
+                                            image_r, 
+                                            box_id, 
+                                            # from image_box_dropdown_price
+                                            price_rv
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -72,6 +78,7 @@ image_box_dropdown_offer_server <- function(id, .values, image_r, box_id) {
 
         .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)
         is_offered_rv(TRUE)
+        price_rv(input$price)
         
         bs4Dash::toast(
           paste0(
@@ -98,7 +105,7 @@ image_box_dropdown_offer_server <- function(id, .values, image_r, box_id) {
         )
         
         shiny::removeUI(
-          selector = print(paste0("#", box_id, " .price-badge"))
+          selector = paste0("#", box_id, " .price-badge")
         )
         
         .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)

@@ -22,14 +22,16 @@ image_box_dropdown_server <- function(id, .values, image_r, box_id) {
         id = "image_box_dropdown_offer",
         .values = .values,
         image_r = image_r,
-        box_id = box_id
+        box_id = box_id,
+        price_rv = price_return$price_rv
       )
       
       price_return <- image_box_dropdown_price_server(
         id = "image_box_dropdown_price",
         .values = .values,
         image_r = image_r,
-        is_offered_r = offer_return$is_offered_r
+        is_offered_r = offer_return$is_offered_r,
+        box_id = box_id
       )
   
       return_list <- list(

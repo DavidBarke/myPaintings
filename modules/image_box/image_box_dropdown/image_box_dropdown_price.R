@@ -6,7 +6,7 @@ image_box_dropdown_price_ui <- function(id) {
   )
 }
 
-image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r) {
+image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r, box_id) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -61,6 +61,16 @@ image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r) 
           price = input$price
         )
         
+        shiny::removeUI(
+          selector = paste0("#", box_id, " .price-badge")
+        )
+        
+        shiny::insertUI(
+          selector = paste0("#", box_id, " .card-title"),
+          where = "beforeEnd",
+          ui = price_badge(input$price)
+        )
+        
         price_rv(input$price)
         .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)
         
@@ -80,7 +90,7 @@ image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r) 
       })
       
       return_list <- list(
-        price_r = shiny::reactive(price_rv())
+        price_rv = price_rv
       )
       
       return(return_list)
