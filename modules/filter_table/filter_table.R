@@ -220,7 +220,11 @@ filter_table_server <- function(id,
       #   str(query_params_result_r())
       # })
       
-      filter_query_r <- shiny::eventReactive(input$apply, ignoreNULL = FALSE, {
+      filter_query_r <- shiny::eventReactive(c(
+        input$apply,
+        # execute query when logged user changes
+        .values$update$db_user_rv()
+      ), ignoreNULL = FALSE, {
         if (length(query_params_result_r())) {
           DBI::dbGetQuery(
             .values$db,
