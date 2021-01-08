@@ -13,11 +13,14 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
       
       ns <- session$ns
       
-      # Used for upstream notification
       is_offered_rv <- shiny::reactiveVal(NULL)
       
+      shiny::observeEvent(image_r(), {
+        is_offered_rv(image_r()$is_offered)
+      })
+      
       output$offer_item <- shiny::renderUI({
-        if (!image_r()$is_offered) {
+        if (!is_offered_rv()) {
           bs4Dash::cardDropdownItem(
             id = ns("offer_image"),
             "Offer",
@@ -103,15 +106,6 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
           )
         )
       })
-      
-      return_list <- list(
-        # is_offered_rv might be inconsistent to actual offer status after
-        # a request has been processed. Therefore only the information whether
-        # an update has occured is returned
-        is_offered_r = shiny::reactive(is_offered_rv())
-      )
-      
-      return(return_list)
     }
   )
 }
