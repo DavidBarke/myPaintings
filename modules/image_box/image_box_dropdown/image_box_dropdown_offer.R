@@ -106,6 +106,12 @@ image_box_dropdown_offer_server <- function(id, .values, image_r) {
           )
         )
       })
+      
+      return_list <- list(
+        is_offered_r = shiny::reactive(is_offered_rv())
+      )
+      
+      return(return_list)
     }
   )
 }

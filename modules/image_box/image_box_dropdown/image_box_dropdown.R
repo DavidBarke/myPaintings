@@ -27,7 +27,8 @@ image_box_dropdown_server <- function(id, .values, image_r) {
       price_return <- image_box_dropdown_price_server(
         id = "image_box_dropdown_price",
         .values = .values,
-        image_r = image_r
+        image_r = image_r,
+        is_offered_r = offer_return$is_offered_r
       )
   
       return_list <- list(

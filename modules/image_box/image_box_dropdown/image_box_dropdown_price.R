@@ -6,7 +6,7 @@ image_box_dropdown_price_ui <- function(id) {
   )
 }
 
-image_box_dropdown_price_server <- function(id, .values, image_r) {
+image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -15,8 +15,12 @@ image_box_dropdown_price_server <- function(id, .values, image_r) {
       
       price_rv <- shiny::reactiveVal()
       
+      shiny::observeEvent(image_r(), {
+        price_rv(image_r()$price)
+      })
+      
       output$price_item <- shiny::renderUI({
-        if (image_r()$is_offered) {
+        if (is_offered_r()) {
           bs4Dash::cardDropdownItem(
             id = ns("change_price"),
             "Price",
@@ -36,7 +40,7 @@ image_box_dropdown_price_server <- function(id, .values, image_r) {
           shinyWidgets::autonumericInput(
             inputId = ns("price"),
             label = "Price",
-            value = image_r()$price,
+            value = price_rv(),
             minimumValue = 0,
             currencySymbol = " $",
             currencySymbolPlacement = "p"
