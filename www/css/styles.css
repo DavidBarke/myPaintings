@@ -26,3 +26,7 @@
 td .form-group {
   margin-bottom: 0;
 }
+
+.price-badge {
+  cursor: pointer;
+}
