@@ -6,7 +6,14 @@ image_box_dropdown_price_ui <- function(id) {
   )
 }
 
-image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r, box_id) {
+image_box_dropdown_price_server <- function(id, 
+                                            .values, 
+                                            image_r, 
+                                            is_offered_r, 
+                                            box_id,
+                                            price_badge_id,
+                                            click_badge_r
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -29,7 +36,17 @@ image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r, 
         }
       })
       
+      change_price_rv <- shiny::reactiveVal(0)
+      
       shiny::observeEvent(input$change_price, {
+        change_price_rv(change_price_rv() + 1)
+      })
+      
+      shiny::observeEvent(click_badge_r(), {
+        change_price_rv(change_price_rv() + 1)
+      })
+      
+      shiny::observeEvent(change_price_rv(), ignoreInit = TRUE, {
         shiny::showModal(shiny::modalDialog(
           easyClose = TRUE,
           title = paste0(
@@ -68,7 +85,7 @@ image_box_dropdown_price_server <- function(id, .values, image_r, is_offered_r, 
         shiny::insertUI(
           selector = paste0("#", box_id, " .card-title"),
           where = "beforeEnd",
-          ui = price_badge(input$price)
+          ui = price_badge(input$price, price_badge_id)
         )
         
         price_rv(input$price)

@@ -13,7 +13,8 @@ image_box_ui <- function(id, image) {
       side = "right",
       title = image_box_title_ui(
         id = ns("image_box_title"),
-        image = image
+        image = image,
+        price_badge_id = ns("price_badge")
       ),
       dropdownMenu = bs4Dash::boxDropdown(
         image_box_dropdown_ui(
@@ -70,7 +71,9 @@ image_box_server <- function(
         id = "image_box_dropdown",
         .values = .values,
         image_r = image_r,
-        box_id = ns("image_tabset")
+        box_id = ns("image_tabset"),
+        price_badge_id = ns("price_badge"),
+        click_badge_r = shiny::reactive(shiny::req(input$price_badge))
       )
     }
   )
