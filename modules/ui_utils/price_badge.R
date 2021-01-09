@@ -1,7 +1,10 @@
-price_badge <- function(price) {
+price_badge <- function(price, id) {
   bs4Dash::bs4Badge(
     class = "price-badge",
-    scales::dollar_format()(price),
+    shiny::actionLink(
+      inputId = id,
+      label = scales::dollar_format()(price)
+    ),
     color = "danger"
   )
 }

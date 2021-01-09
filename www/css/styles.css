@@ -30,3 +30,8 @@ td .form-group {
 .price-badge {
   cursor: pointer;
 }
+
+.price-badge a {
+  outline: 0;
+  color: white;
+}

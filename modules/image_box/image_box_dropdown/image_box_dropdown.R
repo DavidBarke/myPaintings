@@ -11,7 +11,13 @@ image_box_dropdown_ui <- function(id) {
   )
 }
 
-image_box_dropdown_server <- function(id, .values, image_r, box_id) {
+image_box_dropdown_server <- function(id, 
+                                      .values, 
+                                      image_r, 
+                                      box_id, 
+                                      price_badge_id,
+                                      click_badge_r
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -23,7 +29,8 @@ image_box_dropdown_server <- function(id, .values, image_r, box_id) {
         .values = .values,
         image_r = image_r,
         box_id = box_id,
-        price_rv = price_return$price_rv
+        price_rv = price_return$price_rv,
+        price_badge_id = price_badge_id
       )
       
       price_return <- image_box_dropdown_price_server(
@@ -31,7 +38,9 @@ image_box_dropdown_server <- function(id, .values, image_r, box_id) {
         .values = .values,
         image_r = image_r,
         is_offered_r = offer_return$is_offered_r,
-        box_id = box_id
+        box_id = box_id,
+        price_badge_id = price_badge_id,
+        click_badge_r = click_badge_r
       )
   
       return_list <- list(

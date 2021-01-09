@@ -11,7 +11,8 @@ image_box_dropdown_offer_server <- function(id,
                                             image_r, 
                                             box_id, 
                                             # from image_box_dropdown_price
-                                            price_rv
+                                            price_rv,
+                                            price_badge_id
 ) {
   shiny::moduleServer(
     id,
@@ -40,8 +41,10 @@ image_box_dropdown_offer_server <- function(id,
           )
         }
       })
+      
+      
 
-      ## Offer ----      
+      ## Offer ----   
       shiny::observeEvent(input$offer_image, {
         shiny::showModal(shiny::modalDialog(
           easyClose = TRUE,
@@ -73,7 +76,7 @@ image_box_dropdown_offer_server <- function(id,
         shiny::insertUI(
           selector = paste0("#", box_id, " .card-title"),
           where = "beforeEnd",
-          ui = price_badge(input$price)
+          ui = price_badge(input$price, price_badge_id)
         )
 
         .values$update$db_offered_images_rv(.values$update$db_offered_images_rv() + 1)
