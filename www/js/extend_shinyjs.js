@@ -12,7 +12,7 @@ shinyjs.scroll_trigger = function(params) {
     function(e) {
       id = "#" + params.container_id;
       $el = $(id);
-      $last_image_box = $el.find(".image-box").last();
+      $last_image_box = $el.find(".image-box").eq(-10);
       if ($last_image_box.attr("trigger-scroll") !== undefined) return;
       if ($last_image_box.length && inViewport($last_image_box)) {
         $last_image_box.attr("trigger-scroll", "true");
