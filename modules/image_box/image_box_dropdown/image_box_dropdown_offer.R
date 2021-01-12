@@ -12,7 +12,8 @@ image_box_dropdown_offer_server <- function(id,
                                             box_id, 
                                             # from image_box_dropdown_price
                                             price_rv,
-                                            price_badge_id
+                                            price_badge_id,
+                                            type
 ) {
   shiny::moduleServer(
     id,

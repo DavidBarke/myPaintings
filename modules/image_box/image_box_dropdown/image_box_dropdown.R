@@ -1,4 +1,4 @@
-image_box_dropdown_ui <- function(id, tab) {
+image_box_dropdown_ui <- function(id, type) {
   ns <- shiny::NS(id)
   
   dropdown_elements <- list(
@@ -20,7 +20,7 @@ image_box_dropdown_ui <- function(id, tab) {
   )
   
   htmltools::tagList(
-    unname(dropdown_elements[dropdown_elements_dict[[tab]]])
+    unname(dropdown_elements[dropdown_elements_dict[[type]]])
   )
 }
 
@@ -29,7 +29,8 @@ image_box_dropdown_server <- function(id,
                                       image_r, 
                                       box_id, 
                                       price_badge_id,
-                                      click_badge_r
+                                      click_badge_r,
+                                      type
 ) {
   shiny::moduleServer(
     id,
@@ -42,7 +43,8 @@ image_box_dropdown_server <- function(id,
         .values = .values,
         image_r = image_r,
         price_badge_id = price_badge_id,
-        click_badge_r = click_badge_r
+        click_badge_r = click_badge_r,
+        type = type
       )
       
       offer_return <- image_box_dropdown_offer_server(
@@ -51,7 +53,8 @@ image_box_dropdown_server <- function(id,
         image_r = image_r,
         box_id = box_id,
         price_rv = price_return$price_rv,
-        price_badge_id = price_badge_id
+        price_badge_id = price_badge_id,
+        type = type
       )
       
       price_return <- image_box_dropdown_price_server(
@@ -61,12 +64,14 @@ image_box_dropdown_server <- function(id,
         is_offered_r = offer_return$is_offered_r,
         box_id = box_id,
         price_badge_id = price_badge_id,
-        click_badge_r = click_badge_r
+        click_badge_r = click_badge_r,
+        type = type
       )
   
       return_list <- list(
         offer = offer_return,
-        price = price_return
+        price = price_return,
+        type = type
       )
     }
   )

@@ -37,7 +37,7 @@ filter_table_condition_server <- function(
   query_text_start_r, query_text_in_r, query_params_in_r,
   first_condition_r, # needed to trigger server side selectize inputs,
   n_conditions_r,
-  tab
+  type
 ) {
   shiny::moduleServer(
     id,
@@ -115,7 +115,7 @@ filter_table_condition_server <- function(
       })
       
       ## Filter by ----
-      tab_choices <- list(
+      type_choices <- list(
         browse = c("title", "painter", "name", "school", "type", "status", "price"),
         collection = c("title", "painter", "school", "type", "status"),
         buy = c("title", "painter", "name", "school", "type", "price")
@@ -131,7 +131,7 @@ filter_table_condition_server <- function(
         "Price" = "price"
       )
       
-      choices <- choices[match(tab_choices[[tab]], choices)]
+      choices <- choices[match(type_choices[[type]], choices)]
       
       output$filter_by <- shiny::renderUI({
         shiny::selectInput(

@@ -34,7 +34,8 @@ image_display_content_server <- function(id, .values, display_args, options) {
           id = "image_box" %_% index,
           .values = .values,
           image_r = shiny::reactive(options$images_r()[index,]),
-          options = options
+          options = options,
+          type = display_args$type
         )
       })
       
@@ -110,7 +111,8 @@ image_display_content_server <- function(id, .values, display_args, options) {
               id = "image_box" %_% index,
               .values = .values,
               image_r = shiny::reactive(options$images_r()[index,]),
-              options = options
+              options = options,
+              type = display_args$type
             )
           })
           
@@ -125,7 +127,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
             image_box_ui(
               id = ns("image_box" %_% index),
               image = options$images_r()[index,],
-              tab = display_args$tab
+              type = display_args$type
             )
           })
           
