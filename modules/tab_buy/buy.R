@@ -2,7 +2,7 @@ buy_ui <- function(id) {
   ns <- shiny::NS(id)
   
   image_display_ui(
-    id = ns("image_display")
+    id = ns("buy")
   )
 }
 
@@ -13,14 +13,18 @@ buy_server <- function(id, .values) {
       
       ns <- session$ns
       
+      tab <- "buy"
+      
       image_display_server(
-        id = "image_display",
+        id = "buy",
         .values = .values,
         display_args = list(
           header = list(
-            tab = "buy"
+            tab = tab
           ),
-          content = list()
+          content = list(
+            tab = tab
+          )
         )
       )
     }

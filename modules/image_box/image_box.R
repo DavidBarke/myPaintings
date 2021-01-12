@@ -1,4 +1,4 @@
-image_box_ui <- function(id, image) {
+image_box_ui <- function(id, image, tab) {
   ns <- shiny::NS(id)
   
   status_choices <- c("primary", "orange", "olive", "fuchsia")
@@ -18,7 +18,8 @@ image_box_ui <- function(id, image) {
       ),
       dropdownMenu = bs4Dash::boxDropdown(
         image_box_dropdown_ui(
-          id = ns("image_box_dropdown")
+          id = ns("image_box_dropdown"),
+          tab = tab
         )
       ),
       solidHeader = TRUE,

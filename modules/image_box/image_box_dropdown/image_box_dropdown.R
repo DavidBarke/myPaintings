@@ -1,13 +1,26 @@
-image_box_dropdown_ui <- function(id) {
+image_box_dropdown_ui <- function(id, tab) {
   ns <- shiny::NS(id)
   
-  htmltools::tagList(
-    image_box_dropdown_offer_ui(
+  dropdown_elements <- list(
+    buy = image_box_dropdown_buy_ui(
+      id = ns("image_box_dropdown_buy")
+    ),
+    offer = image_box_dropdown_offer_ui(
       id = ns("image_box_dropdown_offer")
     ),
-    image_box_dropdown_price_ui(
+    price = image_box_dropdown_price_ui(
       id = ns("image_box_dropdown_price")
     )
+  )
+
+  dropdown_elements_dict <- list(
+    browse = c("offer", "price"),
+    buy = c("buy"),
+    collection = c("offer", "price")
+  )
+  
+  htmltools::tagList(
+    unname(dropdown_elements[dropdown_elements_dict[[tab]]])
   )
 }
 
@@ -23,6 +36,14 @@ image_box_dropdown_server <- function(id,
     function(input, output, session) {
       
       ns <- session$ns
+      
+      buy_return <- image_box_dropdown_buy_server(
+        id = "image_box_dropdown_buy",
+        .values = .values,
+        image_r = image_r,
+        price_badge_id = price_badge_id,
+        click_badge_r = click_badge_r
+      )
       
       offer_return <- image_box_dropdown_offer_server(
         id = "image_box_dropdown_offer",
