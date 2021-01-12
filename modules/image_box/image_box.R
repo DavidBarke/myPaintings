@@ -41,7 +41,8 @@ image_box_ui <- function(id, image, type) {
         icon = shiny::icon("info-circle"),
         image_box_info_ui(
           id = ns("image_box_info"),
-          image = image
+          image = image,
+          type = type
         )
       )
     )
