@@ -103,7 +103,7 @@ image_box_dropdown_offer_server <- function(id,
       
       ## Withdraw offer ----
       shiny::observeEvent(input$cancel_offer, {
-        db_withdraw_offer_image(
+        db_withdraw_offered_image(
           db = .values$db,
           image_id = image_r()$image_id
         )
