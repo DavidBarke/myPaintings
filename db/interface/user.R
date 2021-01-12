@@ -284,3 +284,40 @@ db_get_user_last_logged <- function(db, name) {
     params = list(name)
   )$time_logged
 }
+
+
+
+#' Get Account Balance for User
+#' 
+#' @template db
+#' @param user_id User ID.
+#' 
+#' @family user
+#' 
+#' @export
+db_get_user_capital <- function(db, user_id) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT capital FROM user WHERE rowid = ?",
+    params = list(user_id)
+  )$capital
+}
+
+
+
+#' Add an Amount of Money to an User Account
+#' 
+#' @template db
+#' @param user_id User ID.
+#' @param amount Amount of money in USD.
+#' 
+#' @family user
+#' 
+#' @export
+db_add_user_capital <- function(db, user_id, amount) {
+  DBI::dbExecute(
+    db,
+    "UPDATE user SET capital = capital + ? WHERE rowid = ?",
+    params = list(amount, user_id)
+  )
+}

@@ -26,7 +26,7 @@ db_offer_image <- function(db, image_id, price) {
 #' @family offered_images
 #' 
 #' @export
-db_withdraw_offer_image <- function(db, image_id) {
+db_withdraw_offered_image <- function(db, image_id) {
   DBI::dbExecute(
     db,
     "DELETE FROM offered_images WHERE image_id = ?",
@@ -106,4 +106,25 @@ db_get_max_offered_price <- function(db) {
   )$max_price
   
   if (is.na(max_price)) 0 else max_price
+}
+
+
+
+#' Get Seller ID
+#' 
+#' @template db
+#' 
+#' @family offered_images
+#' 
+#' @export
+db_get_buy_info <- function(db, image_id) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT user.rowid AS seller_id, offered_images.price
+    FROM user_image
+    INNER JOIN user ON user_image.user_id = user.rowid
+    INNER JOIN offered_images ON user_image.image_id = offered_images.image_id
+    WHERE user_image.image_id = ?",
+    params = list(image_id)
+  )
 }
