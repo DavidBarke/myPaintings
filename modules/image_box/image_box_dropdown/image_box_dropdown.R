@@ -1,3 +1,9 @@
+dropdown_elements_dict <- list(
+  browse = c("offer", "price"),
+  buy = c("buy"),
+  collection = c("offer", "price")
+)
+
 image_box_dropdown_ui <- function(id, type) {
   ns <- shiny::NS(id)
   
@@ -11,12 +17,6 @@ image_box_dropdown_ui <- function(id, type) {
     price = image_box_dropdown_price_ui(
       id = ns("image_box_dropdown_price")
     )
-  )
-
-  dropdown_elements_dict <- list(
-    browse = c("offer", "price"),
-    buy = c("buy"),
-    collection = c("offer", "price")
   )
   
   htmltools::tagList(
@@ -38,37 +38,46 @@ image_box_dropdown_server <- function(id,
       
       ns <- session$ns
       
-      buy_return <- image_box_dropdown_buy_server(
-        id = "image_box_dropdown_buy",
-        .values = .values,
-        image_r = image_r,
-        price_badge_id = price_badge_id,
-        click_badge_r = click_badge_r,
-        type = type
-      )
+      dropdown_elements <- dropdown_elements_dict[[type]]
       
-      offer_return <- image_box_dropdown_offer_server(
-        id = "image_box_dropdown_offer",
-        .values = .values,
-        image_r = image_r,
-        box_id = box_id,
-        price_rv = price_return$price_rv,
-        price_badge_id = price_badge_id,
-        type = type
-      )
+      buy_return <- if ("buy" %in% dropdown_elements) {
+        image_box_dropdown_buy_server(
+          id = "image_box_dropdown_buy",
+          .values = .values,
+          image_r = image_r,
+          price_badge_id = price_badge_id,
+          click_badge_r = click_badge_r,
+          type = type
+        )
+      }
       
-      price_return <- image_box_dropdown_price_server(
-        id = "image_box_dropdown_price",
-        .values = .values,
-        image_r = image_r,
-        is_offered_r = offer_return$is_offered_r,
-        box_id = box_id,
-        price_badge_id = price_badge_id,
-        click_badge_r = click_badge_r,
-        type = type
-      )
+      offer_return <- if ("offer" %in% dropdown_elements) {
+        image_box_dropdown_offer_server(
+          id = "image_box_dropdown_offer",
+          .values = .values,
+          image_r = image_r,
+          box_id = box_id,
+          price_rv = price_return$price_rv,
+          price_badge_id = price_badge_id,
+          type = type
+        )
+      }
+      
+      price_return <- if ("price" %in% dropdown_elements) {
+        image_box_dropdown_price_server(
+          id = "image_box_dropdown_price",
+          .values = .values,
+          image_r = image_r,
+          is_offered_r = offer_return$is_offered_r,
+          box_id = box_id,
+          price_badge_id = price_badge_id,
+          click_badge_r = click_badge_r,
+          type = type
+        )
+      } 
   
       return_list <- list(
+        buy = buy_return,
         offer = offer_return,
         price = price_return,
         type = type
