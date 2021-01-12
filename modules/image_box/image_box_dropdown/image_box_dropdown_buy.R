@@ -12,7 +12,8 @@ image_box_dropdown_buy_server <- function(id,
                                           .values,
                                           image_r,
                                           price_badge_id,
-                                          click_badge_r
+                                          click_badge_r,
+                                          type
 ) {
   shiny::moduleServer(
     id,

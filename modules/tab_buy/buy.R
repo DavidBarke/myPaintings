@@ -13,17 +13,17 @@ buy_server <- function(id, .values) {
       
       ns <- session$ns
       
-      tab <- "buy"
+      type <- "buy"
       
       image_display_server(
         id = "buy",
         .values = .values,
         display_args = list(
           header = list(
-            tab = tab
+            type = type
           ),
           content = list(
-            tab = tab
+            type = type
           )
         )
       )

@@ -27,9 +27,9 @@ filter_table_ui <- function(id) {
 
 filter_table_server <- function(id, 
                                 .values,
-                                tab = c("browse", "collection", "buy")
+                                type = c("browse", "collection", "buy")
 ) {
-  tab <- match.arg(tab)
+  type <- match.arg(type)
   
   shiny::moduleServer(
     id,
@@ -77,7 +77,7 @@ filter_table_server <- function(id,
             query_params_in_r = query_params_in_r,
             first_condition_r = shiny::reactive(first_condition_rv()),
             n_conditions_r = shiny::reactive(n_conditions_rv()),
-            tab = tab
+            type = type
           )
           
           # Listen on clicking remove button in filter condition
@@ -176,11 +176,11 @@ filter_table_server <- function(id,
       )
       
       query_text_start_r <- shiny::reactive({
-        query_text_start_dict[[tab]]
+        query_text_start_dict[[type]]
       })
       
       query_text_in_start_r <- switch(
-        tab,
+        type,
         "browse" = shiny::reactive(character()),
         "collection" = shiny::reactive("user_image.user_id = ?"),
         "buy" = shiny::reactive("user_image.user_id != ?")
@@ -202,7 +202,7 @@ filter_table_server <- function(id,
       
       query_params_start_r <- shiny::reactive({
         switch(
-          tab,
+          type,
           "browse" = list(),
           "collection" = list(.values$user_rv()$user_id),
           "buy" = list(.values$user_rv()$user_id)

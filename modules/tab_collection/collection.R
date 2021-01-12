@@ -13,17 +13,17 @@ collection_server <- function(id, .values) {
       
       ns <- session$ns
       
-      tab <- "collection"
+      type <- "collection"
       
       image_display_server(
         id = "collection",
         .values = .values,
         display_args = list(
           header = list(
-            tab = tab
+            type = type
           ),
           content = list(
-            tab = tab
+            type = type
           )
         )
       )

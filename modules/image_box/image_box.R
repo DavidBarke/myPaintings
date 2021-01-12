@@ -1,4 +1,4 @@
-image_box_ui <- function(id, image, tab) {
+image_box_ui <- function(id, image, type) {
   ns <- shiny::NS(id)
   
   status_choices <- c("primary", "orange", "olive", "fuchsia")
@@ -19,7 +19,7 @@ image_box_ui <- function(id, image, tab) {
       dropdownMenu = bs4Dash::boxDropdown(
         image_box_dropdown_ui(
           id = ns("image_box_dropdown"),
-          tab = tab
+          type = type
         )
       ),
       solidHeader = TRUE,
@@ -51,7 +51,8 @@ image_box_ui <- function(id, image, tab) {
 image_box_server <- function(
   id, .values, 
   image_r,
-  options # List of reactives. Options from the collection header.
+  options, # List of reactives. Options from the collection header.
+  type
 ) {
   shiny::moduleServer(
     id,
@@ -74,7 +75,8 @@ image_box_server <- function(
         image_r = image_r,
         box_id = ns("image_tabset"),
         price_badge_id = ns("price_badge"),
-        click_badge_r = shiny::reactive(shiny::req(input$price_badge))
+        click_badge_r = shiny::reactive(shiny::req(input$price_badge)),
+        type = type
       )
     }
   )

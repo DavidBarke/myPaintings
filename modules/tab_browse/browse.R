@@ -13,17 +13,17 @@ browse_server <- function(id, .values) {
       
       ns <- session$ns
       
-      tab <- "browse"
+      type <- "browse"
       
       image_display_server(
         id = "browse",
         .values = .values,
         display_args = list(
           header = list(
-            tab = tab
+            type = type
           ),
           content = list(
-            tab = tab
+            type = type
           )
         )
       )
