@@ -1,8 +1,8 @@
-image_box_info_ui <- function(id, image) {
+image_box_info_ui <- function(id, image, type) {
   ns <- shiny::NS(id)
   
   shiny::fluidRow(
-    bs4Dash::infoBox(
+    if (type != "collection") bs4Dash::infoBox(
       title = "Owner",
       value = image$owner,
       width = 12,
