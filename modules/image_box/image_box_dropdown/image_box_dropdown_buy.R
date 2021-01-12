@@ -19,6 +19,39 @@ image_box_dropdown_buy_server <- function(id,
     function(input, output, session) {
       
       ns <- session$ns
+      
+      modal_buy_rv <- shiny::reactiveVal(0)
+      
+      shiny::observeEvent(input$buy_image, {
+        modal_buy_rv(modal_buy_rv() + 1)
+      })
+      
+      shiny::observeEvent(click_badge_r(), {
+        modal_buy_rv(modal_buy_rv() + 1)
+      })
+      
+      shiny::observeEvent(modal_buy_rv(), ignoreInit = TRUE, {
+        shiny::showModal(shiny::modalDialog(
+          easyClose = TRUE,
+          title = paste("Buy", image_r()$title),
+          paste(
+            "Please confirm that you want to buy",
+            image_r()$title,
+            "from",
+            image_r()$owner,
+            "for a price of",
+            scales::dollar_format()(image_r()$price)
+          ),
+          footer = shiny::actionButton(
+            inputId = ns("confirm"),
+            label = "Confirm"
+          )
+        ))
+      })
+      
+      shiny::observeEvent(input$confirm, {
+        shiny::removeModal()
+      })
     }
   )
 }
