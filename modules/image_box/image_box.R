@@ -16,7 +16,7 @@ image_box_ui <- function(id, image, type) {
         image = image,
         price_badge_id = ns("price_badge")
       ),
-      dropdownMenu = bs4Dash::boxDropdown(
+      dropdownMenu = if (type %in% c("buy", "collection")) bs4Dash::boxDropdown(
         image_box_dropdown_ui(
           id = ns("image_box_dropdown"),
           type = type

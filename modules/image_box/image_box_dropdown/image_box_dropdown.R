@@ -1,5 +1,5 @@
 dropdown_elements_dict <- list(
-  browse = c("offer", "price"),
+  browse = character(),
   buy = c("buy"),
   collection = c("offer", "price")
 )
