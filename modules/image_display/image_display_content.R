@@ -28,6 +28,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
       
       ui <- new.env()
       
+      # #server_start image_box_servers are loaded on session start
       purrr::walk(1:server_start, function(index) {
         image_box_server(
           id = "image_box" %_% index,
@@ -123,7 +124,8 @@ image_display_content_server <- function(id, .values, display_args, options) {
           new_boxes <- purrr::map(new_indices, function(index) {
             image_box_ui(
               id = ns("image_box" %_% index),
-              image = options$images_r()[index,]
+              image = options$images_r()[index,],
+              tab = display_args$tab
             )
           })
           

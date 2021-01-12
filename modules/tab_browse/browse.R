@@ -2,7 +2,7 @@ browse_ui <- function(id) {
   ns <- shiny::NS(id)
   
   image_display_ui(
-    id = ns("image_display")
+    id = ns("browse")
   )
 }
 
@@ -13,14 +13,18 @@ browse_server <- function(id, .values) {
       
       ns <- session$ns
       
+      tab <- "browse"
+      
       image_display_server(
-        id = "image_display",
+        id = "browse",
         .values = .values,
         display_args = list(
           header = list(
-            tab = "browse"
+            tab = tab
           ),
-          content = list()
+          content = list(
+            tab = tab
+          )
         )
       )
     }
