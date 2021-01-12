@@ -44,11 +44,11 @@ db_add_user <- function(db,
 #' @family user
 #' 
 #' @export
-db_get_user_entry <- function(db, name) {
+db_get_user_entry <- function(db, user_id) {
   DBI::dbGetQuery(
     db,
-    "SELECT rowid AS user_id, * FROM user WHERE name = ?",
-    params = list(name)
+    "SELECT rowid AS user_id, * FROM user WHERE rowid = ?",
+    params = list(user_id)
   )
 }
 
@@ -68,6 +68,24 @@ db_get_user_name <- function(db, user_id) {
     "SELECT name FROM user WHERE rowid = ?",
     params = list(user_id)
   )$name
+}
+
+
+
+#' Get User ID
+#' 
+#' @template db
+#' @param user_name User name.
+#' 
+#' @family user
+#' 
+#' @export
+db_get_user_id <- function(db, user_name) {
+  DBI::dbGetQuery(
+    db,
+    "SELECT rowid FROM user WHERE name = ?",
+    params = list(user_name)
+  )$rowid
 }
 
 
