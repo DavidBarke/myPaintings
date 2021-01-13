@@ -32,23 +32,35 @@ image_box_dropdown_buy_server <- function(id,
       })
       
       shiny::observeEvent(modal_buy_rv(), ignoreInit = TRUE, {
-        shiny::showModal(shiny::modalDialog(
-          easyClose = TRUE,
-          title = paste("Buy", image_r()$title),
-          paste0(
-            "Please confirm that you want to buy \"",
-            image_r()$title,
-            "\" from ",
-            image_r()$owner,
-            " for a price of ",
-            scales::dollar_format()(image_r()$price),
-            "."
-          ),
-          footer = shiny::actionButton(
-            inputId = ns("confirm"),
-            label = "Confirm"
+        has_enough_money <- .values$user_rvs$capital > image_r()$price
+        
+        dialog <- if (has_enough_money) {
+          shiny::modalDialog(
+            easyClose = TRUE,
+            title = paste("Buy", image_r()$title),
+            paste0(
+              "Please confirm that you want to buy \"",
+              image_r()$title,
+              "\" from ",
+              image_r()$owner,
+              " for a price of ",
+              scales::dollar_format()(image_r()$price),
+              "."
+            ),
+            footer = shiny::actionButton(
+              inputId = ns("confirm"),
+              label = "Confirm"
+            )
           )
-        ))
+        } else {
+          shiny::modalDialog(
+            easyClose = TRUE,
+            title = "Transaction denied",
+            "You don't have enough money to buy this image."
+          )
+        }
+        
+        shiny::showModal(dialog)
       })
       
       shiny::observeEvent(input$confirm, {
