@@ -222,7 +222,9 @@ filter_table_server <- function(id,
       
       filter_query_r <- shiny::eventReactive(c(
         input$apply,
-        # execute query when logged user changes
+        # execute query when:
+        # - logged user changes
+        # - images are bought/sold
         .values$update$db_user_rv()
       ), ignoreNULL = FALSE, {
         if (length(query_params_result_r())) {

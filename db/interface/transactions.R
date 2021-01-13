@@ -84,4 +84,5 @@ db_buy_image <- function(db, image_id, buyer_id) {
   db_add_user_capital(db, buyer_id, -price)
   db_add_transaction(db, image_id, seller_id, buyer_id, price, date)
   db_withdraw_offered_image(db, image_id)
+  db_set_image_owner(db, image_id, buyer_id)
 }
