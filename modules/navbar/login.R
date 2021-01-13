@@ -14,7 +14,7 @@ login_server <- function(id, .values) {
       ns <- session$ns
       
       output$login <- shiny::renderUI({
-        if (.values$user_rv()$status == "not_logged") {
+        if (.values$user_rvs$status == "not_logged") {
           dropdown_menu(
             title = "Login",
             dropdown_menu_item(
@@ -84,7 +84,11 @@ login_server <- function(id, .values) {
         if (pwd_correct) {
           user_id <- db_get_user_id(db, input$user_name)
           entry <- db_get_user_entry(.values$db, user_id)
-          .values$user_rv(entry)
+          
+          purrr::walk2(names(entry), entry, function(name, value) {
+            .values$user_rvs[[name]] <- value
+          })
+          
           db_log_user_in(.values$db, input$user_name)
           .values$update$db_user_rv(.values$update$db_user_rv() + 1)
 

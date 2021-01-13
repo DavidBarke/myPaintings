@@ -14,27 +14,27 @@ user_info_server <- function(id, .values) {
       ns <- session$ns
       
       name_r <- shiny::reactive({
-        if (.values$user_rv()$status == "not_logged") {
+        if (.values$user_rvs$status == "not_logged") {
           "Login"
         } else {
-          .values$user_rv()$name
+          .values$user_rvs$name
         }
       })
       
       title_r <- shiny::reactive({
-        if (.values$user_rv()$status != "not_logged") {
-          .values$user_rv()$name
+        if (.values$user_rvs$status != "not_logged") {
+          .values$user_rvs$name
         }
       })
       
       subtitle_r <- shiny::reactive({
-        if (.values$user_rv()$status != "not_logged") {
-          .values$user_rv()$status
+        if (.values$user_rvs$status != "not_logged") {
+          .values$user_rvs$status
         }
       })
       
       output$user <- bs4Dash::renderUser({
-        if (.values$user_rv()$status != "not_logged") {
+        if (.values$user_rvs$status != "not_logged") {
           bs4Dash::dashboardUser(
             name = name_r(),
             image = "./img/empty_profile.png",

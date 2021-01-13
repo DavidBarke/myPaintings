@@ -21,11 +21,11 @@ account_info_server <- function(id, .values) {
       ns <- session$ns
       
       account_label_r <- shiny::reactive({
-        scales::dollar_format()(.values$user_rv()$capital)
+        scales::dollar_format()(.values$user_rvs$capital)
       })
       
       output$account <- bs4Dash::renderMenu({
-        if (.values$user_rv()$status != "not_logged") {
+        if (.values$user_rvs$status != "not_logged") {
           shiny::actionLink(
             inputId = ns("open_account_tab"),
             label = account_label_r(),

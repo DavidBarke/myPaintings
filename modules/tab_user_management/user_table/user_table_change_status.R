@@ -23,7 +23,7 @@ user_table_change_status_server <- function(id, .values, user_name, status) {
       ns <- session$ns
 
       shiny::observeEvent(input$change_status, {
-        if (user_name == .values$user_rv()$name) {
+        if (user_name == .values$user_rvs$name) {
           shiny::showModal(shiny::modalDialog(
             easyClose = TRUE,
             title = "Access denied!",

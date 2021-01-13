@@ -204,8 +204,8 @@ filter_table_server <- function(id,
         switch(
           type,
           "browse" = list(),
-          "collection" = list(.values$user_rv()$user_id),
-          "buy" = list(.values$user_rv()$user_id)
+          "collection" = list(.values$user_rvs$user_id),
+          "buy" = list(.values$user_rvs$user_id)
         )
       })
       

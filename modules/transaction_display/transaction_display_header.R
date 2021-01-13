@@ -71,7 +71,7 @@ transaction_display_header_server <- function(id, .values, display_args) {
       transaction_ids_r <- shiny::reactive({
         db_get_transaction_ids_by_filter(
           db = .values$db,
-          user_id = .values$user_rv()$user_id,
+          user_id = .values$user_rvs$user_id,
           date_start = date_start_rv(),
           date_end = date_end_rv()
         )

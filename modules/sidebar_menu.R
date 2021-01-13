@@ -80,7 +80,7 @@ sidebar_menu_server <- function(id, .values) {
       })
 
       sidebar_menu_r <- shiny::reactive({
-        menu_items <- unname(menu_item_list[access_list[[.values$user_rv()$status]]])
+        menu_items <- unname(menu_item_list[access_list[[.values$user_rvs$status]]])
 
         args <- list(
           id = ns(.values$sidebar$id)

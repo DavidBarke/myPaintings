@@ -29,7 +29,7 @@ user_table_remove_user_server <- function(id,
 
       shiny::observeEvent(input$remove, {
         # Check that admins can't remove themselves
-        if (user_name == .values$user_rv()$name) {
+        if (user_name == .values$user_rvs$name) {
           shiny::showModal(shiny::modalDialog(
             easyClose = TRUE,
             title = "Access denied!",

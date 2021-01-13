@@ -56,11 +56,12 @@ image_box_dropdown_buy_server <- function(id,
         db_buy_image(
           db = db,
           image_id = image_r()$image_id,
-          buyer_id = .values$user_rv()$user_id
+          buyer_id = .values$user_rvs$user_id
         )
         
-        entry <- db_get_user_entry(db, .values$user_rv()$user_id)
-        .values$user_rv(entry)
+        capital <- db_get_user_capital(db, .values$user_rvs$user_id)
+        .values$user_rvs$capital <- capital
+        
         .values$update$db_user_rv(.values$update$db_user_rv() + 1)
       })
     }

@@ -17,7 +17,7 @@ logout_server <- function(id, .values) {
       ns <- session$ns
       
       output$logout <- shiny::renderUI({
-        if (.values$user_rv()$status != "not_logged") {
+        if (.values$user_rvs$status != "not_logged") {
           shiny::actionButton(
             inputId = ns("logout"),
             label = "Logout"
@@ -31,7 +31,10 @@ logout_server <- function(id, .values) {
           name = "",
           last_logged = ""
         )
-        .values$user_rv(entry)
+        
+        purrr::walk2(names(entry), entry, function(name, value) {
+          .values$user_rvs[[name]] <- value
+        })
         
         bs4Dash::toast(
           title = "Logout successful. See you again.",
