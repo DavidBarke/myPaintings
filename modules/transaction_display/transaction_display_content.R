@@ -34,7 +34,7 @@ transaction_display_content_server <- function(id, .values, display_args, option
       output$transaction_table <- DT::renderDataTable({
         tbl <- options$transactions_r()
         
-        tbl$is_sold <- tbl$Seller == .values$user_rv()$name
+        tbl$is_sold <- tbl$Seller == .values$user_rvs$name
         
         DT::datatable(
           tbl,

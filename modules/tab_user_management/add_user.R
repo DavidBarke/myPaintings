@@ -197,7 +197,7 @@ add_user_server <- function(id, .values) {
           name = input$user_name,
           status = input$user_status,
           password = bcrypt::hashpw(input$user_password_1),
-          added_from = .values$user_rv()$name
+          added_from = .values$user_rvs$name
         )
 
         .values$update$db_user_rv(.values$update$db_user_rv() + 1)
