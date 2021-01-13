@@ -66,6 +66,9 @@ image_box_dropdown_offer_server <- function(id,
       })
       
       shiny::observeEvent(input$confirm_offer, {
+        # handle dblclick
+        if (is_offered_rv()) return()
+        
         shiny::removeModal()
         
         db_offer_image(
