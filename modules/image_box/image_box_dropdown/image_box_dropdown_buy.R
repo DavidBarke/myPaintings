@@ -72,7 +72,7 @@ image_box_dropdown_buy_server <- function(id,
           buyer_id = .values$user_rvs$user_id
         )
         
-        capital <- db_get_user_capital(db, .values$user_rvs$user_id)
+        capital <- db_get_user_capital(.values$db, .values$user_rvs$user_id)
         .values$user_rvs$capital <- capital
         
         .values$update$db_user_rv(.values$update$db_user_rv() + 1)
