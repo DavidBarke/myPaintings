@@ -82,7 +82,7 @@ login_server <- function(id, .values) {
         pwd_correct <- bcrypt::checkpw(input$user_password, user_pwd)
 
         if (pwd_correct) {
-          user_id <- db_get_user_id(db, input$user_name)
+          user_id <- db_get_user_id(.values$db, input$user_name)
           entry <- db_get_user_entry(.values$db, user_id)
           
           purrr::walk2(names(entry), entry, function(name, value) {
