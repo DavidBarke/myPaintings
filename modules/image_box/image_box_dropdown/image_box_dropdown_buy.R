@@ -35,13 +35,14 @@ image_box_dropdown_buy_server <- function(id,
         shiny::showModal(shiny::modalDialog(
           easyClose = TRUE,
           title = paste("Buy", image_r()$title),
-          paste(
-            "Please confirm that you want to buy",
+          paste0(
+            "Please confirm that you want to buy \"",
             image_r()$title,
-            "from",
+            "\" from ",
             image_r()$owner,
-            "for a price of",
-            scales::dollar_format()(image_r()$price)
+            " for a price of ",
+            scales::dollar_format()(image_r()$price),
+            "."
           ),
           footer = shiny::actionButton(
             inputId = ns("confirm"),
@@ -63,6 +64,20 @@ image_box_dropdown_buy_server <- function(id,
         .values$user_rvs$capital <- capital
         
         .values$update$db_user_rv(.values$update$db_user_rv() + 1)
+        
+        bs4Dash::toast(
+          paste(
+            "Bought \"",
+            image_r()$title,
+            "\" for a price of ",
+            scales::dollar_format()(image_r()$price),
+            "."
+          ),
+          options = .values$settings$toast(
+            delay = 3000,
+            class = "bg-success"
+          )
+        )
       })
     }
   )
