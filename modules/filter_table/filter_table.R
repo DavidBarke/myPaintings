@@ -3,18 +3,17 @@ filter_table_ui <- function(id) {
   
   htmltools::tagList(
     shiny::actionButton(
-      inputId = ns("reset"),
-      label = "Reset"
-    ),
-    htmltools::hr(),
-    htmltools::div(
-      id = ns("table"),
-      class = "filter-table"
-    ),
-    shiny::actionButton(
       inputId = ns("add_condition"),
       label = NULL,
       icon = shiny::icon("plus")
+    ),
+    shiny::uiOutput(
+      outputId = ns("reset"),
+      inline = TRUE
+    ),
+    htmltools::div(
+      id = ns("table"),
+      class = "filter-table"
     ),
     htmltools::hr(),
     shiny::actionButton(
@@ -35,6 +34,18 @@ filter_table_server <- function(id,
     function(input, output, session) {
       
       ns <- session$ns
+      
+      output$reset <- shiny::renderUI({
+        if (n_conditions_rv()) {
+          htmltools::tagList(
+            shiny::actionButton(
+              inputId = ns("reset"),
+              label = "Reset"
+            ),
+            htmltools::hr()
+          )
+        }
+      })
       
       # Number of currently active conditions
       n_conditions_rv <- shiny::reactiveVal(0)
