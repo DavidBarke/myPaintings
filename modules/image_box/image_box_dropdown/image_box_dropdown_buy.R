@@ -86,7 +86,6 @@ image_box_dropdown_buy_server <- function(id,
             "."
           ),
           options = .values$settings$toast(
-            delay = 3000,
             class = "bg-success"
           )
         )

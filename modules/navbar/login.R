@@ -92,16 +92,18 @@ login_server <- function(id, .values) {
           db_log_user_in(.values$db, input$user_name)
           .values$update$db_user_rv(.values$update$db_user_rv() + 1)
 
-          shiny::showNotification(
-            ui = "Login successful.",
-            type = "default",
-            duration = 3
+          bs4Dash::toast(
+            title = "Login successful.",
+            options = .values$settings$toast(
+              class = "bg-success"
+            )
           )
         } else {
-          shiny::showNotification(
-            ui = "Wrong password! Please try again.",
-            type = "error",
-            duration = 3
+          bs4Dash::toast(
+            title = "Wrong password! Please try again.",
+            options = .values$settings$toast(
+              class = "bg-danger"
+            )
           )
         }
 

@@ -68,24 +68,26 @@ user_table_remove_user_server <- function(id,
         success <- db_remove_user(.values$db, user_name)
 
         if (success) {
-          shiny::showNotification(
-            ui = paste0(
+          bs4Dash::toast(
+            title = paste0(
               "The user \"",
               user_name,
               "\" was deleted succesfully."
             ),
-            type = "warning",
-            duration = 5
+            options = .values$settings$toast(
+              class = "bg-warning"
+            )
           )
         } else {
-          shiny::showNotification(
-            ui = paste0(
+          bs4Dash::toast(
+            title = paste0(
               "The user \"",
               user_name,
               "\" could not be deleted."
             ),
-            type = "error",
-            duration = 5
+            options = .values$settings$toast(
+              class = "bg-danger"
+            )
           )
         }
 

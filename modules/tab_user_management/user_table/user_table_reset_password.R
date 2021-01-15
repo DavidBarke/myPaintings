@@ -45,16 +45,17 @@ user_table_reset_password_server <- function(id, .values, user_name) {
 
         reset_pwd <- "1234"
 
-        shiny::showNotification(
-          ui = paste0(
+        bs4Dash::toast(
+          title = paste0(
             "The password for user \"",
             user_name,
             "\" was reset successfully to \"",
             reset_pwd,
             "\"."
           ),
-          type = "warning",
-          duration = 5
+          options = .values$settings$toast(
+            class = "bg-success"
+          )
         )
 
         db_set_password(.values$db, user_name, bcrypt::hashpw(reset_pwd))

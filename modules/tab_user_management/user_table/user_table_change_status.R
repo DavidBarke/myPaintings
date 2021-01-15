@@ -64,26 +64,28 @@ user_table_change_status_server <- function(id, .values, user_name, status) {
         success <- db_set_user_status(.values$db, user_name, input$user_status)
 
         if (success) {
-          shiny::showNotification(
-            ui = paste0(
+          bs4Dash::toast(
+            title = paste0(
               "The status of user \"",
               user_name,
               "\" was succesfully changed to \"",
               .values$settings$status_dict[input$user_status],
               "\"."
             ),
-            type = "warning",
-            duration = 5
+            options = .values$settings$toast(
+              class = "bg-success"
+            )
           )
         } else {
-          shiny::showNotification(
-            ui = paste0(
+          bs4Dash::toast(
+            title = paste0(
               "The status of user \"",
               user_name,
               "\" couldn't be changed."
             ),
-            type = "error",
-            duration = 5
+            options = .values$settings$toast(
+              class = "bg-danger"
+            )
           )
         }
 
