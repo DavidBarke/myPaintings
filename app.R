@@ -100,7 +100,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
       dots <- list(...)
       
       default <- list(
-        autohide = TRUE
+        autohide = TRUE,
+        position = "bottomRight"
       )
       
       c(dots, default)
