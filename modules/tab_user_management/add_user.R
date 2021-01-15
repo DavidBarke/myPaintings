@@ -184,11 +184,14 @@ add_user_server <- function(id, .values) {
           value = ""
         )
 
-        shiny::showNotification(
-          ui = paste0(
+        bs4Dash::toast(
+          title = paste0(
             "The user \"",
             input$user_name,
             "\" was successfully added."
+          ),
+          options = .values$settings$toast(
+            class = "bg-success"
           )
         )
 

@@ -101,6 +101,7 @@ ui_server <- function(source_to_globalenv = FALSE) {
       
       default <- list(
         autohide = TRUE,
+        delay = 3000,
         position = "bottomRight"
       )
       
