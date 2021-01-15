@@ -2,6 +2,11 @@ filter_table_ui <- function(id) {
   ns <- shiny::NS(id)
   
   htmltools::tagList(
+    shiny::actionButton(
+      inputId = ns("reset"),
+      label = "Reset"
+    ),
+    htmltools::hr(),
     htmltools::div(
       id = ns("table"),
       class = "filter-table"
@@ -9,18 +14,12 @@ filter_table_ui <- function(id) {
     shiny::actionButton(
       inputId = ns("add_condition"),
       label = NULL,
-      icon = shiny::icon("plus"),
-      width = "100%"
+      icon = shiny::icon("plus")
     ),
-    shiny::actionButton(
-      inputId = ns("reset"),
-      label = "Reset",
-      width = "100%"
-    ),
+    htmltools::hr(),
     shiny::actionButton(
       inputId = ns("apply"),
-      label = "Apply",
-      width = "100%"
+      label = "Apply"
     )
   )
 }
