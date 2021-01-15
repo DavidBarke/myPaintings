@@ -188,7 +188,7 @@ populate_user_image_table <- function(db) {
 #' @export
 populate_buy_sell_table <- function(db) {
   # Every user has bought 100 images
-  user_ids <- db_get_user_ids(db)
+  user_ids <- db_get_user_ids(db, status = "user")
   
   tbl <- purrr::map_dfr(user_ids, function(user_id) {
     image_ids <- db_get_image_ids_by_user_id(db, user_id)
@@ -209,4 +209,19 @@ populate_buy_sell_table <- function(db) {
   tbl$price <- price
   
   DBI::dbAppendTable(db, "buy_sell", tbl)
+  
+  income <- tbl %>%
+    group_by(seller_id) %>%
+    summarise(income = sum(price))
+  
+  expense <- tbl %>%
+    group_by(buyer_id) %>%
+    summarise(expense = sum(price))
+  
+  balance <- inner_join(income, expense, by = c("seller_id" = "buyer_id")) %>%
+    mutate(balance = 1e6 + income - expense)
+  
+  purrr::walk2(balance$seller_id, balance$balance, function(user_id, capital) {
+    db_set_user_capital(db, user_id, max(capital, 0))
+  })
 }

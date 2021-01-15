@@ -15,7 +15,8 @@ db_add_user <- function(db,
                         name,
                         status = c("admin", "user"),
                         password,
-                        added_from = "Admin"
+                        added_from = "Admin",
+                        capital = 1e6
 ) {
   status <- match.arg(status)
   
@@ -28,7 +29,7 @@ db_add_user <- function(db,
     time_added = as.character(Sys.time()),
     time_logged = as.character(Sys.time()),
     times_logged = 0,
-    capital = 1000
+    capital = capital
   )
   
   DBI::dbAppendTable(db, "user", entry)
@@ -142,8 +143,12 @@ db_set_user_status <- function(db, name, status) {
 #' @family user
 #'
 #' @export
-db_get_user_ids <- function(db) {
-  tbl <- DBI::dbGetQuery(db, "SELECT rowid, name FROM user")
+db_get_user_ids <- function(db, status = c("user", "admin")) {
+  tbl <- DBI::dbGetQuery(
+    db, 
+    "SELECT rowid, name FROM user WHERE status = ?",
+    params = list(status)
+  )
   
   x <- tbl$rowid
   names(x) <- tbl$name
@@ -319,6 +324,25 @@ db_get_user_capital <- function(db, user_id) {
     "SELECT capital FROM user WHERE rowid = ?",
     params = list(user_id)
   )$capital
+}
+
+
+
+#' Set Account Balance for User
+#' 
+#' @template db
+#' @param user_id User ID.
+#' @param capital Account balance in USD.
+#' 
+#' @family user
+#' 
+#' @export
+db_set_user_capital <- function(db, user_id, capital) {
+  DBI::dbExecute(
+    db,
+    "UPDATE user SET capital = ? WHERE rowid = ?",
+    params = list(capital, user_id)
+  )
 }
 
 
