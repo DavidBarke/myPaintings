@@ -34,7 +34,7 @@ filter_table_condition_ui <- function(id) {
 filter_table_condition_server <- function(
   id, .values, 
   index,
-  query_text_start_r, query_text_in_r, query_params_in_r,
+  image_ids_in_r,
   first_condition_r, # needed to trigger server side selectize inputs,
   n_conditions_r,
   type
@@ -46,6 +46,8 @@ filter_table_condition_server <- function(
       ns <- session$ns
       
       force(index)
+      
+      print("filter_condition")
       
       # is this condition the last condition
       is_active_r <- shiny::reactive({
@@ -165,6 +167,7 @@ filter_table_condition_server <- function(
       )
       
       operation_r <- shiny::reactive({
+        print("operation_r")
         operation_group_dict[[shiny::req(input$filter_by)]]
       })
       
@@ -208,6 +211,7 @@ filter_table_condition_server <- function(
       
       ## Value ----
       output$value <- shiny::renderUI({
+        print("value")
         value_dict[[shiny::req(input$filter_by)]]
       })
       
@@ -413,17 +417,14 @@ filter_table_condition_server <- function(
         query_operation_dict[[operation_r()]]()
       })
       
-      query_text_out_r <- shiny::reactive({
-        c(
-          query_text_in_r(),
-          paste(
-            query_col_dict(
-              shiny::req(input$filter_by),
-              shiny::req(input$operation_text)
-            ),
-            query_operator_dict[[shiny::req(input$operation_text)]],
-            "?"
-          )
+      query_condition_r <- shiny::reactive({
+        paste(
+          query_col_dict(
+            shiny::req(input$filter_by),
+            shiny::req(input$operation_text)
+          ),
+          query_operator_dict[[shiny::req(input$operation_text)]],
+          "?"
         )
       })
       
@@ -459,10 +460,10 @@ filter_table_condition_server <- function(
         "REGEXP" = "REGEXP"
       )
       
-      query_params_out_r <- shiny::reactive({
-        c(
-          query_params_in_r(),
-          list(query_params_dict_fun[[shiny::req(input$filter_by)]]())
+      query_params_r <- shiny::reactive({
+        list(
+          image_ids_in_r(),
+          query_params_dict_fun[[shiny::req(input$filter_by)]]()
         )
       })
       
@@ -484,10 +485,25 @@ filter_table_condition_server <- function(
         })
       )
       
+      query_text_r <- shiny::reactive({
+        query_images(type)
+      })
+      
+      query_r <- shiny::reactive({
+        DBI::dbGetQuery(
+          .values$db,
+          query_text_r(),
+          query_params_r()
+        )
+      })
+      
+      image_ids_out_r <- shiny::reactive({
+        query_r()$image_id
+      })
+      
       ## Return ----
       return_list <- list(
-        query_text_out_r = query_text_out_r,
-        query_params_out_r = query_params_out_r,
+        image_ids_r = image_ids_out_r,
         remove_r = shiny::reactive(remove_rv())
       )
       

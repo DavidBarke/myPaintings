@@ -1,5 +1,5 @@
-query_text_start_dict <- function() {
-  list(
+query_images <- function(type) {
+  dict <- list(
     browse = "
           SELECT 
             image.rowid AS image_id, 
@@ -67,4 +67,6 @@ query_text_start_dict <- function() {
               ON user_image.image_id = offered_images.image_id
         "
   )
+  
+  dict[[type]]
 }

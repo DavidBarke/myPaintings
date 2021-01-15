@@ -54,11 +54,12 @@ filter_table_server <- function(id,
       # Triggered when n_conditions_rv is set to 1
       first_condition_rv <- shiny::reactiveVal(0)
       
-      return <- environment()
+      ret <- environment()
       # List of server returns
-      return$row <- list()
+      ret$condition <- list()
       
       shiny::observeEvent(input$add_condition, {
+        print("add_condition")
         n_conditions_rv(n_conditions_rv() + 1)
         
         if (n_conditions_rv() == 1) first_condition_rv(first_condition_rv() + 1)
@@ -66,32 +67,24 @@ filter_table_server <- function(id,
         if (n_conditions_rv() > max_conditions_rv()) {
           index <- n_conditions_rv()
           
-          query_text_in_r <- if (index > 1) {
-            return$row[[index - 1]]$query_text_out_r
+          image_ids_in_r <- if (n_conditions_rv() == 0) {
+            image_ids_start_r
           } else {
-            query_text_in_start_r
+            ret$condition[[n_conditions_rv() - 1]]$image_ids_r
           }
           
-          query_params_in_r <- if (index > 1) {
-            return$row[[index - 1]]$query_params_out_r
-          } else {
-            query_params_start_r
-          }
-          
-          return$row[[index]] <- filter_table_condition_server(
+          ret$condition[[index]] <- filter_table_condition_server(
             id = "filter_table_condition" %_% index,
             .values = .values,
             index = index,
-            query_text_start_r = query_text_start_r,
-            query_text_in_r = query_text_in_r,
-            query_params_in_r = query_params_in_r,
+            image_ids_in_r = image_ids_in_r,
             first_condition_r = shiny::reactive(first_condition_rv()),
             n_conditions_r = shiny::reactive(n_conditions_rv()),
             type = type
           )
           
           # Listen on clicking remove button in filter condition
-          shiny::observeEvent(return$row[[index]]$remove_r(), {
+          shiny::observeEvent(ret$condition[[index]]$remove_r(), {
             n_conditions_rv(n_conditions_rv() - 1)
           }, ignoreInit = TRUE)
           
@@ -116,80 +109,74 @@ filter_table_server <- function(id,
         )
       })
       
-      query_text_start_r <- shiny::reactive({
-        query_text_start_dict()[[type]]
-      })
-      
-      query_text_in_start_r <- switch(
+      query_image_ids_start_condition_r <- switch(
         type,
         "browse" = shiny::reactive(character()),
         "collection" = shiny::reactive("user_image.user_id = ?"),
         "buy" = shiny::reactive("user_image.user_id != ?")
       )
       
-      query_text_result_r <- shiny::reactive({
-        if (n_conditions_rv() == 0) {
-          construct_query_text(
-            query_text_start_r(),
-            query_text_in_start_r()
-          )
-        } else {
-          construct_query_text(
-            query_text_start_r(),
-            return$row[[n_conditions_rv()]]$query_text_out_r()
-          )
-        }
-      })
-      
       query_params_start_r <- shiny::reactive({
         switch(
           type,
-          "browse" = list(),
+          "browse" = NULL,
           "collection" = list(.values$user_rvs$user_id),
           "buy" = list(.values$user_rvs$user_id)
         )
       })
       
-      query_params_result_r <- shiny::reactive({
-        if (n_conditions_rv() == 0) return(query_params_start_r())
+      image_ids_start_r <- shiny::reactive({
+        query <- construct_query_text(
+          "SELECT image.rowid AS image_id
+          FROM user_image
+          INNER JOIN image ON user_image.image_id = image.rowid
+          INNER JOIN user ON user_image.user_id = user.rowid",
+          query_image_ids_start_condition_r()
+        )
         
-        return$row[[n_conditions_rv()]]$query_params_out_r()
+        DBI::dbGetQuery(
+          .values$db,
+          query,
+          params = query_params_start_r()
+        )$image_id
       })
       
-      # shiny::observeEvent(query_params_result_r(), {
-      #   cat(query_text_result_r(), "\n")
-      #   str(query_params_result_r())
-      # })
+      image_ids_r <- shiny::reactive({
+        if (n_conditions_rv() == 0) {
+          image_ids_start_r()
+        } else {
+          ret$condition[[n_conditions_rv()]]$image_ids_r()
+        }
+      })
       
-      filter_query_r <- shiny::eventReactive(c(
+      query_all_images_r <- shiny::reactive({
+        query_images(type)
+      })
+      
+      images_r <- shiny::eventReactive(c(
         input$apply,
         # execute query when:
         # - logged user changes
         # - images are bought/sold
         .values$update$db_user_rv()
       ), ignoreNULL = FALSE, {
-        if (length(query_params_result_r())) {
-          DBI::dbGetQuery(
-            .values$db,
-            query_text_result_r(),
-            params = query_params_result_r()
-          ) 
-        } else {
-          DBI::dbGetQuery(
-            .values$db,
-            query_text_result_r()
-          )
-        }
+        print(type)
+        print(image_ids_r()[1:5])
+        
+        tbl <- DBI::dbGetQuery(
+          .values$db,
+          query_all_images_r()
+        ) 
+        
+        print(as_tibble(tbl))
+        
+        tbl %>% filter(image_id %in% image_ids_r())
       }) %>%
         shiny::throttle(1000)
       
-      # shiny::observeEvent(image_ids_r(), {
-      #   print(dplyr::as_tibble(image_ids_r()))
-      # })
-      
       return_list <- list(
-        images_r = filter_query_r,
-        image_ids_r = shiny::reactive(filter_query_r()$image_id)
+        images_r = images_r,
+        image_ids_r = image_ids_r
       )
       
       return(return_list)
