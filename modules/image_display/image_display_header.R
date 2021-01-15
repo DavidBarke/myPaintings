@@ -2,47 +2,39 @@ image_display_header_ui <- function(id) {
   ns <- shiny::NS(id)
   
   shiny::fluidRow(
-    shiny::column(
-      width = 12,
-      bs4Dash::box(
-        width = NULL,
-        title = "myPaintings",
-        status = "primary",
-        solidHeader = TRUE,
-        shiny::fluidRow(
-          shiny::column(
-            width = 8,
-            filter_table_ui(
-              id = ns("filter_table")
-            )
-          ),
-          shiny::column(
-            width = 2,
-            shiny::selectInput(
-              inputId = ns("display"),
-              label = "Display",
-              choices = c(
-                "Images" = "image",
-                "Infos" = "info",
-                "List" = "list"
-              )
-            )
-          ),
-          shiny::column(
-            width = 2,
-            shiny::selectInput(
-              inputId = ns("width"),
-              label = "Number of columns",
-              choices = c(
-                "1" = 12,
-                "2" = 6,
-                "3" = 4,
-                "4" = 3
-              ),
-              selected = 3
-            )
-          )
+    bs4Dash::box(
+      width = 8,
+      solidHeader = TRUE,
+      status = "primary",
+      title = "Filter",
+      filter_table_ui(
+        id = ns("filter_table")
+      )
+    ),
+    bs4Dash::box(
+      width = 4,
+      solidHeader = TRUE,
+      status = "primary",
+      title = "Settings",
+      shiny::selectInput(
+        inputId = ns("display"),
+        label = "Display",
+        choices = c(
+          "Images" = "image",
+          "Infos" = "info",
+          "List" = "list"
         )
+      ),
+      shiny::selectInput(
+        inputId = ns("width"),
+        label = "Number of columns",
+        choices = c(
+          "1" = 12,
+          "2" = 6,
+          "3" = 4,
+          "4" = 3
+        ),
+        selected = 3
       )
     )
   )
