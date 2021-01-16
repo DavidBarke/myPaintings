@@ -34,7 +34,7 @@ filter_table_condition_ui <- function(id) {
 filter_table_condition_server <- function(
   id, .values, 
   index,
-  query_text_start_r, query_text_in_r, query_params_in_r,
+  image_ids_in_r,
   first_condition_r, # needed to trigger server side selectize inputs,
   n_conditions_r,
   type
@@ -242,10 +242,16 @@ filter_table_condition_server <- function(
         } else {
           multiple <- shiny::req(input$operation_text) == "IN"
           
+          db_get_user_ids(
+            db = .values$db,
+            status = "user",
+            image_ids = image_ids_in_r()
+          )
+          
           shiny::selectInput(
             inputId = ns("value_name"),
             label = NULL,
-            choices = db_get_user_ids(.values$db),
+            choices = choices,
             selected = shiny::isolate(input$value_name),
             multiple = multiple
           )
@@ -295,7 +301,11 @@ filter_table_condition_server <- function(
       })
       
       painters_r <- shiny::reactive({
-        db_get_painters(.values$db)
+        update_painter_choices_rv()
+        db_get_painters(
+          .values$db,
+          image_ids = image_ids_in_r()
+        )
       })
       
       ## By title ----
@@ -332,7 +342,7 @@ filter_table_condition_server <- function(
         
         shiny::updateSelectizeInput(
           inputId = "value_title",
-          choices = image_ids_r(),
+          choices = title_choices_r(),
           selected = selected,
           server = TRUE
         )
@@ -342,8 +352,11 @@ filter_table_condition_server <- function(
         }
       }, ignoreInit = TRUE)
       
-      image_ids_r <- shiny::reactive({
-        db_get_image_ids(.values$db)
+      title_choices_r <- shiny::reactive({
+        update_title_choices_rv()
+        
+        choices <- db_get_image_ids(.values$db)
+        choices[choices %in% image_ids_in_r()]
       })
       
       ## By school ----
@@ -356,10 +369,15 @@ filter_table_condition_server <- function(
         } else {
           multiple <- shiny::req(input$operation_text) == "IN"
           
+          choices <- db_get_image_schools(
+            db = .values$db,
+            image_ids = image_ids_in_r()
+          )
+          
           shiny::selectInput(
             inputId = ns("value_school"),
             label = NULL,
-            choices = db_get_image_schools(.values$db),
+            choices = choices,
             selected = shiny::isolate(input$value_school),
             multiple = multiple
           )
@@ -376,7 +394,10 @@ filter_table_condition_server <- function(
         } else {
           multiple <- shiny::req(input$operation_text) == "IN"
           
-          choices <- db_get_image_types(.values$db)
+          choices <- db_get_image_types(
+            db = .values$db,
+            image_ids = image_ids_in_r()
+          )
           names(choices) <- stringr::str_to_title(choices)
           
           shiny::selectInput(
@@ -413,17 +434,14 @@ filter_table_condition_server <- function(
         query_operation_dict[[operation_r()]]()
       })
       
-      query_text_out_r <- shiny::reactive({
-        c(
-          query_text_in_r(),
-          paste(
-            query_col_dict(
-              shiny::req(input$filter_by),
-              shiny::req(input$operation_text)
-            ),
-            query_operator_dict[[shiny::req(input$operation_text)]],
-            "?"
-          )
+      query_condition_r <- shiny::reactive({
+        paste(
+          query_col_dict(
+            shiny::req(input$filter_by),
+            shiny::req(input$operation_text)
+          ),
+          query_operator_dict[[shiny::req(input$operation_text)]],
+          "?"
         )
       })
       
@@ -459,10 +477,9 @@ filter_table_condition_server <- function(
         "REGEXP" = "REGEXP"
       )
       
-      query_params_out_r <- shiny::reactive({
-        c(
-          query_params_in_r(),
-          list(query_params_dict_fun[[shiny::req(input$filter_by)]]())
+      query_params_r <- shiny::reactive({
+        list(
+          query_params_dict_fun[[shiny::req(input$filter_by)]]()
         )
       })
       
@@ -484,10 +501,30 @@ filter_table_condition_server <- function(
         })
       )
       
+      query_text_r <- shiny::reactive({
+        construct_query_text(
+          query_images(type),
+          query_condition_r()
+        )
+      })
+      
+      query_r <- shiny::reactive({
+        tbl <- DBI::dbGetQuery(
+          .values$db,
+          query_text_r(),
+          params = query_params_r()
+        )
+        
+        tbl %>% dplyr::filter(image_id %in% image_ids_in_r())
+      })
+      
+      image_ids_out_r <- shiny::reactive({
+        query_r()$image_id
+      })
+      
       ## Return ----
       return_list <- list(
-        query_text_out_r = query_text_out_r,
-        query_params_out_r = query_params_out_r,
+        image_ids_r = image_ids_out_r,
         remove_r = shiny::reactive(remove_rv())
       )
       
