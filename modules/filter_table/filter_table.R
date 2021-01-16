@@ -59,7 +59,6 @@ filter_table_server <- function(id,
       ret$condition <- list()
       
       shiny::observeEvent(input$add_condition, {
-        print("add_condition")
         n_conditions_rv(n_conditions_rv() + 1)
         
         if (n_conditions_rv() == 1) first_condition_rv(first_condition_rv() + 1)
