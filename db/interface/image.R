@@ -133,7 +133,7 @@ db_get_image_schools <- function(db, image_ids) {
 #' @family image
 #' 
 #' @export
-db_get_image_types <- function(db) {
+db_get_image_types <- function(db, image_ids) {
   DBI::dbGetQuery(
     db,
     "SELECT type, rowid AS image_id FROM image"
