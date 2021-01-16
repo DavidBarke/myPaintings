@@ -353,8 +353,9 @@ filter_table_condition_server <- function(
       }, ignoreInit = TRUE)
       
       title_choices_r <- shiny::reactive({
-        choices <- db_get_image_ids(.values$db)
+        update_title_choices_rv()
         
+        choices <- db_get_image_ids(.values$db)
         choices[choices %in% image_ids_in_r()]
       })
       
