@@ -242,10 +242,16 @@ filter_table_condition_server <- function(
         } else {
           multiple <- shiny::req(input$operation_text) == "IN"
           
+          db_get_user_ids(
+            db = .values$db,
+            status = "user",
+            image_ids = image_ids_in_r()
+          )
+          
           shiny::selectInput(
             inputId = ns("value_name"),
             label = NULL,
-            choices = db_get_user_ids(.values$db),
+            choices = choices,
             selected = shiny::isolate(input$value_name),
             multiple = multiple
           )
@@ -295,7 +301,10 @@ filter_table_condition_server <- function(
       })
       
       painters_r <- shiny::reactive({
-        db_get_painters(.values$db)
+        db_get_painters(
+          .values$db,
+          image_ids = image_ids_in_r()
+        )
       })
       
       ## By title ----
@@ -332,7 +341,7 @@ filter_table_condition_server <- function(
         
         shiny::updateSelectizeInput(
           inputId = "value_title",
-          choices = image_ids_r(),
+          choices = title_choices_r(),
           selected = selected,
           server = TRUE
         )
@@ -342,8 +351,10 @@ filter_table_condition_server <- function(
         }
       }, ignoreInit = TRUE)
       
-      image_ids_r <- shiny::reactive({
-        db_get_image_ids(.values$db)
+      title_choices_r <- shiny::reactive({
+        choices <- db_get_image_ids(.values$db)
+        
+        choices[choices %in% image_ids_in_r()]
       })
       
       ## By school ----
@@ -356,10 +367,15 @@ filter_table_condition_server <- function(
         } else {
           multiple <- shiny::req(input$operation_text) == "IN"
           
+          choices <- db_get_image_schools(
+            db = .values$db,
+            image_ids = image_ids_in_r()
+          )
+          
           shiny::selectInput(
             inputId = ns("value_school"),
             label = NULL,
-            choices = db_get_image_schools(.values$db),
+            choices = choices,
             selected = shiny::isolate(input$value_school),
             multiple = multiple
           )
@@ -376,7 +392,10 @@ filter_table_condition_server <- function(
         } else {
           multiple <- shiny::req(input$operation_text) == "IN"
           
-          choices <- db_get_image_types(.values$db)
+          choices <- db_get_image_types(
+            db = .values$db,
+            image_ids = image_ids_in_r()
+          )
           names(choices) <- stringr::str_to_title(choices)
           
           shiny::selectInput(

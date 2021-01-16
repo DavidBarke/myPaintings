@@ -112,11 +112,16 @@ db_get_image_ids <- function(db) {
 #' @family image
 #' 
 #' @export
-db_get_image_schools <- function(db) {
+db_get_image_schools <- function(db, image_ids) {
   DBI::dbGetQuery(
     db,
-    "SELECT DISTINCT school FROM image"
-  )$school
+    "SELECT school, rowid AS image_id FROM image"
+  ) %>% dplyr::filter(
+    image_id %in% image_ids
+  ) %>% `[[`(
+    1
+  ) %>%
+    unique()
 }
 
 
@@ -131,6 +136,11 @@ db_get_image_schools <- function(db) {
 db_get_image_types <- function(db) {
   DBI::dbGetQuery(
     db,
-    "SELECT DISTINCT type FROM image"
-  )$type
+    "SELECT type, rowid AS image_id FROM image"
+  ) %>% dplyr::filter(
+    image_id %in% image_ids
+  ) %>% `[[`(
+    1
+  ) %>%
+    unique()
 }

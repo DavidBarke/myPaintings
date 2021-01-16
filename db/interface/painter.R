@@ -5,10 +5,16 @@
 #' @family painter
 #' 
 #' @export
-db_get_painters <- function(db) {
+db_get_painters <- function(db, image_ids) {
   tbl <- DBI::dbGetQuery(
     db,
-    "SELECT painter_id, name FROM painter"
+    "
+    SELECT painter.painter_id, painter.name, image.rowid AS image_id
+    FROM painter
+    LEFT JOIN image ON painter.painter_id = image.rowid
+    "
+  ) %>% dplyr::filter(
+    image_id %in% image_ids
   )
   
   x <- tbl$painter_id
