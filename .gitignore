@@ -4,3 +4,4 @@
 .RDataTmp
 .Ruserdata
 img/wga
+db/db.sqlite
