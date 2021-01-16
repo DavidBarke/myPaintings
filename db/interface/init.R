@@ -1,3 +1,5 @@
+library(dplyr)
+
 #' Initialise database
 #'
 #' Initialise SQLite database if not present.
@@ -37,11 +39,16 @@ db_init <- function(path = "db/db.sqlite") {
   create_user_image_table(db)
   create_offered_images_table(db)
   create_buy_sell_table(db)
-  
+
+  print("Populate user")  
   populate_user_table(db)
+  print("Populate image")
   populate_image_table(db)
+  print("Populate painter")
   populate_painter_table(db)
+  print("Populate user_image")
   populate_user_image_table(db)
+  print("Populate image")
   populate_buy_sell_table(db)
 }
 
@@ -175,7 +182,7 @@ populate_painter_table <- function(db) {
 populate_user_image_table <- function(db) {
   n <- db_length(db, "image")
   image_ids <- seq_len(n)
-  user_ids <- sample(db_get_user_ids(db), n, replace = TRUE)
+  user_ids <- sample(db_get_user_ids(db, status = "user"), n, replace = TRUE)
   
   tbl <- tibble::tibble(
     image_id = image_ids,

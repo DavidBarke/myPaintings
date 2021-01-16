@@ -144,22 +144,28 @@ db_set_user_status <- function(db, name, status) {
 #'
 #' @export
 db_get_user_ids <- function(db, status = c("user", "admin"), image_ids = NULL) {
-  tbl <- DBI::dbGetQuery(
-    db, 
-    "
+  if (!is.null(image_ids)) {
+    tbl <- DBI::dbGetQuery(
+      db, 
+      "
     SELECT user.rowid, user.name, image.rowid AS image_id
     FROM user_image
     LEFT JOIN user ON user_image.user_id = user.rowid
     LEFT JOIN image ON user_image.image_id = image.rowid
     WHERE status = ?
     ",
-    params = list(status)
-  )
-  
-  if (!is.null(image_ids)) {
+      params = list(status)
+    )
+    
     tbl <- dplyr::filter(
       tbl,
       image_id %in% image_ids
+    )
+  } else {
+    tbl <- DBI::dbGetQuery(
+      db,
+      "SELECT rowid, name FROM user WHERE status = ?",
+      params = list(status)
     )
   }
   
