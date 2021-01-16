@@ -67,7 +67,7 @@ image_box_dropdown_buy_server <- function(id,
         shiny::removeModal()
         
         db_buy_image(
-          db = db,
+          db = .values$db,
           image_id = image_r()$image_id,
           buyer_id = .values$user_rvs$user_id
         )
