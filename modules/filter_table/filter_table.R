@@ -59,7 +59,6 @@ filter_table_server <- function(id,
       ret$condition <- list()
       
       shiny::observeEvent(input$add_condition, {
-        print("add_condition")
         n_conditions_rv(n_conditions_rv() + 1)
         
         if (n_conditions_rv() == 1) first_condition_rv(first_condition_rv() + 1)
@@ -67,10 +66,10 @@ filter_table_server <- function(id,
         if (n_conditions_rv() > max_conditions_rv()) {
           index <- n_conditions_rv()
           
-          image_ids_in_r <- if (n_conditions_rv() == 0) {
+          image_ids_in_r <- if (index == 1) {
             image_ids_start_r
           } else {
-            ret$condition[[n_conditions_rv() - 1]]$image_ids_r
+            ret$condition[[index - 1]]$image_ids_r
           }
           
           ret$condition[[index]] <- filter_table_condition_server(
@@ -125,12 +124,33 @@ filter_table_server <- function(id,
         )
       })
       
+      query_text_start_r <- shiny::reactive({
+        browse_collection_text <- "
+        SELECT 
+          image.rowid AS image_id 
+        FROM user_image
+          INNER JOIN image ON user_image.image_id = image.rowid
+          INNER JOIN user ON user_image.user_id = user.rowid
+        "
+        
+        switch(
+          type,
+          "browse" = browse_collection_text,
+          "collection" = browse_collection_text,
+          "buy" = "
+          SELECT
+            image.rowid AS image_id
+          FROM offered_images
+            LEFT JOIN user_image ON offered_images.image_id = user_image.image_id
+            LEFT JOIN image ON offered_images.image_id = image.rowid
+            LEFT JOIN user ON user_image.user_id = user.rowid
+          "
+        )
+      })
+      
       image_ids_start_r <- shiny::reactive({
         query <- construct_query_text(
-          "SELECT image.rowid AS image_id
-          FROM user_image
-          INNER JOIN image ON user_image.image_id = image.rowid
-          INNER JOIN user ON user_image.user_id = user.rowid",
+          query_text_start_r(),
           query_image_ids_start_condition_r()
         )
         
@@ -160,15 +180,10 @@ filter_table_server <- function(id,
         # - images are bought/sold
         .values$update$db_user_rv()
       ), ignoreNULL = FALSE, {
-        print(type)
-        print(image_ids_r()[1:5])
-        
         tbl <- DBI::dbGetQuery(
           .values$db,
           query_all_images_r()
         ) 
-        
-        print(as_tibble(tbl))
         
         tbl %>% filter(image_id %in% image_ids_r())
       }) %>%

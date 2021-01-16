@@ -47,8 +47,6 @@ filter_table_condition_server <- function(
       
       force(index)
       
-      print("filter_condition")
-      
       # is this condition the last condition
       is_active_r <- shiny::reactive({
         # keeping updates on a minimum by querying reactiveVal
@@ -167,7 +165,6 @@ filter_table_condition_server <- function(
       )
       
       operation_r <- shiny::reactive({
-        print("operation_r")
         operation_group_dict[[shiny::req(input$filter_by)]]
       })
       
@@ -211,7 +208,6 @@ filter_table_condition_server <- function(
       
       ## Value ----
       output$value <- shiny::renderUI({
-        print("value")
         value_dict[[shiny::req(input$filter_by)]]
       })
       
@@ -462,7 +458,6 @@ filter_table_condition_server <- function(
       
       query_params_r <- shiny::reactive({
         list(
-          image_ids_in_r(),
           query_params_dict_fun[[shiny::req(input$filter_by)]]()
         )
       })
@@ -486,15 +481,22 @@ filter_table_condition_server <- function(
       )
       
       query_text_r <- shiny::reactive({
-        query_images(type)
+        construct_query_text(
+          query_images(type),
+          query_condition_r()
+        )
       })
       
       query_r <- shiny::reactive({
-        DBI::dbGetQuery(
+        cat(query_text_r())
+        
+        tbl <- DBI::dbGetQuery(
           .values$db,
           query_text_r(),
-          query_params_r()
+          params = query_params_r()
         )
+        
+        tbl %>% dplyr::filter(image_id %in% image_ids_in_r())
       })
       
       image_ids_out_r <- shiny::reactive({
