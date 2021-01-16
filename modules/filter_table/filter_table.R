@@ -161,7 +161,21 @@ filter_table_server <- function(id,
         )$image_id
       })
       
-      image_ids_r <- shiny::reactive({
+      apply_filter_rv <- shiny::reactiveVal(0)
+      
+      shiny::observeEvent(input$apply, {
+        apply_filter_rv(apply_filter_rv() + 1)
+      })
+      
+      shiny::observeEvent(.values$update$db_user_rv(), {
+        apply_filter_rv(apply_filter_rv() + 1)
+      })
+      
+      apply_filter_r <- shiny::reactive({
+        apply_filter_rv()
+      }) %>% shiny::throttle(1000)
+      
+      image_ids_r <- shiny::eventReactive(apply_filter_r(), {
         if (n_conditions_rv() == 0) {
           image_ids_start_r()
         } else {
@@ -173,21 +187,14 @@ filter_table_server <- function(id,
         query_images(type)
       })
       
-      images_r <- shiny::eventReactive(c(
-        input$apply,
-        # execute query when:
-        # - logged user changes
-        # - images are bought/sold
-        .values$update$db_user_rv()
-      ), ignoreNULL = FALSE, {
+      images_r <- shiny::reactive({
         tbl <- DBI::dbGetQuery(
           .values$db,
           query_all_images_r()
         ) 
         
         tbl %>% filter(image_id %in% image_ids_r())
-      }) %>%
-        shiny::throttle(1000)
+      })
       
       return_list <- list(
         images_r = images_r,

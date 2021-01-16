@@ -488,8 +488,6 @@ filter_table_condition_server <- function(
       })
       
       query_r <- shiny::reactive({
-        cat(query_text_r())
-        
         tbl <- DBI::dbGetQuery(
           .values$db,
           query_text_r(),
