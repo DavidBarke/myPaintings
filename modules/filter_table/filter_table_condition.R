@@ -301,6 +301,7 @@ filter_table_condition_server <- function(
       })
       
       painters_r <- shiny::reactive({
+        update_painter_choices_rv()
         db_get_painters(
           .values$db,
           image_ids = image_ids_in_r()
