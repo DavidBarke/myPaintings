@@ -85,6 +85,6 @@ download_wga <- function(src, dest) {
   progress <- progress_bar$new(total = length(src))
   purrr::map2(src, dest, function(url, destfile) {
     progress$tick()
-    download.file(url, destfile, mode = "wb", quiet = TRUE)
+    curl::curl_download(url, destfile, mode = "wb", quiet = TRUE)
   })
 }
