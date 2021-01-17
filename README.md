@@ -72,6 +72,45 @@ Users can collect these paintings and trade them with other users.
     
       - Buy an offered painting
 
+  - **Wallet**
+    
+    Each user with status `user` has an account balance. Selling a
+    painting increases the balance whereas buying a painting decreases
+    it. In the tab *Wallet* a user can view all past transactions and
+    filter them by date.
+
 ## Implementation
+
+### Folder structure
+
+  - `app.R` : Entry point of the app
+  - `/data` :
+      - `catalog.xlsx` : Catalog of the [Web Gallery of
+        Art](https://www.wga.hu/)
+      - `images.xlsx` : Extracted table of all paintings in
+        `catalog.xlsx`
+      - `painters.xlsx` : Extracted table of all painters in
+        `catalog.xlsx`
+      - `process_catalog.R` : Script for extraction of `images.xlsx` and
+        `painters.xlsx` from `catalog.xlsx` and download of all
+        paintings from the [Web Gallery of Art](https://www.wga.hu/)
+      - `process_catalog_helpers.R` : Helper functions for
+        `process_catalog.R`
+  - `/db` :
+      - `db.sqlite` : SQLite database.
+      - `/interface` :
+          - `init.R` : Call `db_init()` to initialize and populate
+            `db.sqlite`
+          - `*.R` : R functions, that provide an API to the database
+  - `/img/wga` : All paintings from the [Web Gallery of
+    Art](https://www.wga.hu/)
+  - `/init/source_directory.R` : R function to source complete directory
+  - `/md` : Markdown documents included in the app
+  - `/modules` : Core of the functionality. Shiny modules and other R
+    functions
+  - `/renv` / `renv.lock` : Package management
+  - `/www` :
+      - `/css/styles.css` : Custom css
+      - `/js/extend_shinyjs.js` : Custom JS
 
 ### Initialisation
