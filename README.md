@@ -121,7 +121,7 @@ These are the most important R packages, which I used in my application:
             `db.sqlite`
           - `*.R` : R functions, that provide an API to the database
   - `/img/wga` : All paintings from the [Web Gallery of
-    Art](https://www.wga.hu/)
+    Art](https://www.wga.hu/). Ignored by `.gitignore`
   - `/init/source_directory.R` : R function to source complete directory
   - `/md` : Markdown documents included in the app
   - `/modules` : Core of the functionality. Shiny modules and other R
@@ -130,6 +130,22 @@ These are the most important R packages, which I used in my application:
   - `/www` :
       - `/css/styles.css` : Custom CSS
       - `/js/extend_shinyjs.js` : Custom JavaScript
+
+### Database
+
+Data is stored in an [SQLite](https://www.sqlite.org/index.html)
+database. The database contains the following tables:
+
+  - `buy_sell` : Transaction Information (buyer, seller, painting,
+    price, date)
+  - `image` : Painting Information (title, painter, type, school, date,
+    url, …)
+  - `offered_images` : Offered paintings and their price
+  - `painter` : Painter information (name, life data)
+  - `user` : User information (name, status, hashed password …)
+  - `user_image` : Connects image IDs with user IDs
+
+Users with status `admin` may view all tables inside the application.
 
 ## Shiny
 
