@@ -14,11 +14,16 @@ prove the capabilities of my application I crawled over 30,000 images of
 historical paintings from the [Web Gallery of Art](https://www.wga.hu/).
 Users can collect these paintings and trade them with other users.
 
+## Live Version
+
+<https://mypaintings.davidbarke.com/>
+
 ## Features
 
   - **User Management**
     
       - Two statuses: `user` and `admin`
+      - Login with user name and password
       - Views differentiated by status
       - `admin` may add new users and monitor database
       - `user` may collect and trade paintings
