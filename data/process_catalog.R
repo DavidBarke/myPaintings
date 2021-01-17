@@ -53,7 +53,7 @@ write_xlsx(painters, "./data/painters.xlsx")
 # WGA ----
 if (FALSE) {
   add_letters_dirs()
-  add_author_dirs(tbl)
+  add_author_dirs(images)
   
   res <- download_wga(image_src, image_dest)
 }

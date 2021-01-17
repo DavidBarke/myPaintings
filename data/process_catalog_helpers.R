@@ -43,6 +43,7 @@ extract_url <- function(url) {
 }
 
 add_letters_dirs <- function() {
+  if (!file.exists("./img")) dir.create("./img")
   if (!file.exists("./img/wga")) dir.create("./img/wga")
   
   purrr::map(letters, function(letter) {
