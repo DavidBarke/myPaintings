@@ -51,7 +51,7 @@ I decided to build a web application with the framework [Shiny](https://shiny.rs
   * `IN` : Select multiple available choices. 
   * `REGEXP` : Select available choices matching a regular expression.
   
-  An arbitrary number of filter conditions can be added. Each subsequent condition is restricted by the results of the preceding condition (e.g. after you selected a particular painter, subsequent conditions will only allow you to select paintings of this painter).
+  An arbitrary number of filter conditions can be added. Each subsequent condition is restricted by the results of the preceding condition (e.g. after you selected a particular *Painter*, a subsequent *Title* condition will only show the title of paintings of this painter as its choices).
 
 * **Trade Paintings**
 
@@ -64,6 +64,10 @@ I decided to build a web application with the framework [Shiny](https://shiny.rs
   In the *Buy* view:
   
   * Buy an offered painting
+  
+* **Wallet**
+
+  Each user with status `user` has an account balance. Selling a painting increases the balance whereas buying a painting decreases it. In the tab *Wallet* a user can view all past transactions and filter them by date.
 
 ## Implementation
 

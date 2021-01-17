@@ -56,8 +56,9 @@ Users can collect these paintings and trade them with other users.
     
     An arbitrary number of filter conditions can be added. Each
     subsequent condition is restricted by the results of the preceding
-    condition (e.g. after you selected a particular painter, subsequent
-    conditions will only allow you to select paintings of this painter).
+    condition (e.g. after you selected a particular *Painter*, a
+    subsequent *Title* condition will only show the title of paintings
+    of this painter as its choices).
 
   - **Trade Paintings**
     
