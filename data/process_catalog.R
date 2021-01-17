@@ -1,6 +1,7 @@
 library(readxl)
 library(writexl)
 library(dplyr)
+library(curl)
 
 source("./data/process_catalog_helpers.R")
 
