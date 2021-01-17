@@ -594,10 +594,9 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.12.3",
+      "Version": "0.12.5",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "b5510c50c7f31d453c385c7b460af2b9"
+      "Repository": "CRAN"
     },
     "rlang": {
       "Package": "rlang",
