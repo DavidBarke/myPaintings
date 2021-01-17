@@ -81,6 +81,23 @@ Users can collect these paintings and trade them with other users.
 
 ## Implementation
 
+### Packages
+
+These are the most important R packages, which I used in my application:
+
+  - [shiny](https://github.com/rstudio/shiny) : Reactive web framework
+    for R
+  - [DBI](https://github.com/r-dbi/DBI) : Database interface definition
+    for communication between R and RBDMs
+  - [bs4Dash](https://github.com/RinteRface/bs4Dash) : Bootstrap 4
+    dashboard using AdminLTE3
+  - [htmltools](https://github.com/rstudio/htmltools) : Tools for HTML
+    generation and output
+  - [DT](https://github.com/rstudio/DT) : R interface to the jQuery
+    plugin [DataTables](https://datatables.net/)
+  - [shinyjs](https://github.com/daattali/shinyjs) : Extending shiny
+    with custom JavaScript
+
 ### Folder structure
 
   - `app.R` : Entry point of the app
@@ -112,5 +129,3 @@ Users can collect these paintings and trade them with other users.
   - `/www` :
       - `/css/styles.css` : Custom css
       - `/js/extend_shinyjs.js` : Custom JS
-
-### Initialisation
