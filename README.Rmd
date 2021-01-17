@@ -10,12 +10,6 @@ resource_files:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<link href="readme/adminlte.min.css" rel="stylesheet">
-<script src="https://kit.fontawesome.com/3ded47969a.js" crossorigin="anonymous"></script>
-<script src="readme/jquery.min.js"></script>
-<script src="readme/bootstrap.bundle.min.js"></script>
-<script src="readme/adminlte.min.js"></script>
-
 ## Overview
 
 This repository contains my contribution to the [Summer 2021 - Shopify Developer Intern Challenge](https://docs.google.com/document/d/1ZKRywXQLZWOqVOHC4JkF3LqdpO3Llpfk_CkZPR8bjak/edit). The task was to build an image repository. 
@@ -35,28 +29,4 @@ I decided to build a web application with the framework [Shiny](https://shiny.rs
 ## Implementation
 
 ### Initialisation
-
-```{r} 
-source("./init/source_directory.R")
-source_directory("./modules")
-
-set.seed(1)
-
-image_box_ui(
-  id = "image",
-  image = list(
-    owner = "David Barkemeyer",
-    painter = "Emanuel Gottlieb Leutze",
-    title = "Washington Crossing the Delaware",
-    date = "1851",
-    location = "Metropolitan Museum of Art, New York",
-    type = "historical",
-    school = "American",
-    url = "https://www.wga.hu/html/l/leutze/delaware.html",
-    path = "readme/delaware.jpg",
-    is_offered = FALSE
-  ),
-  type = "browse"
-)
-```
 

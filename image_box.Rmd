@@ -1,0 +1,41 @@
+---
+title: "image_box"
+author: "David Barkemeyer"
+date: "17 1 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+<link href="readme/adminlte.min.css" rel="stylesheet">
+<script src="https://kit.fontawesome.com/3ded47969a.js" crossorigin="anonymous"></script>
+<script src="readme/jquery.min.js"></script>
+<script src="readme/bootstrap.bundle.min.js"></script>
+<script src="readme/adminlte.min.js"></script>
+
+```{r} 
+source("./init/source_directory.R")
+source_directory("./modules")
+
+set.seed(1)
+
+image_box_ui(
+  id = "image",
+  image = list(
+    owner = "David Barkemeyer",
+    painter = "Emanuel Gottlieb Leutze",
+    title = "Washington Crossing the Delaware",
+    date = "1851",
+    location = "Metropolitan Museum of Art, New York",
+    type = "historical",
+    school = "American",
+    url = "https://www.wga.hu/html/l/leutze/delaware.html",
+    path = "readme/delaware.jpg",
+    is_offered = FALSE
+  ),
+  type = "browse"
+)
+```
