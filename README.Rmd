@@ -8,6 +8,7 @@ resource_files:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(shiny)
 ```
 
 ## Overview
@@ -103,6 +104,80 @@ These are the most important R packages, which I used in my application:
 * `/modules` : Core of the functionality. Shiny modules and other R functions
 * `/renv` / `renv.lock` : Package management
 * `/www` :
-  * `/css/styles.css` : Custom css
-  * `/js/extend_shinyjs.js` : Custom JS
+  * `/css/styles.css` : Custom CSS
+  * `/js/extend_shinyjs.js` : Custom JavaScript
 
+## Shiny
+
+The framework used in this application is probably not that well-known outside the R ecosystem, so that I thought it's best to provide a short introduction.
+
+Code is split across UI functions and server functions whereas usually one UI function belongs to one server function. UI functions return HTML-like R objects. Server functions process input provided by the user and set outputs accordingly.
+
+[Shiny](https://shiny.rstudio.com/) introduces an reactive programming concept. Three types of reactive components are distinguished:
+
+* **Reactive Source**
+
+  Reactive sources are read-only and usually represent input elements, which require the user to provide a value. 
+  
+```{r, eval=FALSE}
+# UI
+textInput(
+  inputId = "text",
+  label = "I'm a text input"
+)
+
+# Server
+# Use input$text to read the value of the textInput 
+```
+
+* **Reactive Endpoint**
+
+  Reactive endpoints are write-only. Their value is sent to the user. Common examples are plots or tables.
+  
+```{r, eval=FALSE}
+# UI
+plotOutput(outputId = "plot")
+
+# Server
+output$plot <- renderPlot({
+  # code that generates a plot
+})
+```
+  
+* **Reactive Conductor**
+
+  Reactive conductors connect reactive sources with reactive endpoints. The following example puts it all together:
+  
+```{r, eval=FALSE}
+# UI
+tagList(
+  numericInput(
+    inputId = "n",
+    label = "Number of bins:",
+    value = 30
+  ),
+  plotOutput(outputId = "plot")
+)
+
+# Server
+server <- function(input, output) {
+  
+  x <- rnorm(1000)
+  
+  # Reactive conductor
+  bins_r <- reactive({
+    # Read value of reactive source
+    n <- input$n
+    
+    seq(min(x), max(x), length.out = n + 1)
+  })
+  
+  output$plot <- renderPlot({
+    # Read value of reactive conductor
+    bins <- bins_r()
+    
+    # Histogram, which gets displayed to the user
+    hist(x, breaks = bins)
+  })
+}
+```
