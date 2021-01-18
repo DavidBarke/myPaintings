@@ -21,9 +21,9 @@ image_display_header_ui <- function(id) {
         label = "Display",
         choices = c(
           "Images" = "image",
-          "Infos" = "info",
-          "List" = "list"
-        )
+          "Infos" = "info"
+        ),
+        width = "100%"
       ),
       shiny::selectInput(
         inputId = ns("width"),
@@ -34,7 +34,8 @@ image_display_header_ui <- function(id) {
           "3" = 4,
           "4" = 3
         ),
-        selected = 3
+        selected = 3,
+        width = "100%"
       )
     )
   )
