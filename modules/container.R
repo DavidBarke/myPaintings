@@ -74,7 +74,7 @@ container_ui <- function(id) {
         )
       )
     ),
-    title = "DashboardPage"
+    title = "myPaintings"
   )
 }
 

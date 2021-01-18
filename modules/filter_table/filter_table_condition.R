@@ -233,29 +233,53 @@ filter_table_condition_server <- function(
       )
       
       ## By user name ----
+      update_name_choices_rv <- shiny::reactiveVal(0)
+      
       output$value_name <- shiny::renderUI({
+        input$filter_by
+        gets_active_r()
+        
         if (shiny::req(input$operation_text) == "REGEXP") {
           shiny::textInput(
             inputId = ns("value_name"),
             label = NULL
           )
         } else {
-          multiple <- shiny::req(input$operation_text) == "IN"
-          
-          db_get_user_ids(
-            db = .values$db,
-            status = "user",
-            image_ids = image_ids_in_r()
+          update_name_choices_rv(
+            shiny::isolate(update_name_choices_rv()) + 1
           )
           
-          shiny::selectInput(
+          multiple <- shiny::req(input$operation_text) == "IN"
+          
+          shiny::selectizeInput(
             inputId = ns("value_name"),
             label = NULL,
-            choices = choices,
+            choices = NULL,
             selected = shiny::isolate(input$value_name),
             multiple = multiple
           )
         }
+      })
+      
+      shiny::observeEvent(update_name_choices_rv(), {
+        shiny::updateSelectizeInput(
+          inputId = "value_name",
+          choices = names_r(),
+          selected = input$value_name,
+          server = TRUE
+        )
+        
+        if (!is_active_r()) {
+          js$disable_selectize_input(id = ns("value_name"), asis = TRUE)
+        }
+      })
+      
+      names_r <- shiny::reactive({
+        update_name_choices_rv()
+        db_get_user_ids(
+          .values$db,
+          image_ids = image_ids_in_r()
+        )
       })
       
       ## By painter ----
