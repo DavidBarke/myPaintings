@@ -167,6 +167,10 @@ filter_table_server <- function(id,
         apply_filter_rv(apply_filter_rv() + 1)
       })
       
+      shiny::observeEvent(input$reset, {
+        apply_filter_rv(apply_filter_rv() + 1)
+      })
+      
       shiny::observeEvent(.values$update$db_user_rv(), {
         apply_filter_rv(apply_filter_rv() + 1)
       })
