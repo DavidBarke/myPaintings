@@ -31,7 +31,7 @@ db_get_transaction_ids_by_filter <- function(db, user_id, date_start, date_end) 
 db_get_transaction_display <- function(db, transaction_ids) {
   tbl <- DBI::dbGetQuery(
     db,
-    "SELECT image.title AS Title, buyer.name AS Buyer, seller.name AS Seller, 
+    "SELECT image.rowid AS image_id, image.title AS Title, buyer.name AS Buyer, seller.name AS Seller, 
     buy_sell.date AS Date, buy_sell.price AS Price
     FROM buy_sell
     INNER JOIN image ON buy_sell.image_id = image.rowid
