@@ -15,7 +15,7 @@ welcome_ui <- function(id) {
       status = "primary",
       title = NULL,
       shiny::tabPanel(
-        title = "Overview",
+        title = "Getting Started",
         welcome_info_ui(
           id = ns("info")
         )
@@ -31,6 +31,12 @@ welcome_ui <- function(id) {
         welcome_about_ui(
           id = ns("about")
         )
+      ),
+      shiny::tabPanel(
+        title = "README",
+        welcome_README_ui(
+          id = ns("readme")
+        )
       )
     )
   )
@@ -45,6 +51,11 @@ welcome_server <- function(id, .values) {
       
       welcome_info_server(
         id = "info",
+        .values = .values
+      )
+      
+      welcome_README_server(
+        id = "readme",
         .values = .values
       )
       
