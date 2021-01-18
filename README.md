@@ -152,6 +152,13 @@ database. The database contains the following tables:
 
 Users with status `admin` may view all tables inside the application.
 
+## Hosting
+
+The application is hosted using [Shiny
+Server](https://rstudio.com/products/shiny/shiny-server/). I installed
+Shiny Server on my *DigitalOcean* droplet, on which I configured an
+*nginx* server.
+
 ## Shiny
 
 The framework used in this application is probably not that well-known

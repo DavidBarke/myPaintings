@@ -125,6 +125,10 @@ Data is stored in an [SQLite](https://www.sqlite.org/index.html) database. The d
 
 Users with status `admin` may view all tables inside the application.
 
+## Hosting
+
+The application is hosted using [Shiny Server](https://rstudio.com/products/shiny/shiny-server/). I installed Shiny Server on my *DigitalOcean* droplet, on which I configured an *nginx* server.
+
 ## Shiny
 
 The framework used in this application is probably not that well-known outside the R ecosystem, so that I thought it's best to provide a short introduction.
