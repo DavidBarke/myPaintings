@@ -3,7 +3,7 @@ welcome_info_ui <- function(id) {
   
   htmltools::div(
     class = "container",
-    shiny::includeMarkdown("./md/welcome.md")
+    shiny::includeMarkdown("README.md")
   )
 }
 
