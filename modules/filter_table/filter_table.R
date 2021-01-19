@@ -99,7 +99,17 @@ filter_table_server <- function(id,
         )
       })
       
+      reset_rv <- shiny::reactiveVal(0)
+      
       shiny::observeEvent(input$reset, {
+        reset_rv(reset_rv() + 1)
+      })
+      
+      shiny::observeEvent(.values$user_rvs$name, {
+        reset_rv(reset_rv() + 1)
+      })
+      
+      shiny::observeEvent(reset_rv(), {
         n_conditions_rv(0)
         
         shiny::removeUI(
@@ -167,7 +177,7 @@ filter_table_server <- function(id,
         apply_filter_rv(apply_filter_rv() + 1)
       })
       
-      shiny::observeEvent(input$reset, {
+      shiny::observeEvent(reset_rv(), {
         apply_filter_rv(apply_filter_rv() + 1)
       })
       
