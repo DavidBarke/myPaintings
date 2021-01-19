@@ -159,6 +159,11 @@ filter_table_server <- function(id,
       })
       
       image_ids_start_r <- shiny::reactive({
+        # Force recalculation, when user capital changes (e.g. after a painting was bought)
+        # buy: bought image must disapper
+        # collection: bought image must appear
+        if (type %in% c("buy", "collection")) .values$user_rvs$capital
+        
         query <- construct_query_text(
           query_text_start_r(),
           query_image_ids_start_condition_r()
@@ -182,6 +187,11 @@ filter_table_server <- function(id,
       })
       
       shiny::observeEvent(.values$update$db_user_rv(), {
+        apply_filter_rv(apply_filter_rv() + 1)
+      })
+      
+      # After image was bought
+      shiny::observeEvent(.values$user_rvs$capital, {
         apply_filter_rv(apply_filter_rv() + 1)
       })
       
