@@ -109,7 +109,7 @@ filter_table_server <- function(id,
         reset_rv(reset_rv() + 1)
       })
       
-      shiny::observeEvent(reset_rv(), {
+      shiny::observeEvent(reset_rv(), priority = 1, {
         n_conditions_rv(0)
         
         shiny::removeUI(
