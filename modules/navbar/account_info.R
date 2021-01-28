@@ -25,7 +25,7 @@ account_info_server <- function(id, .values) {
       })
       
       output$account <- bs4Dash::renderMenu({
-        if (.values$user_rvs$status != "not_logged") {
+        if (!.values$user_rvs$status %in% c("not_logged", "admin")) {
           shiny::actionLink(
             inputId = ns("open_account_tab"),
             label = account_label_r(),
