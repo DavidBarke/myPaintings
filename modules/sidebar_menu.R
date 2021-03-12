@@ -82,11 +82,19 @@ sidebar_menu_server <- function(id, .values) {
         menu_items <- unname(menu_item_list[access_list[[.values$user_rvs$status]]])
 
         args <- list(
-          id = ns(.values$sidebar$id)
+          id = ns("sidebar")
         )
         
         do.call(sidebarMenu, c(menu_items, args))
       })
+      
+      
+      
+      return_list <- list(
+        sidebar_r = shiny::reactive(input$sidebar)
+      )
+      
+      return(return_list)
     }
   )
 }

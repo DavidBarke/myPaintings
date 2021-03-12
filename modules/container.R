@@ -94,7 +94,7 @@ container_server <- function(id, .values) {
         )
       }
       
-      sidebar_menu_server(
+      sidebar_menu_return <- sidebar_menu_server(
         id = "sidebar_menu", 
         .values = .values
       )
@@ -116,45 +116,74 @@ container_server <- function(id, .values) {
       )
 
       ## Tab Items ----
-      welcome_server(
-        id = "welcome",
-        .values = .values
+      servers <- list(
+        welcome = function() {
+          welcome_server(
+            id = "welcome",
+            .values = .values
+          )
+        },
+        browse = function() {
+          browse_server(
+            id = "browse",
+            .values = .values
+          )
+        },
+        collection = function() {
+          collection_server(
+            id = "collection",
+            .values = .values
+          )
+        },
+        buy = function() {
+          buy_server(
+            id = "buy",
+            .values = .values
+          )
+        },
+        wallet = function() {
+          wallet_server(
+            id = "wallet",
+            .values = .values
+          )
+        },
+        database = function() {
+          database_server(
+            id = "database",
+            .values = .values
+          )
+        },
+        user_management = function() {
+          user_management_server(
+            id = "user_management",
+            .values = .values
+          )
+        },
+        settings = settings_server(
+          id = "settings",
+          .values = .values
+        )
       )
       
-      browse_server(
-        id = "browse",
-        .values = .values
-      )
+      called_rv <- shiny::reactiveVal(character())
       
-      collection_server(
-        id = "collection",
-        .values = .values
-      )
-      
-      buy_server(
-        id = "buy",
-        .values = .values
-      )
-      
-      wallet_server(
-        id = "wallet",
-        .values = .values
-      )
-      
-      database_server(
-        id = "database",
-        .values = .values
-      )
-
-      user_management_server(
-        id = "user_management",
-        .values = .values
-      )
-
-      settings_server(
-        id = "settings",
-        .values = .values
-      )
+      shiny::observeEvent(sidebar_menu_return$sidebar_r(), {
+        call_modules(
+          id = sidebar_menu_return$sidebar_r(),
+          servers = servers,
+          called_rv = called_rv
+        )
+      })
     }
   )
+}
+
+
+
+call_modules <- function(id, servers, called_rv) {
+  if (!id %in% called_rv()) {
+    called_rv(c(called_rv(), id))
+    # Call server function of this module
+    servers[[id]]()
+  }
 }
