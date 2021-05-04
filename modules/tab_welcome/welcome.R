@@ -5,7 +5,21 @@ welcome_ui <- function(id) {
     shiny::fluidRow(
       title_box(
         title = "myPaintings",
-        subtitle = "Collect and trade paintings from the 13th to the 19th century.",
+        subtitle = htmltools::tagList(
+          htmltools::p(
+            "Collect and trade paintings from the 13th to the 19th century."
+          ),
+          shiny::actionButton(
+            inputId = ns("getting_started"),
+            label = "Getting Started",
+            icon = shiny::icon("rocket")
+          ),
+          shiny::actionButton(
+            inputId = ns("login_random"),
+            label = "Login as random user",
+            icon = shiny::icon("random")
+          )
+        ),
         width = 12,
         status = "primary"
       )
@@ -23,25 +37,24 @@ welcome_server <- function(id, .values) {
       
       ns <- session$ns
       
-      welcome_info_server(
-        id = "info",
-        .values = .values
-      )
+      shiny::observeEvent(input$getting_started, {
+        .values$update_sidebar("getting_started")
+      })
       
-      welcome_README_server(
-        id = "readme",
-        .values = .values
-      )
-      
-      welcome_user_table_server(
-        id = "user_table",
-        .values = .values
-      )
-      
-      welcome_about_server(
-        id = "about",
-        .values = .values
-      )
+      shiny::observeEvent(input$login_random, {
+        user_ids <- db_get_user_ids(.values$db)
+        user_id <- sample(user_ids, 1)
+        entry <- db_get_user_entry(.values$db, user_id)
+        
+        purrr::walk2(names(entry), entry, function(name, value) {
+          .values$user_rvs[[name]] <- value
+        })
+        
+        user_name <- db_get_user_name(.values$db, user_id)
+        
+        db_log_user_in(.values$db, user_name)
+        .values$update$db_user_rv(.values$update$db_user_rv() + 1)
+      })
       
       type <- "browse"
       
