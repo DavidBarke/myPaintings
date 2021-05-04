@@ -2,6 +2,7 @@ image_display_header_ui <- function(id) {
   ns <- shiny::NS(id)
   
   shiny::fluidRow(
+    id = ns("header"),
     bs4Dash::box(
       width = 8,
       solidHeader = TRUE,
@@ -47,6 +48,15 @@ image_display_header_server <- function(id, .values, display_args) {
     function(input, output, session) {
       
       ns <- session$ns
+      
+      if (hasName(display_args, "display") && !display_args$display) {
+        shinyjs::hide(ns("header"), asis = TRUE)
+        # shiny::observe({
+        #   shiny::removeUI(
+        #     selector = paste0("#", ns("header"))
+        #   )
+        # })
+      }
       
       user_ids_r <- shiny::reactive({
         2L

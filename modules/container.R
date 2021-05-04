@@ -31,6 +31,12 @@ container_ui <- function(id) {
           )
         ),
         bs4Dash::bs4TabItem(
+          tabName = "getting_started",
+          getting_started_ui(
+            id = ns("getting_started")
+          )
+        ),
+        bs4Dash::bs4TabItem(
           tabName = "browse",
           browse_ui(
             id = ns("browse")
@@ -120,6 +126,12 @@ container_server <- function(id, .values) {
         welcome = function() {
           welcome_server(
             id = "welcome",
+            .values = .values
+          )
+        },
+        getting_started = function() {
+          getting_started_server(
+            id = "getting_started",
             .values = .values
           )
         },

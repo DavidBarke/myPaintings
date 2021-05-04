@@ -1,43 +1,17 @@
 welcome_ui <- function(id) {
   ns <- shiny::NS(id)
   
-  shiny::fluidRow(
-    title_box(
-      title = "myPaintings",
-      subtitle = "Collect and trade paintings from the 13th to the 19th century.",
-      width = 12,
-      status = "primary"
-    ),
-    bs4Dash::tabBox(
-      id = ns("welcome"),
-      width = 12,
-      solidHeader = TRUE,
-      status = "primary",
-      title = NULL,
-      shiny::tabPanel(
-        title = "Getting Started",
-        welcome_info_ui(
-          id = ns("info")
-        )
-      ),
-      shiny::tabPanel(
-        title = "User Table",
-        welcome_user_table_ui(
-          id = ns("user_table")
-        )
-      ),
-      shiny::tabPanel(
-        title = "About",
-        welcome_about_ui(
-          id = ns("about")
-        )
-      ),
-      shiny::tabPanel(
-        title = "README",
-        welcome_README_ui(
-          id = ns("readme")
-        )
+  htmltools::tagList(
+    shiny::fluidRow(
+      title_box(
+        title = "myPaintings",
+        subtitle = "Collect and trade paintings from the 13th to the 19th century.",
+        width = 12,
+        status = "primary"
       )
+    ),
+    image_display_ui(
+      id = ns("browse")
     )
   )
 }
@@ -67,6 +41,22 @@ welcome_server <- function(id, .values) {
       welcome_about_server(
         id = "about",
         .values = .values
+      )
+      
+      type <- "browse"
+      
+      image_display_server(
+        id = "browse",
+        .values = .values,
+        display_args = list(
+          header = list(
+            type = type,
+            display = FALSE
+          ),
+          content = list(
+            type = type
+          )
+        )
       )
     }
   )

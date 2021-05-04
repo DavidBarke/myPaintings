@@ -20,12 +20,12 @@ sidebar_menu_server <- function(id, .values) {
 
       # Name of menu items that are visible according to access right
       access_list <- list(
-        not_logged = "welcome",
+        not_logged = c("welcome", "getting_started"),
         admin = c(
-          "browse", "database", "user_management"
+          "browse", "database", "user_management", "getting_started"
         ),
         user = c(
-          "collection", "browse", "buy", "wallet"
+          "collection", "browse", "buy", "wallet", "getting_started"
         )
       )
 
@@ -36,6 +36,11 @@ sidebar_menu_server <- function(id, .values) {
           text = "Welcome",
           tabName = "welcome",
           icon = shiny::icon("certificate")
+        ),
+        getting_started = bs4Dash::menuItem(
+          text = "Getting Started",
+          tabName = "getting_started",
+          icon = shiny::icon("rocket")
         ),
         browse = bs4Dash::menuItem(
           text = "Browse",
