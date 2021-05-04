@@ -16,7 +16,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
       ns <- session$ns
       
       server_start <- 20
-      load_offset <- 20
+      load_offset <- 10
       
       max_loaded_server_rv <- shiny::reactiveVal(server_start)
       
