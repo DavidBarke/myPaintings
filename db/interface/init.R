@@ -48,7 +48,9 @@ db_init <- function(path = "db/db.sqlite") {
   populate_painter_table(db)
   print("Populate user_image")
   populate_user_image_table(db)
-  print("Populate image")
+  print("Populate_offered_images")
+  populate_offered_images_table(db)
+  print("Populate buy_sell")
   populate_buy_sell_table(db)
 }
 
@@ -190,6 +192,21 @@ populate_user_image_table <- function(db) {
   )
   
   DBI::dbAppendTable(db, "user_image", tbl)
+}
+
+#' @export
+populate_offered_images_table <- function(db) {
+  n <- db_length(db, "image")
+  image_ids <- seq_len(n)
+  m <- round(n / 100)
+  offered_image_ids <- sample(image_ids, m)
+  
+  tbl <- tibble::tibble(
+    image_id = offered_image_ids,
+    price = round(1e5 * rchisq(m, df = 2), digits = 2)
+  )
+  
+  DBI::dbAppendTable(db, "offered_images", tbl)
 }
 
 #' @export
