@@ -22,7 +22,7 @@ sidebar_menu_server <- function(id, .values) {
       access_list <- list(
         not_logged = c("welcome", "getting_started"),
         admin = c(
-          "browse", "database", "user_management", "getting_started"
+          "browse", "database", "getting_started"
         ),
         user = c(
           "collection", "browse", "buy", "wallet", "getting_started"
