@@ -42,61 +42,70 @@ Browse and collect over 30,000 paintings from the 13th to the 19th century. User
 
 # Long Description
 
-myPaintings is my take on the [Summer 2021 - Shopfiy Developer Intern Challenge](https://docs.google.com/document/d/1ZKRywXQLZWOqVOHC4JkF3LqdpO3Llpfk_CkZPR8bjak/edit). The task was to build an image repository. So I decided to crawl more than 30,000 images from the [Web Gallery of Art](https://www.wga.hu/).
+See also my other submissions:
 
-## User Management
+* https://community.rstudio.com/t/weibulltools-interactive-package-documentation-shiny-contest-submission/102356
+* https://community.rstudio.com/t/sensotheka-management-of-inventory-files-users-shiny-contest-submission/103236
+* https://community.rstudio.com/t/distributions-shiny-contest-submission/103691
 
-There are two types of users: `user` and `admin`. A `user` may collect and trade paintings, whereas an `admin` manages users and monitors the database. All users log in with user name and password.
+## Overview
+
+myPaintings is my entry in the [Summer 2021 - Shopfiy Developer Intern Challenge](https://docs.google.com/document/d/1ZKRywXQLZWOqVOHC4JkF3LqdpO3Llpfk_CkZPR8bjak/edit). The task was to create an image repository. So I decided to crawl more than 30,000 images from the [Web Gallery of Art](https://www.wga.hu/) and build a trading platform around it.
+
+## User management
+
+There are two types of users: `user` and `admin`. A `user` is allowed to collect and trade images, while an `admin` manages the users and monitors the database. All users log in with a user name and password.
 
 ## Views
 
 A `user` has three different views on paintings:
 
 * *Browse*: View all paintings
-* *Collection*: View and offer paintings owned by this `user`
-* *Buy*: View and buy paintings offered by other `user`s
+* *Collection*: View and offer paintings owned by this `user`.
+* *Buy*: View and buy paintings offered by other `users`.
 
-Each view consists of a filter, further settings and the paintings display. The paintings display contains image boxes, that are loaded dynamically using custom infinite scroll.
+Each view consists of a filter, other settings and the painting display. The painting display contains picture boxes that are dynamically loaded via a user-defined endless scroll.
 
 ## Filter
 
-In each view all applicable paintings can be filtered by the following characteristics:
+In each view, all paintings in question can be filtered according to the following characteristics:
 
 * *Title*
 * *Painter*
 * *School*
 * *Type*
-* *Status* (*offered* / *not offered*)
+* *Status* (offered / not offered)
 
-All characteristics but *Status* support three operations:
+All features except *Status* support three operations:
 
-* `=`: Select exactly one available choice
+* `=`: Select exactly one available choice.
 * `IN`: Select multiple available choices
-* `REGEXP`: Select available choices matching a regular expression
+* `REGEXP`: Select available choices corresponding to a regular expression
 
-An arbitrary number of filter conditions can be added. Each subsequent condition is restricted by the results of the preceding condition (e.g. after you selected a particular *Painter*, a subsequent *Title* condition will only show the title of paintings of this painter as its choices).
+Any number of filter conditions can be added. Each subsequent condition is constrained by the results of the previous condition (e.g. after you select a particular *painter*, a subsequent *title* condition displays only the titles of paintings by that painter as choices).
 
-## Trade Paintings
+## Trade paintings
 
-In the *Collection* view, a `user` may
+In the *Collections* view, a `user` can.
 
-* offer a painting for an arbitrary price
+* offer a painting for any price
 * change the price of an offered painting
 * withdraw an offered painting
 
-In the *Buy* view, a `user` may buy an offered painting from another `user`.
+In the *Buy* view, a `user` can buy an offered painting from another `user`.
 
 ## Wallet
 
-Each `user` has an account balance. Selling a painting increases the balance whereas buying a painting decreases it. In the tab *Wallet* a `user` can view all past transactions and filter them by date.
+Each 'user' has an account balance. Selling a painting increases the account balance, buying a painting decreases it. In the *Wallet* tab, a `user` can view all past transactions and filter them by date.
 
 ## Database
 
-An `admin` may view all database tables in the tab *Database*. For demonstration purposes, all database tables are randomly initialised.
+In the *Database* tab, an `Admin` can view all database tables. For demonstration purposes, all database tables are randomly initialised.
 
 ## Deployment
 
-All images take up more than 4 GB of disk storage, which exceeds the upload bundle size for shinyapps.io. Therefore, I host the application on my private Shiny Server. Obviously, the images are ignored by the Git repository. For reproducibility the `data` folder contains a [script](https://github.com/DavidBarke/myPaintings/blob/master/data/process_catalog.R) that downloads all images from the [Web Gallery of Art](https://www.wga.hu/).
+All the images require more than 4GB of disk space, which exceeds the upload bundle size for shinyapps.io. Therefore, I host the application on my private Shiny server. Obviously the images are ignored by the git repository. For reproducibility, the `data` folder contains a [script](https://github.com/DavidBarke/myPaintings/blob/master/data/process_catalog.R) that downloads all images from the [Web Gallery of Art](https://www.wga.hu/). If needed, an image of this application can be made available on shinyapps.io with fewer images.
+
 
 
 
