@@ -115,7 +115,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
             image_box_server(
               id = "image_box" %_% index,
               .values = .values,
-              image_r = shiny::reactive(result_image_ids_r()[index,]),
+              image_r = shiny::reactive(options$images_r()[index,]),
               options = options,
               type = display_args$type
             )
