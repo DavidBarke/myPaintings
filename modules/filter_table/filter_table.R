@@ -199,12 +199,20 @@ filter_table_server <- function(id,
         apply_filter_rv()
       })
       
-      image_ids_r <- shiny::eventReactive(apply_filter_r(), {
-        if (n_conditions_rv() == 0) {
+      image_ids_rv <- shiny::reactiveVal(NULL)
+      
+      shiny::observeEvent(apply_filter_r(), {
+        image_ids <- if (n_conditions_rv() == 0) {
           image_ids_start_r()
         } else {
           ret$condition[[n_conditions_rv()]]$image_ids_r()
         }
+        
+        image_ids_rv(image_ids)
+      })
+      
+      image_ids_r <- shiny::reactive({
+        image_ids_rv()
       })
       
       query_all_images_r <- shiny::reactive({

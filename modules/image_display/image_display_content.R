@@ -39,31 +39,16 @@ image_display_content_server <- function(id, .values, display_args, options) {
         )
       })
       
-      result_image_ids_rv <- shiny::reactiveVal(NULL)
-      
-      shiny::observeEvent(options$image_ids_r(), {
-        result_image_ids_rv(options$image_ids_r())
-      })
-      
       result_image_ids_r <- shiny::reactive({
-        # result_image_ids_rv only fires when NEW image ids are set in the
-        # observer above. Therefore multiple clicks on apply do not generate
-        # a rerender
-        result_image_ids_rv()
+        options$image_ids_r()
       })
       
       result_length_r <- shiny::reactive({
-        length(result_image_ids_r())
-      })
-      
-      result_offered_rv <- shiny::reactiveVal(NULL)
-      
-      shiny::observeEvent(result_image_ids_r(), {
-        result_offered_rv(options$images_r()$is_offered)
+        length(options$image_ids_r())
       })
       
       result_offered_r <- shiny::reactive({
-        result_offered_rv()
+        options$images_r()$is_offered
       })
       
       shiny::observeEvent(result_image_ids_r(), {
