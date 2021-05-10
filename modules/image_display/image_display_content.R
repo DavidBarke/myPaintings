@@ -73,6 +73,8 @@ image_display_content_server <- function(id, .values, display_args, options) {
           immediate = TRUE
         )
         
+        ui$boxes <- NULL
+        
         current_visible_index_rv(server_start + runif(1))
         last_visible_index_rv(0)
       }, priority = 1)
