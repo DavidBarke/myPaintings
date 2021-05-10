@@ -1,0 +1,110 @@
+---
+output: github_document
+---
+
+# Distributions
+
+# App Title
+
+myPaintings - Painting Trading Platform
+
+# Author
+
+David Barkemeyer
+
+# Username
+
+David_Barkemeyer
+
+# Keywords
+
+paintings, image-repository, infinite-scroll
+
+# Category
+
+Education
+
+# URL of deployed app
+
+https://mypaintings.davidbarke.com
+
+# URL of source code
+
+https://github.com/DavidBarke/mypaintings
+
+# URL of RStudio Cloud project with app
+
+https://rstudio.cloud/project/2043454
+
+# Short Description
+
+Browse and collect over 30,000 paintings from the 13th to the 19th century. Users may trade paintings with each other. Every user has her/his personal collection and wallet. Infinite scroll and custom image boxes account for a appealing display.
+
+# Long Description
+
+myPaintings is my take on the [Summer 2021 - Shopfiy Developer Intern Challenge](https://docs.google.com/document/d/1ZKRywXQLZWOqVOHC4JkF3LqdpO3Llpfk_CkZPR8bjak/edit). The task was to build an image repository. So I decided to crawl more than 30,000 images from the [Web Gallery of Art](https://www.wga.hu/).
+
+## User Management
+
+There are two types of users: `user` and `admin`. A `user` may collect and trade paintings, whereas an `admin` manages users and monitors the database. All users log in with user name and password.
+
+## Views
+
+A `user` has three different views on paintings:
+
+* *Browse*: View all paintings
+* *Collection*: View and offer paintings owned by this `user`
+* *Buy*: View and buy paintings offered by other `user`s
+
+Each view consists of a filter, further settings and the paintings display. The paintings display contains image boxes, that are loaded dynamically using custom infinite scroll.
+
+## Filter
+
+In each view all applicable paintings can be filtered by the following characteristics:
+
+* *Title*
+* *Painter*
+* *School*
+* *Type*
+* *Status* (*offered* / *not offered*)
+
+All characteristics but *Status* support three operations:
+
+* `=`: Select exactly one available choice
+* `IN`: Select multiple available choices
+* `REGEXP`: Select available choices matching a regular expression
+
+An arbitrary number of filter conditions can be added. Each subsequent condition is restricted by the results of the preceding condition (e.g. after you selected a particular *Painter*, a subsequent *Title* condition will only show the title of paintings of this painter as its choices).
+
+## Trade Paintings
+
+In the *Collection* view, a `user` may
+
+* offer a painting for an arbitrary price
+* change the price of an offered painting
+* withdraw an offered painting
+
+In the *Buy* view, a `user` may buy an offered painting from another `user`.
+
+## Wallet
+
+Each `user` has an account balance. Selling a painting increases the balance whereas buying a painting decreases it. In the tab *Wallet* a `user` can view all past transactions and filter them by date.
+
+## Database
+
+An `admin` may view all database tables in the tab *Database*. For demonstration purposes, all database tables are randomly initialised.
+
+## Deployment
+
+All images take up more than 4 GB of disk storage, which exceeds the upload bundle size for shinyapps.io. Therefore, I host the application on my private Shiny Server. Obviously, the images are ignored by the Git repository. For reproducibility the `data` folder contains a [script](https://github.com/DavidBarke/myPaintings/blob/master/data/process_catalog.R) that downloads all images from the [Web Gallery of Art](https://www.wga.hu/).
+
+
+
+
+
+
+
+
+
+
+
