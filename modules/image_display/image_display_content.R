@@ -46,6 +46,9 @@ image_display_content_server <- function(id, .values, display_args, options) {
       })
       
       result_image_ids_r <- shiny::reactive({
+        # result_image_ids_rv only fires when NEW image ids are set in the
+        # observer above. Therefore multiple clicks on apply do not generate
+        # a rerender
         result_image_ids_rv()
       })
       

@@ -197,7 +197,7 @@ filter_table_server <- function(id,
       
       apply_filter_r <- shiny::reactive({
         apply_filter_rv()
-      }) %>% shiny::throttle(1000)
+      })
       
       image_ids_r <- shiny::eventReactive(apply_filter_r(), {
         if (n_conditions_rv() == 0) {
