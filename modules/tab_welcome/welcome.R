@@ -67,7 +67,8 @@ welcome_server <- function(id, .values) {
             display = FALSE
           ),
           content = list(
-            type = type
+            type = type,
+            random = TRUE
           )
         )
       )

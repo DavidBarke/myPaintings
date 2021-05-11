@@ -21,26 +21,35 @@ image_display_content_server <- function(id, .values, display_args, options) {
       max_loaded_server_rv <- shiny::reactiveVal(server_start)
       
       # This reactiveVal holds the number of currently visible image boxes. It
-      # gets incrementey by user scroll and gets reset whenever a new user
+      # gets incremented by user scroll and gets reset whenever a new user
       # request (filter) is processed.
       current_visible_index_rv <- shiny::reactiveVal(0)
       last_visible_index_rv <- shiny::reactiveVal(0)
       
       ui <- new.env()
       
-      # #server_start image_box_servers are loaded on session start
+      # server_start image_box_servers are loaded on session start
       purrr::walk(1:server_start, function(index) {
         image_box_server(
           id = "image_box" %_% index,
           .values = .values,
-          image_r = shiny::reactive(options$images_r()[index,]),
+          image_r = shiny::reactive({
+            image_id <- result_image_ids_r()[index]
+            dplyr::filter(options$images_r(), image_id = image_id)
+          }),
           options = options,
           type = display_args$type
         )
       })
       
       result_image_ids_r <- shiny::reactive({
-        options$image_ids_r()
+        image_ids <- options$image_ids_r()
+        
+        if (isTRUE(display_args$random)) {
+          image_ids <- sample(image_ids, size = length(image_ids))
+        }
+          
+        image_ids
       })
       
       result_length_r <- shiny::reactive({
@@ -100,7 +109,10 @@ image_display_content_server <- function(id, .values, display_args, options) {
             image_box_server(
               id = "image_box" %_% index,
               .values = .values,
-              image_r = shiny::reactive(options$images_r()[index,]),
+              image_r = shiny::reactive({
+                image_id <- result_image_ids_r()[index]
+                dplyr::filter(options$images_r(), image_id = image_id)
+              }),
               options = options,
               type = display_args$type
             )
@@ -114,9 +126,11 @@ image_display_content_server <- function(id, .values, display_args, options) {
           new_indices <- new_indices[new_indices <= result_length_r()]
           
           new_boxes <- purrr::map(new_indices, function(index) {
+            image_id <- result_image_ids_r()[index]
+            
             image_box_ui(
               id = ns("image_box" %_% index),
-              image = options$images_r()[index,],
+              image = dplyr::filter(options$images_r(), image_id == !!image_id),
               type = display_args$type
             )
           })
