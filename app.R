@@ -48,7 +48,8 @@ ui_server <- function(source_to_globalenv = FALSE) {
   ui <- htmltools::div(
     tags$head(
       # Include custom css styles
-      shiny::includeCSS("www/css/styles.css")
+      shiny::includeCSS("www/css/styles.css"),
+      shiny::includeHTML("www/html/ga.html")
     ),
     container_ui(
       id = "container"
