@@ -35,7 +35,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
           .values = .values,
           image_r = shiny::reactive({
             image_id <- result_image_ids_r()[index]
-            dplyr::filter(options$images_r(), image_id = image_id)
+            dplyr::filter(options$images_r(), image_id == image_id)
           }),
           options = options,
           type = display_args$type
@@ -111,7 +111,7 @@ image_display_content_server <- function(id, .values, display_args, options) {
               .values = .values,
               image_r = shiny::reactive({
                 image_id <- result_image_ids_r()[index]
-                dplyr::filter(options$images_r(), image_id = image_id)
+                dplyr::filter(options$images_r(), image_id == image_id)
               }),
               options = options,
               type = display_args$type
