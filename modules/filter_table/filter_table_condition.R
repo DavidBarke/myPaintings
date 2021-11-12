@@ -116,9 +116,10 @@ filter_table_condition_server <- function(
       
       ## Filter by ----
       type_choices <- list(
-        browse = c("title", "painter", "name", "school", "type", "status", "price"),
+        # price disabled
+        browse = c("title", "painter", "name", "school", "type", "status"),
         collection = c("title", "painter", "school", "type", "status"),
-        buy = c("title", "painter", "name", "school", "type", "price")
+        buy = c("title", "painter", "name", "school", "type")
       )
       
       choices <- c(
